@@ -1,8 +1,10 @@
 {
-  "item.lucentics.dusk_brick": "薄明レンガ",
+  "item.lucentics.dusk_brick": "薄明石",
 
-  "block.lucentics.dusk_bricks": "薄明レンガブロック",
+  "block.lucentics.dusk_bricks": "薄明石レンガ",
+  "block.lucentics.injector": "光注入器",
 
   "itemGroup.lucentics.ingredients": "Lucentics: 材料",
-  "itemGroup.lucentics.blocks": "Lucentics: ブロック"
+  "itemGroup.lucentics.blocks": "Lucentics: ブロック",
+  "itemGroup.lucentics.machines": "Lucentics: 機能付きブロック"
 }

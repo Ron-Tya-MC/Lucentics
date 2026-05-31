@@ -1,0 +1,5 @@
+LucenticsRegistrate.java, LucenticsTabRegister.java, BlockEntityBehavior.java contains modified code from Create:
+https://github.com/Creators-of-Create/Create
+
+Create's code is licensed under the MIT License:
+https://opensource.org/licenses/mit-license.php

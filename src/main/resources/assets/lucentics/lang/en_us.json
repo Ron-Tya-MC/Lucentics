@@ -2,7 +2,9 @@
   "item.lucentics.dusk_brick": "Dusk Brick",
 
   "block.lucentics.dusk_bricks": "Dusk Bricks",
+  "block.lucentics.injector": "Light Injector",
 
   "itemGroup.lucentics.ingredients": "Lucentics: Ingredients",
-  "itemGroup.lucentics.blocks": "Lucentics: Blocks"
+  "itemGroup.lucentics.blocks": "Lucentics: Blocks",
+  "itemGroup.lucentics.machines": "Lucentics: Machines"
 }

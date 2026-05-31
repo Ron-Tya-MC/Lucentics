@@ -1,16 +1,17 @@
 package io.github.rontyamc.lucentics;
 
-import com.tterrag.registrate.Registrate;
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
-import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
-import io.github.rontyamc.lucentics.registers.LucenticsTabRegister;
-import io.github.rontyamc.lucentics.registers.LucenticsRegistrate;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockRenderer;
+import io.github.rontyamc.lucentics.registers.*;
 
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
-import net.minecraft.world.item.CreativeModeTabs;
 
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -42,9 +43,10 @@ public class Lucentics {
 
         REGISTRATE.registerEventListeners(modEventBus);
 
-        LucenticsBlockRegister.register();
-        LucenticsItemRegister.register();
         LucenticsTabRegister.register(modEventBus);
+        LucenticsBlockRegister.register();
+        LucenticsBlockEntityRegister.register();
+        LucenticsItemRegister.register();
 
         modEventBus.addListener(this::addCreative);
 
@@ -56,9 +58,7 @@ public class Lucentics {
     }
 
     private void addCreative(BuildCreativeModeTabContentsEvent event) {
-        if(event.getTabKey() == CreativeModeTabs.INGREDIENTS) {
-            event.accept(LucenticsItemRegister.DUSK_BRICK.get());
-        }
+
     }
 
     @SubscribeEvent
@@ -68,5 +68,22 @@ public class Lucentics {
 
     public static LucenticsRegistrate registrate() {
         return REGISTRATE;
+    }
+
+    @EventBusSubscriber(modid = Lucentics.MOD_ID, value = Dist.CLIENT)
+    public static class LucenticsClient {
+        public LucenticsClient(ModContainer container) {
+            container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        }
+
+        @SubscribeEvent
+        static void onClientSetup(FMLClientSetupEvent event) {
+
+        }
+
+        @SubscribeEvent
+        public static void registerBER(EntityRenderersEvent.RegisterRenderers event){
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorBlockRenderer::new);
+        }
     }
 }

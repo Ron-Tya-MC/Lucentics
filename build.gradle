@@ -73,6 +73,13 @@ configurations {
 dependencies {
     runtimeOnly "curse.maven:jei-238222:7391682"
     runtimeOnly "curse.maven:jade-324717:7545219"
+    runtimeOnly "curse.maven:tooltips-reforged-1277444:7314753"
+    runtimeOnly "curse.maven:jupiter-1072905:7738312"
+
+    implementation "curse.maven:patchouli-306770:7730942"
+
+    runtimeOnly "curse.maven:create-328085:7963363"
+    runtimeOnly "curse.maven:actually-additions-228404:7676502"
 
     jarJar(api("com.tterrag.registrate:Registrate:$registrate_version"))
 }

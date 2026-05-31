@@ -1,0 +1,18 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "category": "building",
+    "key": {
+        "D": {
+            "item": "lucentics:dusk_brick"
+        }
+    },
+    "pattern": [
+        "DD ",
+        "DD ",
+        "   "
+    ],
+    "result": {
+        "count": 1,
+        "id": "lucentics:dusk_bricks"
+    }
+}
