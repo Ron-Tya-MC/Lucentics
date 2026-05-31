@@ -1,7 +1,9 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.GeneralBlockEntity;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
+import io.github.rontyamc.lucentics.common.recipe.LucenticsRecipes;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import net.minecraft.core.BlockPos;
@@ -10,18 +12,22 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.util.Mth;
 import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.neoforged.neoforge.items.ItemStackHandler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 public class InjectorBlockEntity extends GeneralBlockEntity {
     InjectorBlockBehavior injectorBehavior;
@@ -136,10 +142,15 @@ public class InjectorBlockEntity extends GeneralBlockEntity {
     }
 
     private void craftItem() {
-        ItemStack output = new ItemStack(LucenticsItemRegister.DUSK_BRICK.get(), 1);
+        Optional<RecipeHolder<InjectorRecipe>> recipe = getCurrentRecipe();
+        Lucentics.LOGGER.info("No recipe found -> {}", recipe.get());
+        Lucentics.LOGGER.info("No recipe found -> {}", recipe.get().value());
+        Lucentics.LOGGER.info("No recipe found -> {}", recipe.get().value().output());
+        ItemStack output = recipe.get().value().output();
 
+        //inventory.extractItem(0, recipe.get().value().inputItem().getItems()[0].getCount(), false);
         inventory.extractItem(0, 1, false);
-        inventory.insertItem(0, output, false);
+        inventory.setStackInSlot(0, output);
     }
 
     private void setIdol() {
@@ -159,7 +170,29 @@ public class InjectorBlockEntity extends GeneralBlockEntity {
     }
 
     private boolean hasRecipe() {
-        return inventory.getStackInSlot(0).is(Items.BRICK);
+        Optional<RecipeHolder<InjectorRecipe>> recipe = getCurrentRecipe();
+        if(recipe.isEmpty()) {
+            return false;
+        }
+        return getDaylight(this.level, this.worldPosition) >= 7;
+    }
+
+    private static int getDaylight(Level level, BlockPos pos) {
+        int i = level.getBrightness(LightLayer.SKY, pos) - level.getSkyDarken();
+        float f = level.getSunAngle(1.0F);
+
+        if (i > 0) {
+            float f1 = f < (float) Math.PI ? 0.0F : (float) (Math.PI * 2);
+            f += (f1 - f) * 0.2F;
+            i = Math.round((float)i * Mth.cos(f));
+        }
+
+        i = Mth.clamp(i, 0, 15);
+        return i;
+    }
+
+    private Optional<RecipeHolder<InjectorRecipe>> getCurrentRecipe() {
+        return this.level.getRecipeManager().getRecipeFor(LucenticsRecipes.INJECTOR_TYPE.get(), new InjectorRecipeInput(inventory.getStackInSlot(0)), level);
     }
 
     private void notifyInserted() {

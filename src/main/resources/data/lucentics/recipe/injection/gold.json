@@ -1,0 +1,10 @@
+{
+    "type": "lucentics:injector",
+    "ingredient": {
+        "item": "minecraft:iron_ingot"
+    },
+    "result": {
+        "count": 1,
+        "id": "minecraft:gold_ingot"
+    }
+}

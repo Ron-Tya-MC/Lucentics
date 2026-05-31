@@ -1,6 +1,7 @@
 package io.github.rontyamc.lucentics;
 
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockRenderer;
+import io.github.rontyamc.lucentics.common.recipe.LucenticsRecipes;
 import io.github.rontyamc.lucentics.registers.*;
 
 import net.minecraft.resources.ResourceKey;
@@ -47,6 +48,8 @@ public class Lucentics {
         LucenticsBlockRegister.register();
         LucenticsBlockEntityRegister.register();
         LucenticsItemRegister.register();
+
+        LucenticsRecipes.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
