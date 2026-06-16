@@ -1,6 +1,6 @@
 package io.github.rontyamc.lucentics.common.behavior;
 
-import io.github.rontyamc.lucentics.common.GeneralBlockEntity;
+import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -8,6 +8,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.ConcurrentModificationException;
 
@@ -19,11 +20,11 @@ public abstract class BlockEntityBehavior {
      * Copyright (c) The Create Team / The Creators of Create
      * Licensed under the MIT License.
      */
-    public GeneralBlockEntity blockEntity;
+    public BaseBlockEntity blockEntity;
     private int lazyTickRate;
     private int lazyTickCounter;
 
-    public BlockEntityBehavior(GeneralBlockEntity be) {
+    public BlockEntityBehavior(BaseBlockEntity be) {
         blockEntity = be;
         setLazyTickRate(10);
     }
@@ -96,6 +97,10 @@ public abstract class BlockEntityBehavior {
         return blockEntity.getLevel();
     }
 
+    public Vec3 getCenter(BlockPos pos) {
+        return new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
+    }
+
     public static <T extends BlockEntityBehavior> T get(BlockGetter reader, BlockPos pos, BehaviorType<T> type) {
         BlockEntity be;
         try {
@@ -109,7 +114,7 @@ public abstract class BlockEntityBehavior {
     public static <T extends BlockEntityBehavior> T get(BlockEntity be, BehaviorType<T> type) {
         if (be == null)
             return null;
-        if (!(be instanceof GeneralBlockEntity ste))
+        if (!(be instanceof BaseBlockEntity ste))
             return null;
         return ste.getBehavior(type);
     }

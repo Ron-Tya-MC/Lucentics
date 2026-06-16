@@ -1,11 +1,9 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
-import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.GeneralBlockEntity;
+import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
 import io.github.rontyamc.lucentics.common.recipe.LucenticsRecipes;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
-import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -17,7 +15,6 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
@@ -29,7 +26,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Optional;
 
-public class InjectorBlockEntity extends GeneralBlockEntity {
+public class InjectorBlockEntity extends BaseBlockEntity {
     InjectorBlockBehavior injectorBehavior;
 
     public final ItemStackHandler inventory = new ItemStackHandler(1) {
@@ -143,14 +140,11 @@ public class InjectorBlockEntity extends GeneralBlockEntity {
 
     private void craftItem() {
         Optional<RecipeHolder<InjectorRecipe>> recipe = getCurrentRecipe();
-        Lucentics.LOGGER.info("No recipe found -> {}", recipe.get());
-        Lucentics.LOGGER.info("No recipe found -> {}", recipe.get().value());
-        Lucentics.LOGGER.info("No recipe found -> {}", recipe.get().value().output());
         ItemStack output = recipe.get().value().output();
 
         //inventory.extractItem(0, recipe.get().value().inputItem().getItems()[0].getCount(), false);
         inventory.extractItem(0, 1, false);
-        inventory.setStackInSlot(0, output);
+        inventory.setStackInSlot(0, output.copy());
     }
 
     private void setIdol() {
