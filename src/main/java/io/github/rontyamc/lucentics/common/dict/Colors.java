@@ -1,8 +1,11 @@
-package io.github.rontyamc.lucentics.common.info;
+package io.github.rontyamc.lucentics.common.dict;
 
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.DyeColor;
 import org.jetbrains.annotations.Nullable;
+
+import java.awt.*;
+import java.util.Optional;
 
 public enum Colors implements StringRepresentable {
     SUNLIGHT("sunlight", 1, 0xFFF9C4, null),
@@ -59,5 +62,15 @@ public enum Colors implements StringRepresentable {
 
     public @Nullable DyeColor getDyeColor() {
         return dyeColor;
+    }
+
+    public static Optional<Colors> byName(String name) {
+        for (Colors color : Colors.values()) {
+            if (color.getName().equals(name)) {
+                return Optional.of(color);
+            }
+        }
+
+        return Optional.empty();
     }
 }

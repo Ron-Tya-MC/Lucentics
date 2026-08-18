@@ -10,4 +10,5 @@ public class ItemUtilities {
     public static boolean canStackItems(ItemStack stackA, ItemStack stackB) {
         return isSameItem(stackA, stackB, false) && stackA.getCount() + stackB.getCount() <= stackA.getMaxStackSize();
     }
+
 }

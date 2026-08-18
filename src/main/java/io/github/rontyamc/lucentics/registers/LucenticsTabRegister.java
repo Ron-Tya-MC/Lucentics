@@ -58,9 +58,16 @@ public class LucenticsTabRegister {
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_MACHINES = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.MACHINES, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.machines"))
-            .withTabsBefore(CREATIVE_MODE_TAB_INGREDIENTS.getKey())
+            .withTabsBefore(CREATIVE_MODE_TAB_BLOCKS.getKey())
             .icon(LucenticsBlockRegister.INJECTOR::asStack)
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_MACHINES, CategoryType.MACHINES))
+            .build());
+
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_PRISMS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.PRISMS, () -> CreativeModeTab.builder()
+            .title(Component.translatable("itemGroup.lucentics.prisms"))
+            .withTabsBefore(CREATIVE_MODE_TAB_MACHINES.getKey())
+            .icon(LucenticsBlockRegister.PRISM_RITUAL::asStack)
+            .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_PRISMS, CategoryType.PRISMS))
             .build());
 
     public static void register(IEventBus bus) {
@@ -162,6 +169,7 @@ public class LucenticsTabRegister {
         public static final String INGREDIENTS = "ingredients";
         public static final String BLOCKS = "blocks";
         public static final String MACHINES = "machines";
+        public static final String PRISMS = "prisms";
 
         private CategoryType() {
         }

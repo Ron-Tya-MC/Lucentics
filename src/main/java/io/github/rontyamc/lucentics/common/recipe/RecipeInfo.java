@@ -6,10 +6,12 @@ import net.minecraft.world.item.crafting.RecipeInput;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
+import java.util.function.Supplier;
+
 public record RecipeInfo<I extends RecipeInput, R extends Recipe<I>>(
         ResourceLocation id,
-        RecipeType<R> type,
-        RecipeSerializer<R> serializer
+        Supplier<RecipeType<R>> type,
+        Supplier<RecipeSerializer<R>> serializer
 ) implements IRecipeInfo {
     @Override
     public ResourceLocation getId() {
@@ -19,12 +21,12 @@ public record RecipeInfo<I extends RecipeInput, R extends Recipe<I>>(
     @Override
     @SuppressWarnings("unchecked")
     public <T extends RecipeSerializer<?>> T getSerializer() {
-        return (T) serializer;
+        return (T) serializer.get();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public <I2 extends RecipeInput, R2 extends Recipe<I2>> RecipeType<R2> getType() {
-        return (RecipeType<R2>) type;
+    public <I_ extends RecipeInput, R_ extends Recipe<I_>> RecipeType<R_> getType() {
+        return (RecipeType<R_>) type.get();
     }
 }

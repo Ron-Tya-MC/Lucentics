@@ -1,6 +1,5 @@
 package io.github.rontyamc.lucentics.common.behavior;
 
-import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.rontyamc.lucentics.Lucentics;
@@ -31,5 +30,17 @@ public class BehaviorType<T extends BlockEntityBehavior> {
 
     public ResourceLocation getId() {
         return this.id;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof BehaviorType<?> other)) return false;
+        return getId().equals(other.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return getId().hashCode();
     }
 }

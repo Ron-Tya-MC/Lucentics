@@ -15,22 +15,22 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 
-public class InjectorBlockRenderer implements BlockEntityRenderer<InjectorBlockEntity> {
-    public InjectorBlockRenderer(BlockEntityRendererProvider.Context context) {
+public class InjectorRenderer implements BlockEntityRenderer<InjectorBlockEntity> {
+    public InjectorRenderer(BlockEntityRendererProvider.Context context) {
 
     }
 
     @Override
     public void render(InjectorBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        ItemStack stack = blockEntity.inventory.getStackInSlot(0);
+        ItemStack container = blockEntity.getInjectorBehavior().getContainer();
 
         poseStack.pushPose();
-        poseStack.translate(0.5f,0.75f,0.5f);
-        poseStack.scale(0.5f,0.5f,0.5f);
-        poseStack.mulPose(Axis.YP.rotationDegrees(blockEntity.getRenderingRotation()));
+        poseStack.translate(0.5f, 0.75f, 0.5f);
+        poseStack.scale(0.5f, 0.5f, 0.5f);
+        poseStack.mulPose(Axis.YP.rotationDegrees(blockEntity.getNextRotation()));
 
-        itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, getLightLevel(blockEntity.getLevel(), blockEntity.getBlockPos()), OverlayTexture.NO_OVERLAY, poseStack, bufferSource, blockEntity.getLevel(), 1);
+        itemRenderer.renderStatic(container, ItemDisplayContext.FIXED, getLightLevel(blockEntity.getLevel(), blockEntity.getBlockPos()), OverlayTexture.NO_OVERLAY, poseStack, bufferSource, blockEntity.getLevel(), 1);
         poseStack.popPose();
     }
 

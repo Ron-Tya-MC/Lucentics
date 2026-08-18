@@ -1,10 +1,11 @@
 {
-    "type": "lucentics:injector",
-    "ingredient": {
+    "type": "lucentics:injection",
+    "input": {
         "item": "minecraft:brick"
     },
-    "result": {
-        "count": 1,
-        "id": "lucentics:dusk_brick"
-    }
+    "outputs": [
+        { "item": { "id": "lucentics:dusk_brick", "count": 1 } }
+    ],
+    "processing_duration": 100,
+    "daylight_condition": 7
 }

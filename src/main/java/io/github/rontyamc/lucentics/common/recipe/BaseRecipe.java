@@ -5,7 +5,6 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.Optional;
@@ -15,8 +14,7 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
     protected Optional<SizedIngredient> mainInput;
     protected Optional<SizedFluidIngredient> mainFluidInput;
     protected NonNullList<RecipeArguments.TrailInput> trailInputs;
-    protected ItemStack output;
-    protected FluidStack outputFluid;
+    protected NonNullList<RecipeArguments.Output> outputs;
     protected int processingDuration;
     protected int dayLightCondition;
 
@@ -29,8 +27,7 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
         this.mainInput = args.mainInput().left();
         this.mainFluidInput = args.mainInput().right();
         this.trailInputs = args.trailInputs();
-        this.output = args.outputItem();
-        this.outputFluid = args.outputFluid();
+        this.outputs = args.outputs();
         this.processingDuration = args.processingDuration();
         this.dayLightCondition = args.dayLightCondition();
 
@@ -55,13 +52,10 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
         return trailInputs;
     }
 
-    public ItemStack getOutput() {
-        return output;
+    public NonNullList<RecipeArguments.Output> getOutputs() {
+        return outputs;
     }
 
-    public FluidStack getOutputFluid() {
-        return outputFluid;
-    }
 
     public int getProcessingDuration() {
         return processingDuration;
@@ -94,12 +88,15 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return output;
+        return outputs.stream()
+                .flatMap(o -> o.item().stream())
+                .findFirst()
+                .orElse(ItemStack.EMPTY);
     }
 
     @Override
     public ItemStack assemble(I input, HolderLookup.Provider registries) {
-        return output.copy();
+        return getResultItem(registries).copy();
     }
 
     @Override
@@ -114,5 +111,10 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
 
     @Override
     public abstract boolean matches(I input, Level level);
+
+    @Override
+    public boolean isSpecial() {
+        return true;
+    }
 }
 

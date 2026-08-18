@@ -19,14 +19,13 @@ import java.util.Optional;
 public record RecipeArguments (
     Either<SizedIngredient, SizedFluidIngredient> mainInput,
     NonNullList<TrailInput> trailInputs,
-    ItemStack outputItem,
-    FluidStack outputFluid,
+    NonNullList<Output> outputs,
     int processingDuration,
     int dayLightCondition
     ) {
 
     public RecipeArguments() {
-        this(Either.left(SizedIngredient.EMPTY), NonNullList.create(), ItemStack.EMPTY, FluidStack.EMPTY, 0, 0);
+        this(Either.left(SizedIngredient.EMPTY), NonNullList.create(), NonNullList.create(), 0, 0);
     }
 
     public record TrailInput(
@@ -47,6 +46,27 @@ public record RecipeArguments (
                 ByteBufCodecs.collection(size -> NonNullList.create(), OrderingInput.STREAM_CODEC), TrailInput::inputs,
                 TrailInput::new
         );
+    }
+
+    public record Output(
+            Optional<ItemStack> item,
+            Optional<FluidStack> fluid
+    ) {
+        public static final MapCodec<Output> CODEC = RecordCodecBuilder.mapCodec(ins -> ins.group(
+                ItemStack.CODEC.optionalFieldOf("item").forGetter(Output::item),
+                FluidStack.CODEC.optionalFieldOf("fluid").forGetter(Output::fluid)
+        ).apply(ins, Output::new));
+
+        public static final StreamCodec<RegistryFriendlyByteBuf, Output> STREAM_CODEC = StreamCodec.composite(
+                ItemStack.STREAM_CODEC.apply(ByteBufCodecs::optional), Output::item,
+                FluidStack.STREAM_CODEC.apply(ByteBufCodecs::optional), Output::fluid,
+                Output::new
+        );
+
+        public Either<ItemStack, FluidStack> toEither() {
+            return item.<Either<ItemStack, FluidStack>>map(Either::left)
+                    .orElseGet(() -> Either.right(fluid.orElse(FluidStack.EMPTY)));
+        }
     }
 
     public record OrderingInput(
@@ -74,9 +94,12 @@ public record RecipeArguments (
                 NonNullList<TrailInput> inputs = NonNullList.create();
                 inputs.addAll(list);
                 return inputs;
-            }, list -> list).fieldOf("trail_inputs").forGetter(RecipeArguments::trailInputs),
-            ItemStack.CODEC.fieldOf("outputItem").forGetter(RecipeArguments::outputItem),
-            FluidStack.CODEC.fieldOf("output_fluid").forGetter(RecipeArguments::outputFluid),
+            }, list -> list).optionalFieldOf("trail_inputs", NonNullList.create()).forGetter(RecipeArguments::trailInputs),
+            Output.CODEC.codec().listOf().xmap(list -> {
+                NonNullList<Output> outputs = NonNullList.create();
+                outputs.addAll(list);
+                return outputs;
+            }, list -> list).fieldOf("outputs").forGetter(RecipeArguments::outputs),
             Codec.INT.fieldOf("processing_duration").forGetter(RecipeArguments::processingDuration),
             Codec.INT.optionalFieldOf("daylight_condition", 0).forGetter(RecipeArguments::dayLightCondition)
     ).apply(ins, RecipeArguments::new));
@@ -84,8 +107,7 @@ public record RecipeArguments (
     public static final StreamCodec<RegistryFriendlyByteBuf, RecipeArguments> STREAM_CODEC = StreamCodec.composite(
             ByteBufCodecs.either(SizedIngredient.STREAM_CODEC, SizedFluidIngredient.STREAM_CODEC), RecipeArguments::mainInput,
             ByteBufCodecs.collection(size -> NonNullList.create(), TrailInput.STREAM_CODEC), RecipeArguments::trailInputs,
-            ItemStack.STREAM_CODEC, RecipeArguments::outputItem,
-            FluidStack.STREAM_CODEC, RecipeArguments::outputFluid,
+            ByteBufCodecs.collection(size -> NonNullList.create(), Output.STREAM_CODEC), RecipeArguments::outputs,
             ByteBufCodecs.VAR_INT, RecipeArguments::processingDuration,
             ByteBufCodecs.VAR_INT, RecipeArguments::dayLightCondition,
             RecipeArguments::new

@@ -1,9 +1,12 @@
 package io.github.rontyamc.lucentics;
 
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockRenderer;
-import io.github.rontyamc.lucentics.common.recipe.LucenticsRecipes;
+import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
+import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import io.github.rontyamc.lucentics.registers.*;
 
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 
@@ -49,7 +52,7 @@ public class Lucentics {
         LucenticsBlockEntityRegister.register();
         LucenticsItemRegister.register();
 
-        LucenticsRecipes.register(modEventBus);
+        LucenticsRecipeTypesRegister.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
@@ -81,12 +84,15 @@ public class Lucentics {
 
         @SubscribeEvent
         static void onClientSetup(FMLClientSetupEvent event) {
-
+            event.enqueueWork(() -> {
+                ItemBlockRenderTypes.setRenderLayer(LucenticsBlockRegister.PRISM_RITUAL.get(), RenderType.translucent());
+            });
         }
 
         @SubscribeEvent
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event){
-            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorBlockRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
         }
     }
 }

@@ -4,9 +4,9 @@ import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
 public class InjectorIHandler implements IItemHandler {
-    private InjectorBlockBehavior behavior;
+    private InjectorBehavior behavior;
 
-    public InjectorIHandler(InjectorBlockBehavior behavior) {
+    public InjectorIHandler(InjectorBehavior behavior) {
         this.behavior = behavior;
     }
 
@@ -17,12 +17,12 @@ public class InjectorIHandler implements IItemHandler {
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return behavior.getContent();
+        return behavior.getContainer();
     }
 
     @Override
     public ItemStack insertItem(int slot, ItemStack itemStack, boolean simulate) {
-        if (!behavior.getContent().isEmpty() && behavior.getBlockMerge()) return itemStack;
+        if (!behavior.getContainer().isEmpty() && behavior.getBlockMerge()) return itemStack;
 
         ItemStack returnStack = behavior.insert(itemStack, simulate);
         if (!simulate && returnStack != itemStack) {
@@ -33,7 +33,7 @@ public class InjectorIHandler implements IItemHandler {
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (behavior.container == null) {
+        if (behavior.getContainer() == null) {
             return ItemStack.EMPTY;
         }
         ItemStack returnStack = behavior.extract(amount, simulate);
@@ -45,7 +45,7 @@ public class InjectorIHandler implements IItemHandler {
 
     @Override
     public int getSlotLimit(int i) {
-        return 0;
+        return behavior.getSlotLimit();
     }
 
     @Override

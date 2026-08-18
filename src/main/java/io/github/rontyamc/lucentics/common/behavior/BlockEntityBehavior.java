@@ -47,7 +47,7 @@ public abstract class BlockEntityBehavior {
         }
     }
 
-    private void lazyTick() {
+    protected void lazyTick() {
     }
 
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {

@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
 import com.mojang.serialization.MapCodec;
 import io.github.rontyamc.lucentics.blocks.IBlockEntities;
+import io.github.rontyamc.lucentics.common.SlotInteractions;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -22,9 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.items.ItemStackHandler;
 
-public class InjectorBlock extends BaseEntityBlock implements IBlockEntities {
+public class InjectorBlock extends BaseEntityBlock implements IBlockEntities<InjectorBlockEntity> {
     public static final MapCodec<InjectorBlock> CODEC = simpleCodec(InjectorBlock::new);
     private static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0);
 
@@ -60,7 +60,7 @@ public class InjectorBlock extends BaseEntityBlock implements IBlockEntities {
     protected void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean movedByPiston) {
         if(state.getBlock() != newState.getBlock()) {
             if(level.getBlockEntity(pos) instanceof InjectorBlockEntity injectorBlockEntity) {
-                injectorBlockEntity.dropContents();
+                injectorBlockEntity.dropContents(level, pos);
                 level.updateNeighbourForOutputSignal(pos, this);
             }
         }
@@ -69,40 +69,54 @@ public class InjectorBlock extends BaseEntityBlock implements IBlockEntities {
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
-        if(level.getBlockEntity(pos) instanceof InjectorBlockEntity injectorBlockEntity) {
-            ItemStackHandler inv = injectorBlockEntity.inventory;
+        if (!(level.getBlockEntity(pos) instanceof InjectorBlockEntity be)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+        }
+        if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
 
-            if(inv.getStackInSlot(0).isEmpty()) {
-                if(!stack.isEmpty()) {
-                    inv.insertItem(0, stack.copy(), false);
-                    if (!player.isCreative()) {
-                        stack.shrink(1);
-                    }
-                    level.playSound(player, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 2f);
-                }
+        InjectorBehavior behavior = be.getInjectorBehavior();
+        ItemStack container = behavior.getContainer();
+        boolean handled = false;
+
+        SlotInteractions.SingleItemSlot containerSlot = new SlotInteractions.SingleItemSlot() {
+            public ItemStack getStack() { return container; }
+            public ItemStack insert(ItemStack s, boolean sim) { return behavior.insert(s, sim); }
+            public ItemStack extract(int amount, boolean sim) { return behavior.extract(amount, sim); }
+            public int getRemainingSpace() { return behavior.getRemainingSpace(); }
+        };
+
+        SlotInteractions.Result result = SlotInteractions.handle(containerSlot, stack, false);
+        switch (result.outcome()) {
+            case INSERTED, MERGED -> {
+                if (!player.isCreative()) player.setItemInHand(interactionHand, result.resultStack());
+                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 2f);
+                handled = true;
             }
-            else {
-                ItemStack contentStack = inv.extractItem(0, 1, false);
-                if(!stack.isEmpty()) {
-                    injectorBlockEntity.clearContents();
+            case EXTRACTED -> {
+                player.getInventory().placeItemBackInInventory(result.resultStack());
+                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 1f);
+                handled = true;
+            }
+            case SWAPPED -> {
+                if (!player.isCreative()) player.setItemInHand(interactionHand, result.resultStack());
+                else player.getInventory().placeItemBackInInventory(result.resultStack());
+                result.fallbackStack().ifPresent(fallback -> player.getInventory().placeItemBackInInventory(fallback));
+                level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 1.5f);
+                handled = true;
+            }
+            case NONE -> {}
+        }
 
-                    inv.insertItem(0, stack.copy(), false);
-                    if (!player.isCreative()) {
-                        stack.shrink(1);
-                    }
-
-                    player.getInventory().placeItemBackInInventory(contentStack);
-                    level.playSound(player, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 2f);
-                }
-                else {
-                    player.getInventory().placeItemBackInInventory(contentStack);
-                    injectorBlockEntity.clearContents();
-                    level.playSound(player, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 1f);
-                }
+        ItemStack buffer = behavior.getBuffer();
+        if (!buffer.isEmpty()) {
+            ItemStack collected = behavior.extractBuffer(buffer.getCount(), false);
+            if (!collected.isEmpty()) {
+                player.getInventory().placeItemBackInInventory(collected);
+                handled = true;
             }
         }
 
-        return ItemInteractionResult.SUCCESS;
+        return handled ? ItemInteractionResult.SUCCESS : ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
     @Override

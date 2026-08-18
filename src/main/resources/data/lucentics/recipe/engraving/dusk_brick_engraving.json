@@ -1,0 +1,19 @@
+{
+    "type": "lucentics:engraving",
+    "input": { "item": "minecraft:brick" },
+    "trail_inputs": [
+        {
+            "color": "sunlight",
+            "inputs": [
+                {
+                    "input": { "item": "minecraft:gold_nugget" },
+                    "required_type": { "id": "lucentics:pedestal_ritual" }
+                }
+            ]
+        }
+    ],
+    "outputs": [
+        { "item": { "id": "lucentics:dusk_bricks", "count": 4 } }
+    ],
+    "processing_duration": 100
+}

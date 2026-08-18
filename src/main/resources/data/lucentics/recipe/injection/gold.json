@@ -1,10 +1,11 @@
 {
-    "type": "lucentics:injector",
-    "ingredient": {
+    "type": "lucentics:injection",
+    "input": {
         "item": "minecraft:iron_ingot"
     },
-    "result": {
-        "count": 1,
-        "id": "minecraft:gold_ingot"
-    }
+    "outputs": [
+        { "item": { "id": "minecraft:gold_ingot", "count": 1 } }
+    ],
+    "processing_duration": 100,
+    "daylight_condition": 15
 }
