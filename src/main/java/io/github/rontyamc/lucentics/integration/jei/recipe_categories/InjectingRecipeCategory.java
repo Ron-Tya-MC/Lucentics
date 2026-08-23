@@ -2,44 +2,40 @@ package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
+import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.placement.HorizontalAlignment;
+import mezz.jei.api.gui.placement.VerticalAlignment;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
-import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
-import mezz.jei.api.recipe.category.IRecipeCategory;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import mezz.jei.library.util.RecipeUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-import java.util.List;
-
-public class InjectingRecipeCategory implements IRecipeCategory<InjectorRecipe> {
-    public static final RecipeType<InjectorRecipe> TYPE =
-            RecipeType.create(Lucentics.MOD_ID, "injector", InjectorRecipe.class);
-
+public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectorRecipe> {
     private static final int WIDTH = 120;
     private static final int HEIGHT = 40;
 
     private static final ResourceLocation ARROW_TEXTURE =
             ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "textures/gui/jei/injector_arrow.png");
 
-    private final IDrawable background;
-    private final IDrawable icon;
-    private final IDrawableStatic slot;
     private final IDrawableStatic arrow;
-    private final Font font = Minecraft.getInstance().font;
 
     public InjectingRecipeCategory(IGuiHelper guiHelper) {
-        this.background = guiHelper.createBlankDrawable(WIDTH, HEIGHT);
-        this.icon = guiHelper.createDrawableItemStack(LucenticsBlockRegister.INJECTOR.asStack());
-        this.slot = guiHelper.getSlotDrawable();
+        super(
+                LucenticsJEIIntegration.INJECTION,
+                Component.translatable("jei.lucentics.category.injector"),
+                guiHelper.createDrawableItemStack(LucenticsBlockRegister.INJECTOR.asStack()),
+                WIDTH,
+                HEIGHT
+        );
 
         this.arrow = guiHelper.drawableBuilder(ARROW_TEXTURE, 0, 0, 48, 18)
                 .setTextureSize(48, 18)
@@ -47,44 +43,52 @@ public class InjectingRecipeCategory implements IRecipeCategory<InjectorRecipe> 
     }
 
     @Override
-    public RecipeType<InjectorRecipe> getRecipeType() {
-        return TYPE;
-    }
-
-    @Override
-    public Component getTitle() {
-        return Component.translatable("jei.lucentics.category.injector");
-    }
-
-    @Override
-    @SuppressWarnings("removal")
-    public IDrawable getBackground() {
-        return background;
-    }
-
-    @Override
-    public IDrawable getIcon() {
-        return icon;
-    }
-
-    @Override
     public void draw(InjectorRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        arrow.draw(guiGraphics, 36, 4);
-
-        int daylight = recipe.getDayLightCondition();
-        Component text = Component.translatable("jei.lucentics.info.injector.daylight_condition", daylight);
-        guiGraphics.drawString(font, text, 2, 30, 0x404040, false);
+        arrow.draw(guiGraphics, WIDTH / 2 - 24, 4);
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, InjectorRecipe recipe, IFocusGroup focuses) {
         recipe.getMainInput().ifPresent(sized ->
-                builder.addSlot(RecipeIngredientRole.INPUT, 10, 5)
-                        .setBackground(slot, -1, -1)
-                        .addItemStacks(List.of(sized.getItems())));
+                builder.addInputSlot(10, 5)
+                        .setStandardSlotBackground()
+                        .addIngredients(sized.ingredient())
+        );
 
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 93, 5)
-                .setBackground(slot, -1, -1)
-                .addItemStack(recipe.getResultItem(Minecraft.getInstance().level.registryAccess()));
+        builder.addOutputSlot(93, 5)
+                .setStandardSlotBackground()
+                .addItemStack(RecipeUtil.getResultItem(recipe));
+    }
+
+    @Override
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, InjectorRecipe recipe, IFocusGroup focuses) {
+        addDaylightCondition(builder, recipe);
+        addProcessingDuration(builder, recipe);
+    }
+
+    protected void addDaylightCondition(IRecipeExtrasBuilder builder, InjectorRecipe recipe) {
+        int daylightCondition = recipe.getDayLightCondition();
+        if (daylightCondition <= 0) {
+            daylightCondition = 0;
+        }
+
+        Component text = Component.translatable("jei.lucentics.info.daylight_condition", daylightCondition);
+        builder.addText(text, getWidth() - 20, 10)
+                    .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.LEFT, VerticalAlignment.BOTTOM)
+                    .setTextAlignment(HorizontalAlignment.LEFT)
+                    .setColor(0xFF808080);
+    }
+
+    protected void addProcessingDuration(IRecipeExtrasBuilder builder, InjectorRecipe recipe) {
+        int processingDuration = recipe.getProcessingDuration();
+        if (processingDuration <= 0) {
+            processingDuration = 0;
+        }
+
+        Component text = Component.translatable("jei.lucentics.info.processing_duration", LucenticsJEIIntegration.makeSecond(processingDuration));
+        builder.addText(text, getWidth() - 20, 10)
+                .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM)
+                .setTextAlignment(HorizontalAlignment.RIGHT)
+                .setColor(0xFF808080);
     }
 }

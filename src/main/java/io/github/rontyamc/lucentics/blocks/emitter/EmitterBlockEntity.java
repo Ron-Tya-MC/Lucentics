@@ -20,23 +20,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class EmitterBlockEntity extends BaseBlockEntity implements Clearable {
+public class EmitterBlockEntity extends BaseBlockEntity {
     EmitterBehavior behavior;
-
-    public final ItemStackHandler inventory = new ItemStackHandler(1) {
-        @Override
-        protected int getStackLimit(int slot, ItemStack stack) {
-            return 1;
-        }
-
-        @Override
-        protected void onContentsChanged(int slot) {
-            setChanged();
-            if (level != null && !level.isClientSide()) {
-                level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
-            }
-        }
-    };
 
     public EmitterBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState blockState) {
         super(type, pos, blockState);
@@ -51,27 +36,16 @@ public class EmitterBlockEntity extends BaseBlockEntity implements Clearable {
         return behavior;
     }
 
-    public ItemStack getContent() {
-        return inventory.getStackInSlot(0);
-    }
-
     public void tick() {
         behavior.tick();
     }
 
     public void dropContents(Level level, BlockPos pos) {
-        Vec3 vec = getCenter(pos);
-        ItemStack stack = inventory.getStackInSlot(0);
-
-        if (!stack.isEmpty()) {
-            Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
-        }
-        clearContent();
+        behavior.dropContents(level, pos);
     }
 
     @Override
     protected void saveAdditional(CompoundTag tag, HolderLookup.Provider provider) {
-        tag.put("item", inventory.serializeNBT(provider));
         CompoundTag behaviorTag = new CompoundTag();
         behavior.write(behaviorTag, provider, false);
         tag.put("emitter", behaviorTag);
@@ -81,7 +55,6 @@ public class EmitterBlockEntity extends BaseBlockEntity implements Clearable {
     @Override
     protected void loadAdditional(CompoundTag tag, HolderLookup.Provider provider) {
         super.loadAdditional(tag, provider);
-        inventory.deserializeNBT(provider, tag.getCompound("item"));
         behavior.read(tag.getCompound("emitter"), provider, false);
     }
 
@@ -93,10 +66,5 @@ public class EmitterBlockEntity extends BaseBlockEntity implements Clearable {
     @Override
     public CompoundTag getUpdateTag(HolderLookup.Provider registries) {
         return saveWithoutMetadata(registries);
-    }
-
-    @Override
-    public void clearContent() {
-        inventory.setStackInSlot(0, ItemStack.EMPTY);
     }
 }

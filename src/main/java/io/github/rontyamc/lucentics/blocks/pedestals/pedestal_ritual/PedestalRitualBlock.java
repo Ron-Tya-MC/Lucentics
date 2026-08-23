@@ -27,7 +27,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PedestalRitualBlock extends BaseEntityBlock implements IBlockEntities<PedestalRitualBlockEntity> {
     public static final MapCodec<InjectorBlock> CODEC = simpleCodec(InjectorBlock::new);
-    private static final VoxelShape SHAPE = Block.box(4.0, 0.0, 4.0, 12.0, 15.0, 12.0);
+    private static final VoxelShape SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 10.0, 11.0);
 
     @Override
     public Class<PedestalRitualBlockEntity> getBlockEntityClass() {

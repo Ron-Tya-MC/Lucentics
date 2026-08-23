@@ -39,7 +39,7 @@ public class SlotInteractions {
             return extracted.isEmpty() ? Result.NONE : Result.of(Outcome.EXTRACTED, extracted);
         }
 
-        if (ItemUtilities.canStackItems(current, heldStack)) {
+        if (ItemUtilities.isSameItem(current, heldStack, false)) {
             int mergeCount = Math.min(slot.getRemainingSpace(), heldStack.getCount());
             if (mergeCount <= 0) return Result.NONE;
             slot.insert(heldStack.copyWithCount(mergeCount), simulate);

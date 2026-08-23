@@ -11,7 +11,6 @@ import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRit
 import io.github.rontyamc.lucentics.integration.jade.component_providers.EmitterComponentProvider;
 import io.github.rontyamc.lucentics.integration.jade.component_providers.EngravingTableComponentProvider;
 import io.github.rontyamc.lucentics.integration.jade.component_providers.InjectorComponentProvider;
-import io.github.rontyamc.lucentics.integration.jade.component_providers.pedestals.PedestalRitualComponentProvider;
 import snownee.jade.api.IWailaClientRegistration;
 import snownee.jade.api.IWailaCommonRegistration;
 import snownee.jade.api.IWailaPlugin;
@@ -24,7 +23,6 @@ public class LucenticsJadeIntegration implements IWailaPlugin {
         registration.registerBlockDataProvider(InjectorComponentProvider.INSTANCE, InjectorBlockEntity.class);
         registration.registerBlockDataProvider(EmitterComponentProvider.INSTANCE, EmitterBlockEntity.class);
         registration.registerBlockDataProvider(EngravingTableComponentProvider.INSTANCE, EngravingTableBlockEntity.class);
-        registration.registerBlockDataProvider(PedestalRitualComponentProvider.INSTANCE, PedestalRitualBlockEntity.class);
     }
 
     @Override
@@ -32,6 +30,5 @@ public class LucenticsJadeIntegration implements IWailaPlugin {
         registration.registerBlockComponent(InjectorComponentProvider.INSTANCE, InjectorBlock.class);
         registration.registerBlockComponent(EmitterComponentProvider.INSTANCE, EmitterBlock.class);
         registration.registerBlockComponent(EngravingTableComponentProvider.INSTANCE, EngravingTableBlock.class);
-        registration.registerBlockComponent(PedestalRitualComponentProvider.INSTANCE, PedestalRitualBlock.class);
     }
 }

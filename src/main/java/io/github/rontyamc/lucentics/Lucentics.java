@@ -2,6 +2,8 @@ package io.github.rontyamc.lucentics;
 
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
+import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
+import io.github.rontyamc.lucentics.common.datagen.AddRawLang;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import io.github.rontyamc.lucentics.registers.*;
 
@@ -13,6 +15,8 @@ import net.minecraft.world.item.CreativeModeTab;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
@@ -55,8 +59,11 @@ public class Lucentics {
         LucenticsRecipeTypesRegister.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::registerCapabilities);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        
+        AddRawLang.register();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -76,6 +83,29 @@ public class Lucentics {
         return REGISTRATE;
     }
 
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.INJECTOR.get(),
+                (be, side) -> be.getInjectorBehavior().iHandler
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().iHandler
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(),
+                (be, side) -> be.getEngravingTableBehavior().iHandler
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(),
+                (be, side) -> be.getPedestalRitualBehavior().iHandler
+        );
+    }
+
     @EventBusSubscriber(modid = Lucentics.MOD_ID, value = Dist.CLIENT)
     public static class LucenticsClient {
         public LucenticsClient(ModContainer container) {
@@ -93,6 +123,7 @@ public class Lucentics {
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event){
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);   
         }
     }
 }

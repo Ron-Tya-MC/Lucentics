@@ -21,6 +21,24 @@ public class LucenticsItemRegister {
 
     public static final ItemEntry<Item> DUSK_BRICK = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dusk_brick", Item::new)
             .register();
+    public static final ItemEntry<Item> RED_DUSK_BRICK = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "red_dusk_brick", Item::new)
+            .register();
+    public static final ItemEntry<Item> BLUE_DUSK_BRICK = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "blue_dusk_brick", Item::new)
+            .register();
+    public static final ItemEntry<Item> GREEN_DUSK_BRICK = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "green_dusk_brick", Item::new)
+            .register();
+
+    public static final ItemEntry<Item> LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "light_copper", Item::new)
+            .register();
+    public static final ItemEntry<Item> YELLOW_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "yellow_light_copper", Item::new)
+            .register();
+    public static final ItemEntry<Item> MAGENTA_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "magenta_light_copper", Item::new)
+            .register();
+    public static final ItemEntry<Item> LIGHT_BLUE_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "light_blue_light_copper", Item::new)
+            .register();
+
+    public static final ItemEntry<Item> LENS_FRAME = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "lens_frame", Item::new)
+            .register();
 
     public static final Map<Colors, ItemEntry<LensItem>> LENSES = registerLenses();
 

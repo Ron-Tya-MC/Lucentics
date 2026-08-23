@@ -7,13 +7,25 @@
             "inputs": [
                 {
                     "input": { "item": "minecraft:gold_nugget" },
+                    "required_type": { "id": "lucentics:pedestal_ritual" },
+                    "not_consume": true
+                },
+                {
+                    "input": { "item": "minecraft:iron_nugget" },
                     "required_type": { "id": "lucentics:pedestal_ritual" }
+                },
+                {
+                    "input": { "item": "minecraft:gold_nugget" },
+                    "required_type": { "id": "lucentics:pedestal_ritual" },
+                    "not_consume": true
                 }
+
             ]
         }
     ],
     "outputs": [
-        { "item": { "id": "lucentics:dusk_bricks", "count": 4 } }
+        { "item": { "id": "lucentics:dusk_brick", "count": 4 } }
     ],
-    "processing_duration": 100
+    "processing_duration": 100,
+    "daylight_condition": 12
 }

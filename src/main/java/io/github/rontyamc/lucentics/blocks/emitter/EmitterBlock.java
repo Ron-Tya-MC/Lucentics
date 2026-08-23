@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.blocks.emitter;
 
 import com.mojang.serialization.MapCodec;
 import io.github.rontyamc.lucentics.blocks.IBlockEntities;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.common.SlotInteractions;
 import io.github.rontyamc.lucentics.items.LensItem;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
@@ -58,6 +59,11 @@ public class EmitterBlock extends HorizontalDirectionalBlock implements IBlockEn
     }
 
     @Override
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new EmitterBlockEntity(getBlockEntityType(), pos, state);
+    }
+
+    @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide()) return null;
         return IBlockEntities.createTickerHelper(type, LucenticsBlockEntityRegister.EMITTER.get(), (l, pos, s, be) -> be.tick());
@@ -81,19 +87,15 @@ public class EmitterBlock extends HorizontalDirectionalBlock implements IBlockEn
         }
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
 
-        ItemStackHandler inv = be.inventory;
         EmitterBehavior behavior = be.getEmitterBehavior();
-        ItemStack current = inv.getStackInSlot(0);
+        ItemStack container = behavior.getLensContainer();
         boolean handled = false;
 
         SlotInteractions.SingleItemSlot lensSlot = new SlotInteractions.SingleItemSlot() {
-            public ItemStack getStack() { return current; }
-            public ItemStack insert(ItemStack s, boolean sim) {
-                if (!(s.getItem() instanceof LensItem)) return s;
-                return inv.insertItem(0, s, sim);
-            }
-            public ItemStack extract(int amount, boolean sim) { return inv.extractItem(0, amount, sim); }
-            public int getRemainingSpace() { return current.isEmpty() ? 1 : 0; }
+            public ItemStack getStack() { return container; }
+            public ItemStack insert(ItemStack s, boolean sim) { return behavior.insert(s, sim); }
+            public ItemStack extract(int amount, boolean sim) { return behavior.extract(amount, sim); }
+            public int getRemainingSpace() { return behavior.getRemainingSpace(); }
         };
 
         SlotInteractions.Result result = SlotInteractions.handle(lensSlot, stack, false);

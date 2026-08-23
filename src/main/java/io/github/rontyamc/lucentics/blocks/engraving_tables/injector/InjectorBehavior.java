@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
+import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRecipe;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.ItemUtilities;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
@@ -8,6 +9,7 @@ import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
@@ -27,18 +29,25 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
 
     private ItemStack container;
     private ItemStack buffer;
+    private boolean hasOutputItem;
     private Supplier<Integer> maxStackSize;
     public InjectorIHandler iHandler;
-    private boolean blockMerge = true;
+    private boolean blockMerge;
+    private boolean metDayLightCondition;
 
     private int processingTime = -1;
     private boolean recipeCheck = false;
+    private boolean inserted = false;
+    private boolean extracted = false;
+    private boolean swapped = false;
 
     public InjectorBehavior(BaseBlockEntity be) {
         super(be);
 
+        hasOutputItem = false;
+        metDayLightCondition = true;
         maxStackSize = () -> 64;
-        setBlockMerge(false);
+        setBlockMerge(true);
         iHandler = new InjectorIHandler(this);
         clearContent();
     }
@@ -71,8 +80,8 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     public List<ItemStack> getContents() {
         List<ItemStack> list = new ArrayList<>();
 
-        list.addLast(container == null ? ItemStack.EMPTY : container);
-        list.addLast(buffer == null ? ItemStack.EMPTY : buffer);
+        list.addLast(getContainer());
+        list.addLast(getBuffer());
         return list;
     }
 
@@ -83,46 +92,77 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         setIdle();
     }
 
+    public boolean hasOutputItem() {
+        return hasOutputItem;
+    }
+
+    public boolean metDayLightCondition() {
+        return metDayLightCondition;
+    }
+
+    public void resetTransportNotifies() {
+        inserted = false;
+        extracted = false;
+        swapped = false;
+    }
+
     @Override
     public void tick() {
         super.tick();
         Level level = getWorld();
-        if (level == null || level.isClientSide()) return;
+        if (!(level instanceof ServerLevel serverLevel)) return;
 
-        if (container.isEmpty()) {
+        if (getContainer().isEmpty()) {
             setIdle();
+            metDayLightCondition = true;
+            recipeCheck = false;
             if (!buffer.isEmpty()) {
                 flushBuffer();
             }
+            resetTransportNotifies();
             return;
         }
 
+        swapped = inserted && extracted;
+        InjectorRecipeInput input = new InjectorRecipeInput(getContainer());
+
         if (!isIdle()) {
-            if (hasRecipe(level)) {
+            if (checkDayLightCondition(serverLevel, input) && !swapped) {
                 processingTime--;
                 blockEntity.setChanged();
                 if (processingTime <= 0) {
-                    craftOnce(level);
+                    Optional<RecipeHolder<InjectorRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
+                    if (recipeHolder.isEmpty()) {
+                        setIdle();
+                    } else {
+                        InjectorRecipe recipe = recipeHolder.get().value();
+                        craft(serverLevel, recipe, input);
+                    }
                 }
             } else {
                 setIdle();
+                recipeCheck = true;
             }
-        } else if (recipeCheck) {
-            if (hasRecipe(level)) {
-                startProcessing(level);
+        } else {
+            if (inserted) recipeCheck = true;
+            if (recipeCheck) {
+                if (hasRecipe(serverLevel, input)) {
+                    if (checkDayLightCondition(serverLevel, input)) {
+                        startProcessing(serverLevel, input);
+                    }
+                } else {
+                    recipeCheck = false;
+                }
             }
         }
+
+        resetTransportNotifies();
     }
 
-    private void craftOnce(Level level) {
-        Optional<RecipeHolder<InjectorRecipe>> recipeHolder = getCurrentRecipe(level);
-        if (recipeHolder.isEmpty()) {
-            setIdle();
-            return;
-        }
-        ItemStack result = recipeHolder.get().value().getResultItem(level.registryAccess());
+    private void craft(ServerLevel level, InjectorRecipe recipe, InjectorRecipeInput input) {
+        ItemStack result = recipe.getArguments().outputs().getFirst().item().orElse(ItemStack.EMPTY);
 
-        container.shrink(1);
+        if (recipe.getMainInput().isPresent()) container.shrink(recipe.getMainInput().get().count());
 
         if (buffer.isEmpty()) {
             buffer = result.copy();
@@ -130,11 +170,11 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
             buffer.grow(result.getCount());
         }
 
-        if (container.isEmpty()) {
+        if (getContainer().isEmpty()) {
             flushBuffer();
             setIdle();
-        } else if (hasRecipe(level)) {
-            startProcessing(level);
+        } else if (hasRecipe(level, input)) {
+            startProcessing(level, input);
         } else {
             setIdle();
         }
@@ -142,8 +182,8 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         blockEntity.updated();
     }
 
-    private void startProcessing(Level level) {
-        processingTime = getCurrentRecipe(level)
+    private void startProcessing(ServerLevel level, InjectorRecipeInput input) {
+        processingTime = getCurrentRecipe(level, input)
                 .map(r -> r.value().getProcessingDuration())
                 .orElse(-1);
         if (processingTime <= 0) {
@@ -154,6 +194,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     private void flushBuffer() {
         container = buffer;
         buffer = ItemStack.EMPTY;
+        hasOutputItem = true;
         blockEntity.updated();
     }
 
@@ -165,20 +206,25 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         return processingTime == -1;
     }
 
-    private boolean hasRecipe(Level level) {
-        int daylight = getCurrentRecipe(level)
-                .map(r -> r.value().getDayLightCondition())
-                .orElse(0);
-        return getCurrentRecipe(level).isPresent() && getDaylight(level, getPos()) >= daylight;
+    private boolean hasRecipe(ServerLevel level, InjectorRecipeInput input) {
+        if (getCurrentRecipe(level, input).isEmpty()) {
+            metDayLightCondition = true;
+            return false;
+        }
+        else return true;
     }
 
-    private Optional<RecipeHolder<InjectorRecipe>> getCurrentRecipe(Level level) {
-        if (level == null || container.isEmpty()) return Optional.empty();
-        return level.getRecipeManager().getRecipeFor(
-                LucenticsRecipeTypesRegister.INJECTION_TYPE.get(),
-                new InjectorRecipeInput(container),
-                level
-        );
+    private boolean checkDayLightCondition(ServerLevel level, InjectorRecipeInput input) {
+        int daylight = getCurrentRecipe(level, input)
+                .map(r -> r.value().getDayLightCondition())
+                .orElse(0);
+        metDayLightCondition = getDaylight(level, getPos()) >= daylight;
+        return metDayLightCondition;
+    }
+
+    private Optional<RecipeHolder<InjectorRecipe>> getCurrentRecipe(ServerLevel level, InjectorRecipeInput input) {
+        if (level == null || input.isEmpty()) return Optional.empty();
+        return level.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.INJECTION_TYPE.get(), input, level);
     }
 
     public static int getDaylight(Level level, BlockPos pos) {
@@ -195,23 +241,32 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     }
 
     public void notifyInserted() {
-        this.recipeCheck = true;
+        this.inserted = true;
+    }
+
+    public void notifyExtracted() {
+        this.extracted = true;
     }
 
     public int getRemainingSpace() {
         int max = maxStackSize.get();
-        if (container.isEmpty()) return max;
-        return Math.min(max, container.getMaxStackSize()) - container.getCount();
+        if (getContainer().isEmpty()) return max;
+        return Math.min(max, getContainer().getMaxStackSize()) - getContainer().getCount();
     }
 
     public int getSlotLimit() {
-        int limit = container.isEmpty() ? 64 : container.getMaxStackSize();
+        int limit = getContainer().isEmpty() ? 64 : getContainer().getMaxStackSize();
+        return Math.min(maxStackSize.get(), limit);
+    }
+
+    public int getBufferSlotLimit() {
+        int limit = buffer.isEmpty() ? 64 : buffer.getMaxStackSize();
         return Math.min(maxStackSize.get(), limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        if (!container.isEmpty() && !ItemUtilities.isSameItem(container, stack, false)) return stack;
+        if (!getContainer().isEmpty() && !ItemUtilities.isSameItem(getContainer(), stack, false)) return stack;
 
         int remainingSpace = getRemainingSpace();
         if (remainingSpace <= 0) return stack;
@@ -220,11 +275,12 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
-            if (container.isEmpty()) {
+            if (getContainer().isEmpty()) {
                 container = stack.copyWithCount(insertCount);
             } else {
                 container.grow(insertCount);
             }
+            hasOutputItem = false;
             notifyInserted();
             blockEntity.updated();
         }
@@ -233,13 +289,14 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     }
 
     public ItemStack extract(int amount, boolean simulate) {
-        if (container.isEmpty()) return ItemStack.EMPTY;
+        if (getContainer().isEmpty()) return ItemStack.EMPTY;
 
-        ItemStack copyStack = container.copy();
+        ItemStack copyStack = getContainer().copy();
         ItemStack extracted = copyStack.split(amount);
 
         if (!simulate) {
             container = copyStack;
+            notifyExtracted();
             blockEntity.updated();
         }
 
@@ -274,9 +331,11 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-        if (!container.isEmpty()) nbt.put("container", container.save(registries, new CompoundTag()));
+        if (!getContainer().isEmpty()) nbt.put("container", getContainer().save(registries, new CompoundTag()));
         if (!buffer.isEmpty()) nbt.put("buffer", buffer.save(registries, new CompoundTag()));
         nbt.putInt("processing_time", processingTime);
+        nbt.putBoolean("has_output_item", hasOutputItem);
+        nbt.putBoolean("met_daylight_condition", metDayLightCondition);
     }
 
     @Override
@@ -284,6 +343,8 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         container = nbt.contains("container") ? ItemStack.parse(registries, nbt.getCompound("container")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
         buffer = nbt.contains("buffer") ? ItemStack.parse(registries, nbt.getCompound("buffer")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
         processingTime = nbt.getInt("processing_time");
+        hasOutputItem = nbt.getBoolean("has_output_item");
+        metDayLightCondition = nbt.getBoolean("met_daylight_condition");
     }
 
     @Override

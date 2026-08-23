@@ -1,6 +1,9 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorIHandler;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipeInput;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
@@ -24,22 +27,29 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
+import static io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior.getDaylight;
+
 public class EngravingTableBehavior extends ReceiveBehavior implements Clearable {
     public static final BehaviorType<EngravingTableBehavior> TYPE = new BehaviorType<>("engraving_table");
 
     private ItemStack container = ItemStack.EMPTY;
     private final List<ItemStack> buffer = new ArrayList<>();
+    private boolean hasOutputItem = false;
     private Supplier<Integer> maxStackSize;
-    private boolean blockMerge = true;
+    public EngravingTableIHandler iHandler;
+    private boolean blockMerge;
+    private boolean metDayLightCondition;
 
     private int processingTime = -1;
-    private boolean recipeCheck = false;
 
     public EngravingTableBehavior(BaseBlockEntity be) {
         super(be);
 
+        hasOutputItem = false;
+        metDayLightCondition = true;
         maxStackSize = () -> 64;
-        setBlockMerge(false);
+        setBlockMerge(true);
+        iHandler = new EngravingTableIHandler(this);
         clearContent();
     }
 
@@ -68,6 +78,11 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         return buffer;
     }
 
+    public ItemStack getBuffetAt(int index) {
+        if (index < 0 || index >= buffer.size()) return ItemStack.EMPTY;
+        return buffer.get(index) == null ? ItemStack.EMPTY : buffer.get(index);
+    }
+
     public List<ItemStack> collectBuffer() {
         List<ItemStack> collected = new ArrayList<>(buffer);
         buffer.clear();
@@ -75,10 +90,18 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         return collected;
     }
 
+    public boolean hasOutputItem() {
+        return hasOutputItem;
+    }
+
+    public boolean metDayLightCondition() {
+        return metDayLightCondition;
+    }
+
     public List<ItemStack> getContents() {
         List<ItemStack> list = new ArrayList<>();
 
-        list.addLast(container == null ? ItemStack.EMPTY : container);
+        list.addLast(getContainer());
         for (ItemStack stack : buffer) {
             list.addLast(stack == null ? ItemStack.EMPTY : stack);
         }
@@ -89,22 +112,26 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
     public void clearContent() {
         container = ItemStack.EMPTY;
         buffer.clear();
+        hasOutputItem = false;
         setIdle();
-    }
-
-    public void notifyInserted() {
-        this.recipeCheck = true;
     }
 
     public int getRemainingSpace() {
         int max = maxStackSize.get();
-        if (container.isEmpty()) return max;
-        return Math.min(max, container.getMaxStackSize()) - container.getCount();
+        if (getContainer().isEmpty()) return max;
+        return Math.min(max, getContainer().getMaxStackSize()) - getContainer().getCount();
+    }
+
+    public int getSlotLimit(int slot) {
+        int limit;
+        if (slot == 0) limit = getContainer().isEmpty() ? 64 : getContainer().getMaxStackSize();
+        else limit = getBuffetAt(slot - 1).isEmpty() ? 64 : getBuffetAt(slot - 1).getMaxStackSize();
+        return Math.min(maxStackSize.get(), limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        if (!container.isEmpty() && !ItemUtilities.isSameItem(container, stack, false)) return stack;
+        if (!getContainer().isEmpty() && !ItemUtilities.isSameItem(getContainer(), stack, false)) return stack;
 
         int remainingSpace = getRemainingSpace();
         if (remainingSpace <= 0) return stack;
@@ -113,12 +140,12 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
-            if (container.isEmpty()) {
+            if (getContainer().isEmpty()) {
                 container = stack.copyWithCount(insertCount);
             } else {
                 container.grow(insertCount);
             }
-            notifyInserted();
+            hasOutputItem = false;
             blockEntity.updated();
         }
 
@@ -126,13 +153,31 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
     }
 
     public ItemStack extract(int amount, boolean simulate) {
-        if (container.isEmpty()) return ItemStack.EMPTY;
+        if (getContainer().isEmpty()) return ItemStack.EMPTY;
 
-        ItemStack copyStack = container.copy();
+        ItemStack copyStack = getContainer().copy();
         ItemStack extracted = copyStack.split(amount);
 
         if (!simulate) {
             container = copyStack;
+            blockEntity.updated();
+        }
+
+        return extracted;
+    }
+
+    public ItemStack extractBufferAt(int index, int amount, boolean simulate) {
+        if (getBuffetAt(index).isEmpty()) return ItemStack.EMPTY;
+
+        ItemStack copyStack = getBuffetAt(index).copy();
+        ItemStack extracted = copyStack.split(amount);
+
+        if (!simulate) {
+            if (copyStack.isEmpty()) {
+                buffer.remove(index);
+            } else {
+                buffer.set(index, copyStack);
+            }
             blockEntity.updated();
         }
 
@@ -157,34 +202,46 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         Level level = getWorld();
         if (!(level instanceof ServerLevel serverLevel)) return;
 
-        List<Beam> beams = new ArrayList<>(getTrails().stream().map(b -> b).toList());
+        List<Beam> beams = new ArrayList<>(getTrails().stream().toList());
         trails.clear();
 
-        if (container.isEmpty()) {
+        if (getContainer().isEmpty()) {
             setIdle();
+            metDayLightCondition = true;
+            if (!buffer.isEmpty()) {
+                flushBuffer();
+            }
             return;
         }
 
-        EngravingTableRecipeInput input = new EngravingTableRecipeInput(container, beams);
-        Optional<RecipeHolder<EngravingTableRecipe>> recipeHolder =
-                serverLevel.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), input, serverLevel);
+        EngravingTableRecipeInput input = new EngravingTableRecipeInput(getContainer(), beams);
 
-        if (recipeHolder.isEmpty()) {
-            setIdle();
-            return;
-        }
+        if (!isIdle()) {
+            if (checkDayLightCondition(serverLevel, input) && hasRecipe(serverLevel, input)) {
+                processingTime--;
+                blockEntity.setChanged();
+                if (processingTime > 0) return;
 
-        EngravingTableRecipe recipe = recipeHolder.get().value();
-        if (isIdle()) {
-            processingTime = recipe.getProcessingDuration();
+                Optional<RecipeHolder<EngravingTableRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
+                if (recipeHolder.isEmpty()) {
+                    setIdle();
+                } else {
+                    EngravingTableRecipe recipe = recipeHolder.get().value();
+                    craft(serverLevel, recipe, input);
+                }
+            } else {
+                setIdle();
+            }
+        } else if (checkDayLightCondition(serverLevel, input) && hasRecipe(serverLevel, input)) {
+            startProcessing(serverLevel, input);
         }
-        processingTime--;
-        blockEntity.setChanged();
+    }
 
-        if (processingTime <= 0) {
-            craft(recipe, input, serverLevel);
-            setIdle();
-        }
+    private void flushBuffer() {
+        container = buffer.getFirst();
+        buffer.removeFirst();
+        hasOutputItem = true;
+        blockEntity.updated();
     }
     private void setIdle() {
         processingTime = -1;
@@ -194,7 +251,28 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         return processingTime == -1;
     }
 
-    private void craft(EngravingTableRecipe recipe, EngravingTableRecipeInput input, ServerLevel level) {
+    private boolean hasRecipe(ServerLevel level, EngravingTableRecipeInput input) {
+        if (getCurrentRecipe(level, input).isEmpty()) {
+            metDayLightCondition = true;
+            return false;
+        }
+        else return true;
+    }
+
+    private boolean checkDayLightCondition(ServerLevel level, EngravingTableRecipeInput input) {
+        int daylight = getCurrentRecipe(level, input)
+                .map(r -> r.value().getDayLightCondition())
+                .orElse(0);
+        metDayLightCondition = getDaylight(level, getPos()) >= daylight;
+        return metDayLightCondition;
+    }
+
+    private Optional<RecipeHolder<EngravingTableRecipe>> getCurrentRecipe(ServerLevel level, EngravingTableRecipeInput input) {
+        if (level == null || input.isEmpty()) return Optional.empty();
+        return level.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), input, level);
+    }
+
+    private void craft(ServerLevel level, EngravingTableRecipe recipe, EngravingTableRecipeInput input) {
         Optional<List<EngravingTableRecipe.ConsumptionEntry>> consumption = recipe.resolveConsumptionCached(input, level);
         if (consumption.isEmpty()) return;
 
@@ -204,15 +282,34 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         }
 
         for (var output : recipe.getArguments().outputs()) {
-            output.item().ifPresent(item -> buffer.add(item.copy()));
+            output.item().ifPresent(item -> ItemUtilities.stackOrAppend(buffer, item));
         }
+
+        if (getContainer().isEmpty()) {
+            flushBuffer();
+            setIdle();
+        } else if (hasRecipe(level, input)) {
+            startProcessing(level, input);
+        } else {
+            setIdle();
+        }
+
         blockEntity.updated();
+    }
+
+    private void startProcessing(ServerLevel level, EngravingTableRecipeInput input) {
+        processingTime = getCurrentRecipe(level, input)
+                .map(r -> r.value().getProcessingDuration())
+                .orElse(-1);
+        if (processingTime <= 0) {
+            processingTime = -1;
+        }
     }
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-        if (!container.isEmpty()) {
-            nbt.put("container", container.save(registries, new CompoundTag()));
+        if (!getContainer().isEmpty()) {
+            nbt.put("container", getContainer().save(registries, new CompoundTag()));
         }
         ListTag bufferList = new ListTag();
         for (ItemStack stack : buffer) {
@@ -220,6 +317,8 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         }
         nbt.put("buffer", bufferList);
         nbt.putInt("processing_time", processingTime);
+        nbt.putBoolean("has_output_item", hasOutputItem);
+        nbt.putBoolean("met_daylight_condition", metDayLightCondition);
     }
 
     @Override
@@ -235,10 +334,10 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         }
 
         processingTime = nbt.getInt("processing_time");
+        hasOutputItem = nbt.getBoolean("has_output_item");
+        metDayLightCondition = nbt.getBoolean("met_daylight_condition");
     }
 
     @Override
-    public boolean isSafeNBT() {
-        return true;
-    }
+    public boolean isSafeNBT() { return true; }
 }

@@ -1,10 +1,11 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
+import io.github.rontyamc.lucentics.common.ItemUtilities;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
 public class InjectorIHandler implements IItemHandler {
-    private InjectorBehavior behavior;
+    private final InjectorBehavior behavior;
 
     public InjectorIHandler(InjectorBehavior behavior) {
         this.behavior = behavior;
@@ -12,44 +13,42 @@ public class InjectorIHandler implements IItemHandler {
 
     @Override
     public int getSlots() {
-        return 1;
+        return 2;
     }
 
     @Override
-    public ItemStack getStackInSlot(int i) {
-        return behavior.getContainer();
+    public ItemStack getStackInSlot(int slot) {
+        return slot == 0 ? behavior.getContainer() : behavior.getBuffer();
     }
 
     @Override
     public ItemStack insertItem(int slot, ItemStack itemStack, boolean simulate) {
-        if (!behavior.getContainer().isEmpty() && behavior.getBlockMerge()) return itemStack;
+        if (slot != 0) return itemStack;
+        if (behavior.hasOutputItem()) return itemStack;
+        if (!behavior.getContainer().isEmpty() && !behavior.getBlockMerge()) return itemStack;
 
-        ItemStack returnStack = behavior.insert(itemStack, simulate);
-        if (!simulate && returnStack != itemStack) {
-            behavior.blockEntity.updated();
-        }
-        return returnStack;
+        return behavior.insert(itemStack, simulate);
     }
 
     @Override
     public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        if (behavior.getContainer() == null) {
-            return ItemStack.EMPTY;
-        }
-        ItemStack returnStack = behavior.extract(amount, simulate);
-        if (!simulate && returnStack != ItemStack.EMPTY) {
-            behavior.blockEntity.updated();
-        }
-        return returnStack;
+        if (slot == 1) return behavior.extractBuffer(amount, simulate);
+
+        if (behavior.getContainer() == null) return ItemStack.EMPTY;
+        if (!behavior.hasOutputItem()) return ItemStack.EMPTY;
+
+        return behavior.extract(amount, simulate);
     }
 
     @Override
-    public int getSlotLimit(int i) {
-        return behavior.getSlotLimit();
+    public int getSlotLimit(int slot) {
+        if (slot == 0) return behavior.getSlotLimit();
+        return behavior.getBufferSlotLimit();
     }
 
     @Override
-    public boolean isItemValid(int i, ItemStack itemStack) {
-        return false;
+    public boolean isItemValid(int slot, ItemStack itemStack) {
+        if (slot != 0) return false;
+        return behavior.getContainer().isEmpty() || ItemUtilities.isSameItem(behavior.getContainer(), itemStack, false);
     }
 }

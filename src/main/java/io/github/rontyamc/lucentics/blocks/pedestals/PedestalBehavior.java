@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.pedestals;
 
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorIHandler;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
@@ -13,14 +14,31 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.function.Supplier;
+
 public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice, Clearable {
     public static final BehaviorType<PedestalBehavior> TYPE = new BehaviorType<>("pedestal");
-    private static final int MAX_STACK_SIZE = 64;
 
     private ItemStack content = ItemStack.EMPTY;
+    private Supplier<Integer> maxStackSize;
+    public PedestalIHandler iHandler;
+    private boolean blockMerge;
 
     public PedestalBehavior(BaseBlockEntity be) {
         super(be);
+
+        maxStackSize = () -> 64;
+        setBlockMerge(true);
+        iHandler = new PedestalIHandler(this);
+        clearContent();
+    }
+
+    public void setBlockMerge(boolean blockMerge) {
+        this.blockMerge = blockMerge;
+    }
+
+    public boolean getBlockMerge() {
+        return blockMerge;
     }
 
     @Override
@@ -39,13 +57,19 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     }
 
     public int getRemainingSpace() {
-        if (content.isEmpty()) return MAX_STACK_SIZE;
-        return Math.min(MAX_STACK_SIZE, content.getMaxStackSize()) - content.getCount();
+        int max = maxStackSize.get();
+        if (getContent().isEmpty()) return max;
+        return Math.min(max, getContent().getMaxStackSize()) - getContent().getCount();
+    }
+
+    public int getSlotLimit() {
+        int limit = getContent().isEmpty() ? 64 : getContent().getMaxStackSize();
+        return Math.min(maxStackSize.get(), limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        if (!content.isEmpty() && !io.github.rontyamc.lucentics.common.ItemUtilities.isSameItem(content, stack, false)) {
+        if (!getContent().isEmpty() && !io.github.rontyamc.lucentics.common.ItemUtilities.isSameItem(getContent(), stack, false)) {
             return stack;
         }
 
@@ -56,7 +80,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
         ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
-            if (content.isEmpty()) {
+            if (getContent().isEmpty()) {
                 content = stack.copyWithCount(insertCount);
             } else {
                 content.grow(insertCount);
@@ -68,9 +92,9 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     }
 
     public ItemStack extract(int amount, boolean simulate) {
-        if (content.isEmpty()) return ItemStack.EMPTY;
+        if (getContent().isEmpty()) return ItemStack.EMPTY;
 
-        ItemStack copyStack = content.copy();
+        ItemStack copyStack = getContent().copy();
         ItemStack extracted = copyStack.split(amount);
 
         if (!simulate) {
@@ -93,15 +117,15 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
 
     @Override
     public void consumeItem(int amount) {
-        if (content.isEmpty()) return;
+        if (getContent().isEmpty()) return;
         content.shrink(amount);
         blockEntity.updated();
     }
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-        if (!content.isEmpty()) {
-            nbt.put("content", content.save(registries, new CompoundTag()));
+        if (!getContent().isEmpty()) {
+            nbt.put("content", getContent().save(registries, new CompoundTag()));
         }
     }
 

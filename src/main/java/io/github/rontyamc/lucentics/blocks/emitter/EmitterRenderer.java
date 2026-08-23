@@ -34,7 +34,7 @@ public class EmitterRenderer implements BlockEntityRenderer<EmitterBlockEntity> 
 
     public void renderLens(EmitterBlockEntity blockEntity, PoseStack poseStack, MultiBufferSource bufferSource) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        ItemStack lens = blockEntity.inventory.getStackInSlot(0);
+        ItemStack lens = blockEntity.getEmitterBehavior().getLensContainer();
 
         poseStack.pushPose();
         poseStack.translate(0.0f, 1.0f, 0.0f);

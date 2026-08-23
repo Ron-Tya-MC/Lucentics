@@ -1,7 +1,11 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalBlockEntity;
+import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.items.LensItem;
+import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -19,23 +23,21 @@ public enum EmitterComponentProvider implements IBlockComponentProvider, IServer
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         CompoundTag data = accessor.getServerData();
-        if (data.isEmpty() || !data.contains("lens")) return;
-
-        IElementHelper helper = IElementHelper.get();
         Level level = accessor.getLevel();
 
         ItemStack content = ItemStack.parse(level.registryAccess(), data.getCompound("lens")).orElse(ItemStack.EMPTY);
+        Colors color = (!content.isEmpty() && content.getItem() instanceof LensItem) ? ((LensItem) content.getItem()).getColor() : Colors.SUNLIGHT;
 
-        tooltip.add(helper.item(content.copyWithCount(1)));
-        tooltip.append(helper.text(Component.literal(content.getCount() + "x ").append(content.getHoverName())));
+        tooltip.add(Component.translatable("term.lucentics.colors." + color.getName()));
     }
 
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
         if (!(accessor.getBlockEntity() instanceof EmitterBlockEntity be)) return;
-        ItemStack content = be.getContent();
-        if (!content.isEmpty()) {
-            data.put("lens", content.save(accessor.getLevel().registryAccess(), new CompoundTag()));
+        var behavior = be.getEmitterBehavior();
+
+        if (!behavior.getLensContainer().isEmpty()) {
+            data.put("lens", behavior.getLensContainer().save(accessor.getLevel().registryAccess(), new CompoundTag()));
         }
     }
 

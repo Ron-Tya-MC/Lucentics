@@ -1,6 +1,14 @@
 {
   "values": [
     "lucentics:dusk_bricks",
-    "lucentics:injector"
+    "lucentics:red_dusk_bricks",
+    "lucentics:blue_dusk_bricks",
+    "lucentics:green_dusk_bricks",
+    "lucentics:dawnstone",
+    "lucentics:injector",
+    "lucentics:emitter",
+    "lucentics:engraving_table",
+    "lucentics:pedestal_ritual",
+    "lucentics:prism_ritual"
   ]
 }
