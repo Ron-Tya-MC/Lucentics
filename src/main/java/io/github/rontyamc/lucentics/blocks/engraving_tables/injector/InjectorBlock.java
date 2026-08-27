@@ -22,11 +22,19 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class InjectorBlock extends BaseEntityBlock implements IBlockEntities<InjectorBlockEntity> {
     public static final MapCodec<InjectorBlock> CODEC = simpleCodec(InjectorBlock::new);
-    private static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 15.0, 16.0);
+    private static final VoxelShape BASE = Block.box(0.0, 0.0, 0.0, 16.0, 8.0, 16.0);
+    private static final VoxelShape POLE1 = Block.box(1.0, 8.0, 1.0, 3.0, 15.0, 3.0);
+    private static final VoxelShape POLE2 = Block.box(13.0, 8.0, 1.0, 15.0, 15.0, 3.0);
+    private static final VoxelShape POLE3 = Block.box(1.0, 8.0, 13.0, 3.0, 15.0, 15.0);
+    private static final VoxelShape POLE4 = Block.box(13.0, 8.0, 13.0, 15.0, 15.0, 15.0);
+    private static final VoxelShape LENS = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 16.0);
+
+    private static final VoxelShape SHAPE = Shapes.or(BASE, POLE1, POLE2, POLE3, POLE4, LENS);
 
     @Override
     public Class<InjectorBlockEntity> getBlockEntityClass() {
@@ -83,6 +91,7 @@ public class InjectorBlock extends BaseEntityBlock implements IBlockEntities<Inj
             public ItemStack insert(ItemStack s, boolean sim) { return behavior.insert(s, sim); }
             public ItemStack extract(int amount, boolean sim) { return behavior.extract(amount, sim); }
             public int getRemainingSpace() { return behavior.getRemainingSpace(); }
+            public boolean blockMerge() { return behavior.getBlockMerge(); }
         };
 
         SlotInteractions.Result result = SlotInteractions.handle(containerSlot, stack, false);

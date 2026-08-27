@@ -38,7 +38,7 @@ public final class SizedIngredient {
 
     public static final Codec<SizedIngredient> CODEC = RecordCodecBuilder.create(inst -> inst.group(
                     Ingredient.MAP_CODEC_NONEMPTY.forGetter(SizedIngredient::ingredient),
-                    NeoForgeExtraCodecs.optionalFieldAlwaysWrite(ExtraCodecs.POSITIVE_INT, "amount", 1).forGetter(SizedIngredient::count))
+                    NeoForgeExtraCodecs.optionalFieldAlwaysWrite(ExtraCodecs.POSITIVE_INT, "count", 1).forGetter(SizedIngredient::count))
             .apply(inst, SizedIngredient::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SizedIngredient> STREAM_CODEC = StreamCodec.composite(

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "lucentics:dawnstone"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    }
+  },
+  "pattern": [
+    "DGD",
+    " D ",
+    "DDD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:pedestal_ritual"
+  }
+}

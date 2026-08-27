@@ -1,11 +1,8 @@
 package io.github.rontyamc.lucentics.common.behavior;
 
-import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.prism.IPrismBehavior ;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.beam.BeamNode;
-import io.github.rontyamc.lucentics.common.beam.DeviceSlot;
-import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,11 +20,13 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
     public static final BehaviorType<EmitBehavior> TYPE = new BehaviorType<>("emit");
     private static final int MAX_DISTANCE = 8;
 
-    protected int beamLength = MAX_DISTANCE;
+    protected int beamLength = 0;
 
     private List<BeamNode> trail = List.of();
     private BeamNode endpoint = null;
     protected Colors color = Colors.SUNLIGHT;
+
+    private boolean stopBeam = true;
 
     public EmitBehavior(BaseBlockEntity be) {
         super(be);
@@ -43,12 +42,24 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
 
     public void setColor(Colors color) { this.color = color; }
 
+    public void setStopBeam(boolean bool) { stopBeam = bool; }
+
+    public BeamNode getEndpoint() { return endpoint; }
+
     @Override
     public void tick() {
         super.tick();
 
         Level level = getWorld();
         if (!(level instanceof ServerLevel serverLevel)) return;
+
+        if (stopBeam) {
+            if (!trail.isEmpty() || endpoint != null || beamLength != 0) {
+                clearBeam(serverLevel);
+            }
+            stopBeam = false;
+            return;
+        }
 
         Direction facing = getFacing();
         int newLength = rayCast(serverLevel, getPos(), facing);
@@ -105,6 +116,18 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
             break;
         }
 
+        if (newEndpoint == null) {
+            BlockPos checkPos = origin.relative(direction, MAX_DISTANCE + 1);
+            BlockState state = level.getBlockState(checkPos);
+            BlockEntity be = level.getBlockEntity(checkPos);
+            if (be instanceof BaseBlockEntity base) {
+                if (base.findBehavior(b -> b instanceof ReceiveBehavior).isPresent()) {
+                    ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+                    newEndpoint = new BeamNode(blockId, checkPos.immutable(), level.dimension());
+                }
+            }
+        }
+
         this.trail = newTrail;
         this.endpoint = newEndpoint;
         this.color = color;
@@ -123,6 +146,13 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
             return distance - 1;
         }
         return MAX_DISTANCE;
+    }
+
+    private void clearBeam(ServerLevel level) {
+        this.trail = List.of();
+        this.endpoint = null;
+        this.beamLength = 0;
+        level.sendBlockUpdated(getPos(), blockEntity.getBlockState(), blockEntity.getBlockState(), 3);
     }
 
     protected abstract Direction getFacing();

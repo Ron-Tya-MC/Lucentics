@@ -80,6 +80,7 @@ public class PedestalRitualBlock extends BaseEntityBlock implements IBlockEntiti
             public ItemStack insert(ItemStack s, boolean sim) { return behavior.insert(s, sim); }
             public ItemStack extract(int amount, boolean sim) { return behavior.extract(amount, sim); }
             public int getRemainingSpace() { return behavior.getRemainingSpace(); }
+            public boolean blockMerge() { return behavior.getBlockMerge(); }
         };
 
         SlotInteractions.Result result = SlotInteractions.handle(containerSlot, stack, false);

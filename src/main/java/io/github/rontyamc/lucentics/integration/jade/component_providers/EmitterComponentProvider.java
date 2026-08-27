@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalBlockEntity;
@@ -23,6 +24,8 @@ public enum EmitterComponentProvider implements IBlockComponentProvider, IServer
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
         CompoundTag data = accessor.getServerData();
+        if (data.isEmpty() || !data.contains("lens")) return;
+
         Level level = accessor.getLevel();
 
         ItemStack content = ItemStack.parse(level.registryAccess(), data.getCompound("lens")).orElse(ItemStack.EMPTY);
@@ -43,6 +46,6 @@ public enum EmitterComponentProvider implements IBlockComponentProvider, IServer
 
     @Override
     public net.minecraft.resources.ResourceLocation getUid() {
-        return net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("lucentics", "emitter");
+        return Lucentics.defaultLocation("emitter");
     }
 }

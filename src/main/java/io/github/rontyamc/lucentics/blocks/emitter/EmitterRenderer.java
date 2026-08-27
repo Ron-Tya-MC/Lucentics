@@ -36,12 +36,30 @@ public class EmitterRenderer implements BlockEntityRenderer<EmitterBlockEntity> 
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
         ItemStack lens = blockEntity.getEmitterBehavior().getLensContainer();
 
-        poseStack.pushPose();
-        poseStack.translate(0.0f, 1.0f, 0.0f);
-        poseStack.scale(1.0f, 1.0f, 1.0f);
-        poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+        Direction facing = blockEntity.getBlockState().getValue(EmitterBlock.FACING);
 
-        itemRenderer.renderStatic(lens, ItemDisplayContext.FIXED, getLightLevel(blockEntity.getLevel(), blockEntity.getBlockPos()), OverlayTexture.NO_OVERLAY, poseStack, bufferSource, blockEntity.getLevel(), 1);
+        poseStack.pushPose();
+        switch (facing) {
+            case NORTH -> {
+                poseStack.translate(0.5f, 0.5f, 1.0f / 32);
+            }
+            case SOUTH -> {
+                poseStack.translate(0.5f, 0.5f, 31 * 1.0f / 32);
+                poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+            }
+            case WEST -> {
+                poseStack.translate(1.0f / 32, 0.5f, 0.5f);
+                poseStack.mulPose(Axis.YP.rotationDegrees(90.0F));
+            }
+            case EAST -> {
+                poseStack.translate(31 * 1.0f / 32, 0.5f, 0.5f);
+                poseStack.mulPose(Axis.YP.rotationDegrees(-90.0F));
+            }
+            default -> {}
+        }
+        poseStack.scale(1.0f, 1.0f, 1.0f);
+
+        itemRenderer.renderStatic(lens, ItemDisplayContext.FIXED, LightTexture.pack(15, 15), OverlayTexture.NO_OVERLAY, poseStack, bufferSource, blockEntity.getLevel(), 1);
         poseStack.popPose();
     }
 
@@ -55,30 +73,28 @@ public class EmitterRenderer implements BlockEntityRenderer<EmitterBlockEntity> 
         long gameTime = blockEntity.getLevel().getGameTime();
 
         poseStack.pushPose();
-        poseStack.translate(0, 0.5, 0);
+        poseStack.translate(0.5, 0.5, 0.5);
 
         switch (facing) {
             case NORTH -> {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-90));
-                poseStack.translate(0, 0, -0.5);
             }
             case SOUTH -> {
                 poseStack.mulPose(Axis.XP.rotationDegrees(90));
-                poseStack.translate(0, 0, -0.5);
             }
             case WEST -> {
                 poseStack.mulPose(Axis.ZP.rotationDegrees(90));
-                poseStack.translate(-0.5, 0, 0);
             }
             case EAST -> {
                 poseStack.mulPose(Axis.ZP.rotationDegrees(-90));
-                poseStack.translate(-0.5, 0, 0);
             }
             default -> {}
         }
+        poseStack.translate(-0.5, 0.0, -0.5);
+        if (behavior.getEndpoint() == null) poseStack.translate(0, -0.4375, 0);
 
         BeaconRenderer.renderBeaconBeam(poseStack, bufferSource, BEAM_TEXTURE,
-                partialTick, 1.0f, gameTime, 0, length+1, argb, 0.15f, 0.2f);
+                partialTick, 1.0f, gameTime, 0, length + 1, argb, 0.1f, 0.13f);
 
         poseStack.popPose();
     }

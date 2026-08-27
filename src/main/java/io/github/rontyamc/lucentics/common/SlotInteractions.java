@@ -10,6 +10,7 @@ public class SlotInteractions {
         ItemStack insert(ItemStack stack, boolean simulate);
         ItemStack extract(int amount, boolean simulate);
         int getRemainingSpace();
+        boolean blockMerge();
     }
 
     public enum Outcome {
@@ -39,7 +40,7 @@ public class SlotInteractions {
             return extracted.isEmpty() ? Result.NONE : Result.of(Outcome.EXTRACTED, extracted);
         }
 
-        if (ItemUtilities.isSameItem(current, heldStack, false)) {
+        if (ItemUtilities.isSameItem(current, heldStack, false) && slot.blockMerge()) {
             int mergeCount = Math.min(slot.getRemainingSpace(), heldStack.getCount());
             if (mergeCount <= 0) return Result.NONE;
             slot.insert(heldStack.copyWithCount(mergeCount), simulate);

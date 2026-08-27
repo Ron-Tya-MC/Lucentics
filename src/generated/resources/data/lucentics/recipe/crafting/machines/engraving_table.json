@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "lucentics:dusk_bricks"
+    },
+    "D": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "lucentics:dawnstone"
+    }
+  },
+  "pattern": [
+    "SSS",
+    "SDS",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:engraving_table"
+  }
+}

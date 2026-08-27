@@ -23,8 +23,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectorReci
     private static final int WIDTH = 120;
     private static final int HEIGHT = 40;
 
-    private static final ResourceLocation ARROW_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "textures/gui/jei/injector_arrow.png");
+    private static final ResourceLocation ARROW_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/injector_arrow.png");
 
     private final IDrawableStatic arrow;
 

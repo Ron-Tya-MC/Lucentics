@@ -8,7 +8,7 @@ import java.awt.*;
 import java.util.Optional;
 
 public enum Colors implements StringRepresentable {
-    SUNLIGHT("sunlight", 1, 0xFFF9C4, null),
+    SUNLIGHT("sunlight", 1, 16775620, null),
 
     RED(DyeColor.RED, 2),
     BLUE(DyeColor.BLUE, 2),

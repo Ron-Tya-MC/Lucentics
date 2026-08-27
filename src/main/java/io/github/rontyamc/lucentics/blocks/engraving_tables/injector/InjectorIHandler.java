@@ -24,7 +24,6 @@ public class InjectorIHandler implements IItemHandler {
     @Override
     public ItemStack insertItem(int slot, ItemStack itemStack, boolean simulate) {
         if (slot != 0) return itemStack;
-        if (behavior.hasOutputItem()) return itemStack;
         if (!behavior.getContainer().isEmpty() && !behavior.getBlockMerge()) return itemStack;
 
         return behavior.insert(itemStack, simulate);

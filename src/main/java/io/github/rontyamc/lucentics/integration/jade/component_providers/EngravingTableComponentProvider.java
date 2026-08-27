@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
@@ -40,6 +41,6 @@ public enum EngravingTableComponentProvider implements IBlockComponentProvider, 
 
     @Override
     public net.minecraft.resources.ResourceLocation getUid() {
-        return net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("lucentics", "engraving_table");
+        return Lucentics.defaultLocation("engraving_table");
     }
 }

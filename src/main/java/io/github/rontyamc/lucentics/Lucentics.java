@@ -1,8 +1,11 @@
 package io.github.rontyamc.lucentics;
 
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
+import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
+import io.github.rontyamc.lucentics.client.particle.GlowParticle;
+import io.github.rontyamc.lucentics.client.particle.SphereParticle;
 import io.github.rontyamc.lucentics.common.datagen.AddRawLang;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import io.github.rontyamc.lucentics.registers.*;
@@ -10,6 +13,7 @@ import io.github.rontyamc.lucentics.registers.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
 import net.neoforged.api.distmarker.Dist;
@@ -18,6 +22,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import org.slf4j.Logger;
@@ -55,6 +60,7 @@ public class Lucentics {
         LucenticsBlockRegister.register();
         LucenticsBlockEntityRegister.register();
         LucenticsItemRegister.register();
+        LucenticsParticleRegister.register(modEventBus);
 
         LucenticsRecipeTypesRegister.register(modEventBus);
 
@@ -62,7 +68,7 @@ public class Lucentics {
         modEventBus.addListener(this::registerCapabilities);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-        
+
         AddRawLang.register();
     }
 
@@ -106,6 +112,10 @@ public class Lucentics {
         );
     }
 
+    public static ResourceLocation defaultLocation(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+
     @EventBusSubscriber(modid = Lucentics.MOD_ID, value = Dist.CLIENT)
     public static class LucenticsClient {
         public LucenticsClient(ModContainer container) {
@@ -123,7 +133,14 @@ public class Lucentics {
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event){
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
-            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);   
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(), EngravingTableRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
+        }
+
+        @SubscribeEvent
+        static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(LucenticsParticleRegister.SPHERE.get(), SphereParticle.Provider::new);
+            event.registerSpriteSet(LucenticsParticleRegister.GLOW.get(), GlowParticle.Provider::new);
         }
     }
 }

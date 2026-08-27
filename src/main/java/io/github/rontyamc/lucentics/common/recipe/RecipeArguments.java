@@ -16,7 +16,7 @@ import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.Optional;
 
-public record RecipeArguments (
+public record RecipeArguments(
     Either<SizedIngredient, SizedFluidIngredient> mainInput,
     NonNullList<TrailInput> trailInputs,
     NonNullList<Output> outputs,

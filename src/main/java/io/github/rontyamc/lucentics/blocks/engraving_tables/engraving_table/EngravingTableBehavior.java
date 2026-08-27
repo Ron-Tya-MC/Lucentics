@@ -1,20 +1,20 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
-import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorIHandler;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipeInput;
+import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.ReceiveBehavior;
+import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
@@ -31,6 +31,8 @@ import static io.github.rontyamc.lucentics.blocks.engraving_tables.injector.Inje
 
 public class EngravingTableBehavior extends ReceiveBehavior implements Clearable {
     public static final BehaviorType<EngravingTableBehavior> TYPE = new BehaviorType<>("engraving_table");
+
+    private final RandomSource randomSource = RandomSource.create();
 
     private ItemStack container = ItemStack.EMPTY;
     private final List<ItemStack> buffer = new ArrayList<>();
@@ -58,7 +60,7 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
     }
 
     public boolean getBlockMerge() {
-        return blockMerge;
+        return blockMerge && !hasOutputItem;
     }
 
     public int getProcessingTime() {
@@ -160,6 +162,7 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
 
         if (!simulate) {
             container = copyStack;
+            if (container.isEmpty()) hasOutputItem = false;
             blockEntity.updated();
         }
 
@@ -196,6 +199,43 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         clearContent();
     }
 
+    private void spawnCraftingParticles(ServerLevel level, List<Beam> beams) {
+        BlockPos pos = getPos();
+
+        double dx = randomSource.nextDouble() < 0.5 ? 3.0d / 32 : 29.0d / 32;
+        double dy = Mth.lerp(randomSource.nextDouble(), 0.1, 0.5);
+        double dz = randomSource.nextDouble() < 0.5 ? 3.0d / 32 : 29.0d / 32;
+
+        double Sx = pos.getX() + dx;
+        double Sy = pos.getY() + 7.0d / 8;
+        double Sz = pos.getZ() + dz;
+
+        double Tx = Sx + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Ty = Sy + dy;
+        double Tz = Sz + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+
+        double Vx = Tx - Sx;
+        double Vy = Ty - Sy;
+        double Vz = Tz - Sz;
+
+        int rgb;
+
+        if (!beams.isEmpty()) {
+            List<Integer> colors = new ArrayList<>();
+            for (Beam beam : beams) {
+                colors.add(beam.color().getColorCode());
+            }
+            rgb = colors.get(Mth.lerpInt(randomSource.nextFloat(), 1, colors.size()) - 1);
+        } else {
+            rgb = Colors.BLACK.getColorCode();
+        }
+        float r = ((rgb >> 16) & 0xFF) / 255f;
+        float g = ((rgb >> 8) & 0xFF) / 255f;
+        float b = (rgb & 0xFF) / 255f;
+
+        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.07);
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -207,6 +247,7 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
 
         if (getContainer().isEmpty()) {
             setIdle();
+            hasOutputItem = false;
             metDayLightCondition = true;
             if (!buffer.isEmpty()) {
                 flushBuffer();
@@ -220,6 +261,10 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
             if (checkDayLightCondition(serverLevel, input) && hasRecipe(serverLevel, input)) {
                 processingTime--;
                 blockEntity.setChanged();
+                if (processingTime %3 == 0) {
+                    spawnCraftingParticles(serverLevel, beams);
+                    spawnCraftingParticles(serverLevel, beams);
+                }
                 if (processingTime > 0) return;
 
                 Optional<RecipeHolder<EngravingTableRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);

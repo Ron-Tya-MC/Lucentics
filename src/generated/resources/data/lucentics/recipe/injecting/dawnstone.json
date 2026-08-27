@@ -1,0 +1,17 @@
+{
+  "type": "lucentics:injection",
+  "daylight_condition": 7,
+  "input": {
+    "count": 1,
+    "item": "minecraft:diorite"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:dawnstone"
+      }
+    }
+  ],
+  "processing_duration": 100
+}

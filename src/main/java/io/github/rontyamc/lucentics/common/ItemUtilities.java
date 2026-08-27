@@ -1,10 +1,14 @@
 package io.github.rontyamc.lucentics.common;
 
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ItemLike;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ItemUtilities {
     public static boolean isSameItem(ItemStack stackA, ItemStack stackB, boolean allowEmpty) {
@@ -33,5 +37,9 @@ public class ItemUtilities {
         if (!newStack.isEmpty()) {
             container.add(newStack);
         }
+    }
+
+    public static ResourceLocation getId(Supplier<? extends ItemLike> output) {
+        return BuiltInRegistries.ITEM.getKey(output.get().asItem());
     }
 }

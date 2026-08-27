@@ -3,14 +3,12 @@ package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRecipe;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
 import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.placement.HorizontalAlignment;
@@ -19,7 +17,6 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
-import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
 import mezz.jei.library.util.RecipeUtil;
 import net.minecraft.client.Minecraft;
@@ -48,11 +45,11 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
     private static final int ITEM_SLOT_OFFSET = 0;
 
     private static final ResourceLocation ARROW_ALPHA_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "textures/gui/jei/engraving_arrow_alpha.png");
+            Lucentics.defaultLocation("textures/gui/jei/engraving_arrow_alpha.png");
     private static final ResourceLocation ARROW_OVERLAY_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "textures/gui/jei/engraving_arrow_overlay.png");
+            Lucentics.defaultLocation("textures/gui/jei/engraving_arrow_overlay.png");
     private static final ResourceLocation ARROW_LIGHT_TEXTURE =
-            ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "textures/gui/jei/injector_arrow.png");
+            Lucentics.defaultLocation("textures/gui/jei/injector_arrow.png");
 
     private final IDrawableStatic arrowAlpha;
     private final IDrawableStatic arrowOverlay;
@@ -93,7 +90,7 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
             drawColored(guiGraphics, arrowAlpha, 20, y, color);
             arrowOverlay.draw(guiGraphics, 20, y);
 
-            guiGraphics.drawString(Minecraft.getInstance().font, String.valueOf(row+1) + ".",
+            guiGraphics.drawString(Minecraft.getInstance().font, row + 1 + ".",
                     8, y+2, 0xFF808080, false);
         }
 
@@ -111,9 +108,11 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
         float g = ((rgb >> 8) & 0xFF) / 255f;
         float b = (rgb & 0xFF) / 255f;
 
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
         RenderSystem.setShaderColor(r, g, b, 1.0f);
         drawable.draw(guiGraphics, x, y);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f); // 必ずリセット
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @SuppressWarnings("removal")

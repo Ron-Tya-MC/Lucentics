@@ -1,6 +1,5 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
-import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.beam.BeamNode;

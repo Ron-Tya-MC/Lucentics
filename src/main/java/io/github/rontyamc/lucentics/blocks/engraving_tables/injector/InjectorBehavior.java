@@ -1,16 +1,18 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRecipe;
+import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.ItemUtilities;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
+import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
@@ -26,6 +28,8 @@ import java.util.function.Supplier;
 
 public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     public static final BehaviorType<InjectorBehavior> TYPE = new BehaviorType<>("injector");
+
+    private final RandomSource randomSource = RandomSource.create();
 
     private ItemStack container;
     private ItemStack buffer;
@@ -57,7 +61,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     }
 
     public boolean getBlockMerge() {
-        return blockMerge;
+        return blockMerge && !hasOutputItem;
     }
 
     public int getProcessingTime() {
@@ -115,6 +119,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         if (getContainer().isEmpty()) {
             setIdle();
             metDayLightCondition = true;
+            hasOutputItem = false;
             recipeCheck = false;
             if (!buffer.isEmpty()) {
                 flushBuffer();
@@ -129,6 +134,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         if (!isIdle()) {
             if (checkDayLightCondition(serverLevel, input) && !swapped) {
                 processingTime--;
+                if (processingTime %5 == 0) spawnCraftingParticles(serverLevel);
                 blockEntity.setChanged();
                 if (processingTime <= 0) {
                     Optional<RecipeHolder<InjectorRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
@@ -296,6 +302,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
 
         if (!simulate) {
             container = copyStack;
+            if (container.isEmpty()) hasOutputItem = false;
             notifyExtracted();
             blockEntity.updated();
         }
@@ -327,6 +334,29 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
             }
         }
         clearContent();
+    }
+
+    private void spawnCraftingParticles(ServerLevel level) {
+        BlockPos pos = getPos();
+
+        double Sx = pos.getX() + Mth.lerp(randomSource.nextDouble(), 0.1, 0.9);
+        double Sy = pos.getY() + 0.9;
+        double Sz = pos.getZ() + Mth.lerp(randomSource.nextDouble(), 0.1, 0.9);
+
+        double Tx = pos.getX() + 0.5;
+        double Ty = pos.getY() + 0.75;
+        double Tz = pos.getZ() + 0.5;
+
+        double Vx = Tx - Sx;
+        double Vy = Ty - Sy;
+        double Vz = Tz - Sz;
+
+        int rgb = Colors.SUNLIGHT.getColorCode();
+        float r = ((rgb >> 16) & 0xFF) / 255f;
+        float g = ((rgb >> 8) & 0xFF) / 255f;
+        float b = (rgb & 0xFF) / 255f;
+
+        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.05);
     }
 
     @Override

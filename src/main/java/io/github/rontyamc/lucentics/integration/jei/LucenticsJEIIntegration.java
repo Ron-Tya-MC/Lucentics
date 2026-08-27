@@ -3,7 +3,6 @@ package io.github.rontyamc.lucentics.integration.jei;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRecipe;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
-import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
 import io.github.rontyamc.lucentics.integration.jei.recipe_categories.EngravingRecipeCategory;
 import io.github.rontyamc.lucentics.integration.jei.recipe_categories.InjectingRecipeCategory;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
@@ -28,8 +27,7 @@ import java.util.List;
 
 @JeiPlugin
 public class LucenticsJEIIntegration implements IModPlugin {
-    private static final ResourceLocation PLUGIN_ID =
-            ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "jei_plugin");
+    private static final ResourceLocation PLUGIN_ID = Lucentics.defaultLocation("jei_plugin");
 
     private static IJeiRuntime runtime;
     private static List<InjectorRecipe> lastInjectorRecipes = new ArrayList<>();
@@ -64,7 +62,9 @@ public class LucenticsJEIIntegration implements IModPlugin {
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalysts(INJECTION, LucenticsBlockRegister.INJECTOR);
+
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.ENGRAVING_TABLE);
+        registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.PRISM_RITUAL);
     }
 
     private<I extends RecipeInput, T extends Recipe<I>> void registerStream(IRecipeRegistration registration, ClientLevel level, net.minecraft.world.item.crafting.RecipeType<T> typeMC, RecipeType<T> typeJEI) {
@@ -75,58 +75,6 @@ public class LucenticsJEIIntegration implements IModPlugin {
                 recipes.stream().map(RecipeHolder::value).toList()
         );
     }
-
-    /*
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        runtime = jeiRuntime;
-        refreshRecipes();
-    }
-
-    @Override
-    public void onRuntimeUnavailable() {
-        runtime = null;
-    }
-
-    public static void refreshRecipes() {
-        if (runtime == null) return;
-
-        var level = Minecraft.getInstance().level;
-        if (level == null) return;
-
-        List<InjectorRecipe> injRecipes = level.getRecipeManager()
-                .getAllRecipesFor(LucenticsRecipeTypesRegister.INJECTION_TYPE.get())
-                .stream()
-                .map(RecipeHolder::value)
-                .toList();
-
-        if (!lastInjectorRecipes.isEmpty()) {
-            runtime.getRecipeManager().hideRecipes(INJECTION, lastInjectorRecipes);
-        }
-        runtime.getRecipeManager().addRecipes(INJECTION, injRecipes);
-        lastInjectorRecipes = injRecipes;
-
-        List<EngravingTableRecipe> engRecipes = level.getRecipeManager()
-                .getAllRecipesFor(LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get())
-                .stream()
-                .map(RecipeHolder::value)
-                .toList();
-
-        if (!lastEngravingRecipes.isEmpty()) {
-            runtime.getRecipeManager().hideRecipes(ENGRAVING, lastEngravingRecipes);
-        }
-        runtime.getRecipeManager().addRecipes(ENGRAVING, engRecipes);
-        lastEngravingRecipes = engRecipes;
-    }
-
-    @EventBusSubscriber(modid = Lucentics.MOD_ID, value = Dist.CLIENT)
-    public static class JeiRecipeRefreshListener {
-        @SubscribeEvent
-        public static void onRecipesUpdated(RecipesUpdatedEvent event) {
-            refreshRecipes();
-        }
-    }
-    */
 
     public static String makeSecond(int tick) {
         int dInt;

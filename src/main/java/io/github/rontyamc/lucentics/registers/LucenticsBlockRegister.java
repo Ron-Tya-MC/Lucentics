@@ -87,7 +87,7 @@ public class LucenticsBlockRegister {
             .blockstate((context, provider) -> {})
             .item()
             .model((context, provider) -> provider.withExistingParent(context.getName(),
-                    ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "block/pedestals/" + context.getName())))
+                    Lucentics.defaultLocation("block/pedestals/" + context.getName())))
             .build()
             .register();
 
@@ -97,7 +97,7 @@ public class LucenticsBlockRegister {
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate((context, provider) -> provider.simpleBlock(context.getEntry(),
                     provider.models().cubeAll(context.getName(),
-                            ResourceLocation.fromNamespaceAndPath(Lucentics.MOD_ID, "block/prisms/" + context.getName()))))
+                            Lucentics.defaultLocation("block/prisms/" + context.getName()))))
             .item()
             .build()
             .register();

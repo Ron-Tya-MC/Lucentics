@@ -22,13 +22,30 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 import java.util.List;
 
 public class EngravingTableBlock extends BaseEntityBlock implements IBlockEntities<EngravingTableBlockEntity> {
     public static final MapCodec<EngravingTableBlock> CODEC = simpleCodec(EngravingTableBlock::new);
-    private static final VoxelShape SHAPE = Block.box(0.0, 0.0, 0.0, 16.0, 12.0, 16.0);
+    private static final VoxelShape BASE = Block.box(1.0, 0.0, 1.0, 15.0, 11.0, 15.0);
+
+    private static final VoxelShape COVER_TOP = Block.box(0.0, 10.0, 0.0, 16.0, 12.0, 16.0);
+    private static final VoxelShape COVER_L1_P1 = Block.box(0.0, 9.0, 0.0, 6.0, 10.0, 6.0);
+    private static final VoxelShape COVER_L1_P2 = Block.box(10.0, 9.0, 0.0, 16.0, 10.0, 6.0);
+    private static final VoxelShape COVER_L1_P3 = Block.box(0.0, 9.0, 10.0, 6.0, 10.0, 16.0);
+    private static final VoxelShape COVER_L1_P4 = Block.box(10.0, 9.0, 10.0, 16.0, 10.0, 16.0);
+    private static final VoxelShape COVER_L2_P1 = Block.box(0.0, 8.0, 0.0, 3.0, 9.0, 3.0);
+    private static final VoxelShape COVER_L2_P2 = Block.box(13.0, 8.0, 0.0, 16.0, 9.0, 3.0);
+    private static final VoxelShape COVER_L2_P3 = Block.box(0.0, 8.0, 13.0, 3.0, 9.0, 16.0);
+    private static final VoxelShape COVER_L2_P4 = Block.box(13.0, 8.0, 13.0, 16.0, 9.0, 16.0);
+    private static final VoxelShape COVER_L3_P1 = Block.box(0.0, 6.0, 0.0, 2.0, 8.0, 2.0);
+    private static final VoxelShape COVER_L3_P2 = Block.box(14.0, 6.0, 0.0, 16.0, 8.0, 2.0);
+    private static final VoxelShape COVER_L3_P3 = Block.box(0.0, 6.0, 14.0, 2.0, 8.0, 16.0);
+    private static final VoxelShape COVER_L3_P4 = Block.box(14.0, 6.0, 14.0, 16.0, 8.0, 16.0);
+
+    private static final VoxelShape SHAPE = Shapes.or(BASE, COVER_TOP, COVER_L1_P1, COVER_L1_P2, COVER_L1_P3, COVER_L1_P4, COVER_L2_P1, COVER_L2_P2, COVER_L2_P3, COVER_L2_P4, COVER_L3_P1, COVER_L3_P2, COVER_L3_P3, COVER_L3_P4);
 
     public EngravingTableBlock(Properties properties) {
         super(properties);
@@ -85,6 +102,7 @@ public class EngravingTableBlock extends BaseEntityBlock implements IBlockEntiti
             public ItemStack insert(ItemStack s, boolean sim) { return behavior.insert(s, sim); }
             public ItemStack extract(int amount, boolean sim) { return behavior.extract(amount, sim); }
             public int getRemainingSpace() { return behavior.getRemainingSpace(); }
+            public boolean blockMerge() { return behavior.getBlockMerge(); }
         };
 
         SlotInteractions.Result result = SlotInteractions.handle(slot, stack, false);

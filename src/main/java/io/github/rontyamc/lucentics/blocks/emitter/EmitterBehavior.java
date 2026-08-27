@@ -69,9 +69,18 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     }
 
     @Override
+    public void tick() {
+        Level level = getWorld();
+        if (!(level instanceof ServerLevel serverLevel)) return;
+        
+        if (!isPowered(serverLevel)) setStopBeam(true);
+        super.tick();
+    }
+
+    @Override
     protected void lazyTick() {
         Level level = getWorld();
-        if (level instanceof ServerLevel serverLevel) triggerFullScan(serverLevel, getFacing());
+        if (level instanceof ServerLevel serverLevel && isPowered(serverLevel)) triggerFullScan(serverLevel, getFacing());
     }
 
     public int getRemainingSpace() {
@@ -119,6 +128,8 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
         if (!stack.isEmpty()) Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
         clearContent();
     }
+
+    private boolean isPowered(ServerLevel level) { return level.hasNeighborSignal(getPos()); }
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {

@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipeInput;
@@ -40,6 +41,6 @@ public enum InjectorComponentProvider implements IBlockComponentProvider, IServe
 
     @Override
     public net.minecraft.resources.ResourceLocation getUid() {
-        return net.minecraft.resources.ResourceLocation.fromNamespaceAndPath("lucentics", "injector");
+        return Lucentics.defaultLocation("injector");
     }
 }

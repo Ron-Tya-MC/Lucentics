@@ -15,6 +15,7 @@ import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
@@ -24,13 +25,36 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class EmitterBlock extends HorizontalDirectionalBlock implements IBlockEntities<EmitterBlockEntity> {
     public static final MapCodec<EmitterBlock> CODEC = simpleCodec(EmitterBlock::new);
+    private static final VoxelShape BOX = Block.box(1.0, 1.0, 1.0, 15.0, 15.0, 15.0);
+    private static final VoxelShape FRAME_V1 = Block.box(0.0, 0.0, 0.0, 1.0, 16.0, 1.0);
+    private static final VoxelShape FRAME_V2 = Block.box(0.0, 0.0, 15.0, 1.0, 16.0, 16.0);
+    private static final VoxelShape FRAME_V3 = Block.box(15.0, 0.0, 0.0, 16.0, 16.0, 1.0);
+    private static final VoxelShape FRAME_V4 = Block.box(15.0, 0.0, 15.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape FRAME_H1 = Block.box(0.0, 0.0, 0.0, 16.0, 1.0, 1.0);
+    private static final VoxelShape FRAME_H2 = Block.box(0.0, 0.0, 0.0, 1.0, 1.0, 16.0);
+    private static final VoxelShape FRAME_H3 = Block.box(15.0, 0.0, 0.0, 16.0, 1.0, 16.0);
+    private static final VoxelShape FRAME_H4 = Block.box(0.0, 0.0, 15.0, 16.0, 1.0, 16.0);
+    private static final VoxelShape FRAME_H5 = Block.box(0.0, 15.0, 0.0, 16.0, 16.0, 1.0);
+    private static final VoxelShape FRAME_H6 = Block.box(0.0, 15.0, 0.0, 1.0, 16.0, 16.0);
+    private static final VoxelShape FRAME_H7 = Block.box(15.0, 15.0, 0.0, 16.0, 16.0, 16.0);
+    private static final VoxelShape FRAME_H8 = Block.box(0.0, 15.0, 15.0, 16.0, 16.0, 16.0);
+
+    private static final VoxelShape SHAPE = Shapes.or(BOX, FRAME_V1, FRAME_V2, FRAME_V3, FRAME_V4, FRAME_H1, FRAME_H2, FRAME_H3, FRAME_H4, FRAME_H5, FRAME_H6, FRAME_H7, FRAME_H8);
 
     public EmitterBlock(Properties properties) {
         super(properties);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return SHAPE;
     }
 
     @Override
@@ -96,6 +120,7 @@ public class EmitterBlock extends HorizontalDirectionalBlock implements IBlockEn
             public ItemStack insert(ItemStack s, boolean sim) { return behavior.insert(s, sim); }
             public ItemStack extract(int amount, boolean sim) { return behavior.extract(amount, sim); }
             public int getRemainingSpace() { return behavior.getRemainingSpace(); }
+            public boolean blockMerge() { return true; }
         };
 
         SlotInteractions.Result result = SlotInteractions.handle(lensSlot, stack, false);
