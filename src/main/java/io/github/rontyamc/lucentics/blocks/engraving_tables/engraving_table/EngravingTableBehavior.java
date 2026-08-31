@@ -10,6 +10,7 @@ import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
@@ -236,6 +237,16 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
         level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.07);
     }
 
+    private void spawnCraftCompleteParticles(ServerLevel level) {
+        BlockPos pos = getPos();
+
+        double Sx = pos.getX() + 0.5;
+        double Sy = pos.getY() + 0.8;
+        double Sz = pos.getZ() + 0.5;
+
+        level.sendParticles(ParticleTypes.END_ROD, Sx, Sy, Sz, 9, 0.3, 0, 0.3, 0.1);
+    }
+
     @Override
     public void tick() {
         super.tick();
@@ -339,6 +350,7 @@ public class EngravingTableBehavior extends ReceiveBehavior implements Clearable
             setIdle();
         }
 
+        spawnCraftCompleteParticles(level);
         blockEntity.updated();
     }
 

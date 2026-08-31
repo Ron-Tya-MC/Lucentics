@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "P": {
+      "item": "lucentics:prism_blank"
+    }
+  },
+  "pattern": [
+    " L ",
+    "LPL",
+    " L "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_ritual"
+  }
+}

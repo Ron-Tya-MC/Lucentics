@@ -9,6 +9,7 @@ import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.Mth;
@@ -133,7 +134,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
 
         if (!isIdle()) {
             if (checkDayLightCondition(serverLevel, input) && !swapped) {
-                processingTime--;
+                if (!(processingTime == 1 && getRemainingSpaceBuffer() <= 0)) processingTime--;
                 if (processingTime %5 == 0) spawnCraftingParticles(serverLevel);
                 blockEntity.setChanged();
                 if (processingTime <= 0) {
@@ -172,8 +173,13 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
 
         if (buffer.isEmpty()) {
             buffer = result.copy();
-        } else {
+        } else if (getRemainingSpaceBuffer() >= result.getCount()) {
             buffer.grow(result.getCount());
+        } else {
+            ItemStack stack = result.copyWithCount(result.getCount() - getRemainingSpaceBuffer());
+            buffer.grow(getRemainingSpaceBuffer());
+            Vec3 vec = getCenter(getPos());
+            Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
         }
 
         if (getContainer().isEmpty()) {
@@ -185,6 +191,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
             setIdle();
         }
 
+        spawnCraftCompleteParticles(level);
         blockEntity.updated();
     }
 
@@ -258,6 +265,12 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         int max = maxStackSize.get();
         if (getContainer().isEmpty()) return max;
         return Math.min(max, getContainer().getMaxStackSize()) - getContainer().getCount();
+    }
+
+    public int getRemainingSpaceBuffer() {
+        int max = maxStackSize.get();
+        if (getBuffer().isEmpty()) return max;
+        return Math.min(max, getBuffer().getMaxStackSize()) - getBuffer().getCount();
     }
 
     public int getSlotLimit() {
@@ -357,6 +370,16 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         float b = (rgb & 0xFF) / 255f;
 
         level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.05);
+    }
+
+    private void spawnCraftCompleteParticles(ServerLevel level) {
+        BlockPos pos = getPos();
+
+        double Sx = pos.getX() + 0.5;
+        double Sy = pos.getY() + 0.75;
+        double Sz = pos.getZ() + 0.5;
+
+        level.sendParticles(ParticleTypes.END_ROD, Sx, Sy, Sz, 6, 0.2, 0, 0.2, 0.1);
     }
 
     @Override

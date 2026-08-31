@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.common.datagen;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.datagen.providers.RecipeProvider;
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.data.event.GatherDataEvent;
@@ -14,6 +14,6 @@ public class LucenticsDatagen {
         var output = generator.getPackOutput();
 
         generator.addProvider(event.includeClient(), new LangProviderJp(output));
-        generator.addProvider(event.includeServer(), new RecipeProvider(output, event.getLookupProvider()));
+        generator.addProvider(event.includeServer(), new LucenticsRecipeProvider(output, event.getLookupProvider()));
     }
 }

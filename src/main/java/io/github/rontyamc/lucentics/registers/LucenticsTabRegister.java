@@ -70,106 +70,110 @@ public class LucenticsTabRegister {
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_PRISMS, CategoryType.PRISMS))
             .build());
 
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_TOOLS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.TOOLS, () -> CreativeModeTab.builder()
+            .title(Component.translatable("itemGroup.lucentics.tools"))
+            .withTabsBefore(CREATIVE_MODE_TAB_PRISMS.getKey())
+            .icon(LucenticsItemRegister.COPPER_HAMMER::asStack)
+            .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_TOOLS, CategoryType.TOOLS))
+            .build());
+
     public static void register(IEventBus bus) {
         CREATIVE_MODE_TAB_REGISTER.register(bus);
     }
 
-    public static class RegistrateDisplayItemsGenerator implements DisplayItemsGenerator {
-        public final DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter;
-        public final String registerType;
-
-        public RegistrateDisplayItemsGenerator(DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter, String registerType) {
-            this.tabFilter = tabFilter;
-            this.registerType = registerType;
-        }
+    public record RegistrateDisplayItemsGenerator(DeferredHolder<CreativeModeTab, CreativeModeTab> tabFilter,
+                                                  String registerType) implements DisplayItemsGenerator {
 
         private static Function<Item, ItemStack> makeStackFunc() {
-            Map<Item, Function<Item, ItemStack>> factories = new Reference2ReferenceOpenHashMap<>();
+                Map<Item, Function<Item, ItemStack>> factories = new Reference2ReferenceOpenHashMap<>();
 
-            Map<ItemProviderEntry<?, ?>, Function<Item, ItemStack>> simpleFactories = Map.of(
-                    // メモ
-                    // LucenticsItemRegister.EXAMPLE, item -> {
-                    //    ItemStack stack = new ItemStack(item);
-                    //    stack.set(SomeComponents.SOME_COMPONENT, someValue);
-                    //   return stack;
-                    //}
-            );
+                Map<ItemProviderEntry<?, ?>, Function<Item, ItemStack>> simpleFactories = Map.of(
+                        /*
+                         メモ
+                         LucenticsItemRegister.EXAMPLE, item -> {
+                            ItemStack stack = new ItemStack(item);
+                            stack.set(SomeComponents.SOME_COMPONENT, someValue);
+                           return stack;
+                        }
+                        */
+                );
 
-            simpleFactories.forEach((entry, factory) -> {
-                factories.put(entry.asItem(), factory);
-            });
+                simpleFactories.forEach((entry, factory) -> {
+                    factories.put(entry.asItem(), factory);
+                });
 
-            return item -> {
-                Function<Item, ItemStack> factory = factories.get(item);
-                if (factory != null) {
-                    return factory.apply(item);
+                return item -> {
+                    Function<Item, ItemStack> factory = factories.get(item);
+                    if (factory != null) {
+                        return factory.apply(item);
+                    }
+                    return new ItemStack(item);
+                };
+            }
+
+            private static Function<Item, TabVisibility> makeVisibilityFunc() {
+                Map<Item, TabVisibility> visibilities = new Reference2ObjectOpenHashMap<>();
+
+                Map<ItemProviderEntry<?, ?>, TabVisibility> defineVisibilities = Map.of(
+                        // メモ
+                        // LucenticsItemRegister.EXAMPLE, TabVisibility.SEARCH_TAB_ONLY
+                );
+
+                defineVisibilities.forEach((entry, factory) -> {
+                    visibilities.put(entry.asItem(), factory);
+                });
+
+                return item -> {
+                    TabVisibility visibility = visibilities.get(item);
+                    if (visibility != null) {
+                        return visibility;
+                    }
+                    return TabVisibility.PARENT_AND_SEARCH_TABS;
+                };
+            }
+
+            @Override
+            public void accept(ItemDisplayParameters parameters, Output output) {
+                Function<Item, ItemStack> stackFunc = makeStackFunc();
+                Function<Item, TabVisibility> visibilityFunc = makeVisibilityFunc();
+
+                List<Item> items = new LinkedList<>(collectItemsFromCategory(this.registerType));
+
+                for (Item item : items) {
+                    output.accept(stackFunc.apply(item), visibilityFunc.apply(item));
                 }
-                return new ItemStack(item);
-            };
-        }
+            }
 
-        private static Function<Item, TabVisibility> makeVisibilityFunc() {
-            Map<Item, TabVisibility> visibilities = new Reference2ObjectOpenHashMap<>();
-
-            Map<ItemProviderEntry<?, ?>, TabVisibility> defineVisibilities = Map.of(
-                    // メモ
-                    // LucenticsItemRegister.EXAMPLE, TabVisibility.SEARCH_TAB_ONLY
-            );
-
-            defineVisibilities.forEach((entry, factory) -> {
-                visibilities.put(entry.asItem(), factory);
-            });
-
-            return item -> {
-                TabVisibility visibility = visibilities.get(item);
-                if (visibility != null) {
-                    return visibility;
+            // 使うかも
+            private List<Item> collectBlocksItems() {
+                List<Item> items = new ReferenceArrayList<>();
+                for (RegistryEntry<Block, Block> entry : Lucentics.registrate().getAll(Registries.BLOCK)) {
+                    if (LucenticsRegistrate.alreadyInCreativeTab(entry, tabFilter))
+                        continue;
+                    items.add(entry.get().asItem());
                 }
-                return TabVisibility.PARENT_AND_SEARCH_TABS;
-            };
-        }
+                items = new ReferenceArrayList<>(new ReferenceLinkedOpenHashSet<>(items));
+                return items;
+            }
 
-        @Override
-        public void accept(ItemDisplayParameters parameters, Output output) {
-            Function<Item, ItemStack> stackFunc = makeStackFunc();
-            Function<Item, TabVisibility> visibilityFunc = makeVisibilityFunc();
-
-            List<Item> items = new LinkedList<>(collectItemsFromCategory(this.registerType));
-
-            for (Item item : items) {
-                output.accept(stackFunc.apply(item), visibilityFunc.apply(item));
+            private List<Item> collectItemsFromCategory(String category) {
+                List<Item> items = new ReferenceArrayList<>();
+                for (RegistryEntry<Item, Item> entry : Lucentics.registrate().getAll(Registries.ITEM)) {
+                    if (LucenticsRegistrate.alreadyInCreativeTab(entry, tabFilter) || !ITEM_CATEGORY.get(entry.get().toString()).equals(category)) {
+                        continue;
+                    }
+                    items.add(entry.get());
+                }
+                return items;
             }
         }
-
-        // 使うかも
-        private List<Item> collectBlocksItems() {
-            List<Item> items = new ReferenceArrayList<>();
-            for (RegistryEntry<Block, Block> entry : Lucentics.registrate().getAll(Registries.BLOCK)) {
-                if (LucenticsRegistrate.alreadyInCreativeTab(entry, tabFilter))
-                    continue;
-                items.add(entry.get().asItem());
-            }
-            items = new ReferenceArrayList<>(new ReferenceLinkedOpenHashSet<>(items));
-            return items;
-        }
-
-        private List<Item> collectItemsFromCategory(String category) {
-            List<Item> items = new ReferenceArrayList<>();
-            for (RegistryEntry<Item, Item> entry : Lucentics.registrate().getAll(Registries.ITEM)) {
-                if (LucenticsRegistrate.alreadyInCreativeTab(entry, tabFilter) || !ITEM_CATEGORY.get(entry.get().toString()).equals(category)) {
-                    continue;
-                }
-                items.add(entry.get());
-            }
-            return items;
-        }
-    }
 
     public static class CategoryType {
         public static final String INGREDIENTS = "ingredients";
         public static final String BLOCKS = "blocks";
         public static final String MACHINES = "machines";
         public static final String PRISMS = "prisms";
+        public static final String TOOLS = "tools";
 
         private CategoryType() {
         }

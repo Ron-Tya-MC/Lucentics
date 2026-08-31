@@ -1,0 +1,73 @@
+{
+  "type": "lucentics:engraving",
+  "input": {
+    "count": 1,
+    "item": "lucentics:dusk_brick"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:blue_dusk_brick"
+      }
+    }
+  ],
+  "processing_duration": 60,
+  "trail_inputs": [
+    {
+      "color": "blue",
+      "inputs": [
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:blue_dye"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:blue_dye"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:blue_dye"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:blue_dye"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:blue_dye"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

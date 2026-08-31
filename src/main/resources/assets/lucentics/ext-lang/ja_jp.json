@@ -1,41 +1,31 @@
 {
   "item.lucentics.dusk_brick": "薄明石",
-  "item.lucentics.red_dusk_brick": "赤色の薄明石",
-  "item.lucentics.blue_dusk_brick": "青色の薄明石",
-  "item.lucentics.green_dusk_brick": "緑色の薄明石",
-
+  "$R:item.lucentics;tier2_colors/_dusk_brick" : "%Rの薄明石",
   "item.lucentics.light_copper": "光銅",
-  "item.lucentics.yellow_light_copper": "黄色の光銅",
-  "item.lucentics.magenta_light_copper": "赤紫色の光銅",
-  "item.lucentics.light_blue_light_copper": "空色の光銅",
+  "$R:item.lucentics;tier3_colors/_light_copper" : "%Rの光銅",
 
   "item.lucentics.lens_frame": "レンズフレーム",
-  "item.lucentics.red_lens": "赤色のレンズ",
-  "item.lucentics.blue_lens": "青色のレンズ",
-  "item.lucentics.green_lens": "緑色のレンズ",
-  "item.lucentics.yellow_lens": "黄色のレンズ",
-  "item.lucentics.magenta_lens": "赤紫色のレンズ",
-  "item.lucentics.light_blue_lens": "空色のレンズ",
-  "item.lucentics.pink_lens": "桃色のレンズ",
-  "item.lucentics.cyan_lens": "水色のレンズ",
-  "item.lucentics.lime_lens": "黄緑色のレンズ",
-  "item.lucentics.gray_lens": "灰色のレンズ",
-  "item.lucentics.light_gray_lens": "薄灰色のレンズ",
-  "item.lucentics.brown_lens": "茶色のレンズ",
-  "item.lucentics.purple_lens": "紫色のレンズ",
-  "item.lucentics.orange_lens": "橙色のレンズ",
-  "item.lucentics.white_lens": "白色のレンズ",
-  "item.lucentics.black_lens": "黒色のレンズ",
+  "$R:item.lucentics;16_colors/_lens" : "%Rのレンズ",
 
+  "item.lucentics.dawnstone_dust": "黎明石の粉",
+
+  "item.lucentics.copper_hammer": "銅のハンマー",
+  "item.lucentics.iron_hammer": "鉄のハンマー",
+  "item.lucentics.golden_hammer": "金のハンマー",
+  "item.lucentics.diamond_hammer": "ダイヤモンドのハンマー",
 
   "block.lucentics.dusk_bricks": "薄明石レンガ",
+  "$R:block.lucentics;tier2_colors/_dusk_bricks" : "%Rの薄明石レンガ",
   "block.lucentics.dawnstone": "黎明石",
+  "block.lucentics.light_copper_block": "光銅ブロック",
+  "$R:block.lucentics;tier3_colors/_light_copper_block" : "%Rの光銅ブロック",
 
   "block.lucentics.injector": "光注入器",
   "block.lucentics.emitter": "放射器",
   "block.lucentics.engraving_table": "彩刻台",
   "block.lucentics.pedestal_ritual": "儀式の台座",
 
+  "block.lucentics.prism_blank": "無地のプリズム",
   "block.lucentics.prism_ritual": "儀式のプリズム",
 
 
@@ -43,6 +33,7 @@
   "itemGroup.lucentics.blocks": "Lucentics: ブロック",
   "itemGroup.lucentics.machines": "Lucentics: 機能付きブロック",
   "itemGroup.lucentics.prisms": "Lucentics: プリズム",
+  "itemGroup.lucentics.tools": "Lucentics: ツール",
 
 
   "term.lucentics.colors.sunlight": "陽光",

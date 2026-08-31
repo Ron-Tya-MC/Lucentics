@@ -30,7 +30,7 @@ public class LucenticsParticleRegister {
             });
 
     public static final DeferredHolder<ParticleType<?>, ParticleType<SphereParticleOptions>> SPHERE =
-            PARTICLE_TYPES.register("test", () -> new ParticleType<>(false) {
+            PARTICLE_TYPES.register("sphere", () -> new ParticleType<>(false) {
                 @Override
                 public MapCodec<SphereParticleOptions> codec() {
                     return SphereParticleOptions.CODEC;

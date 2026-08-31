@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "lucentics:block/mixing_table"
+    }
+  }
+}

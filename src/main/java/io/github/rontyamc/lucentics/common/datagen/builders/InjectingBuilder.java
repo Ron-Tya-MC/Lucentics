@@ -3,6 +3,7 @@ package io.github.rontyamc.lucentics.common.datagen.builders;
 import com.mojang.datafixers.util.Either;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -20,12 +21,14 @@ import java.util.Optional;
 public class InjectingBuilder implements RecipeBuilder {
     private SizedIngredient input;
     private final ItemStack result;
+    protected String suffix;
     private int processingDuration = 100;
     private int daylightCondition = 0;
 
     public InjectingBuilder(SizedIngredient input, ItemLike result, int count) {
         this.input = input;
         this.result = new ItemStack(result, count);
+        this.suffix = "";
     }
 
     public static InjectingBuilder create(SizedIngredient input, ItemLike result, int count) {
@@ -68,6 +71,11 @@ public class InjectingBuilder implements RecipeBuilder {
         return this;
     }
 
+    public InjectingBuilder suffix(String suffix) {
+        this.suffix = suffix;
+        return this;
+    }
+
     @Override
     public Item getResult() {
         return result.getItem();
@@ -76,7 +84,7 @@ public class InjectingBuilder implements RecipeBuilder {
     @Override
     public void save(RecipeOutput output) {
         ResourceLocation defaultId = RecipeBuilder.getDefaultRecipeId(getResult());
-        ResourceLocation id = Lucentics.defaultLocation("injection/" + defaultId.getPath());
+        ResourceLocation id = Lucentics.defaultLocation("injection/" + defaultId.getPath() + suffix);
         save(output, id);
     }
 

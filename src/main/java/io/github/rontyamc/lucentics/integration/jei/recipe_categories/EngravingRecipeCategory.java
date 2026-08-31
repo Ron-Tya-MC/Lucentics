@@ -39,8 +39,8 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
     private static final int FOOTER_HEIGHT = 20;
     private static final int HEIGHT = HEADER_HEIGHT + MAX_BEAMS * ROW_HEIGHT + FOOTER_HEIGHT;
 
-    private static final int NODE_AREA_LEFT_SIDE = 30;
-    private static final int NODE_AREA_WIDTH = 100;
+    private static final int NODE_AREA_LEFT_SIDE = 25;
+    private static final int NODE_AREA_WIDTH = 110;
     private static final int DEVICE_SLOT_OFFSET = 10;
     private static final int ITEM_SLOT_OFFSET = 0;
 

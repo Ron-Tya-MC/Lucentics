@@ -1,6 +1,7 @@
 {
-  "parent": "minecraft:block/cube_all",
+  "parent": "minecraft:block/cube_column",
   "textures": {
-    "all": "lucentics:block/prisms/prism_ritual"
+    "end": "lucentics:block/prisms/prism_blank",
+    "side": "lucentics:block/prisms/prism_ritual"
   }
 }

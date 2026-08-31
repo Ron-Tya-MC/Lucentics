@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "lucentics:block/light_blue_light_copper_block"
+  }
+}

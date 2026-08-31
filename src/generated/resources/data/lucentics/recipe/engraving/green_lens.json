@@ -1,0 +1,87 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "lucentics:lens_frame"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:green_lens"
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:crafting_table"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:smithing_table"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:cartography_table"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:fletching_table"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:loom"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:crafter"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:green_stained_glass"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

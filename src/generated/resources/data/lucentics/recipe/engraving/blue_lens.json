@@ -1,0 +1,87 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "lucentics:lens_frame"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:blue_lens"
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:cod"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:salmon"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:kelp"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:water_bucket"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "tag": "minecraft:boats"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:ink_sac"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:blue_stained_glass"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

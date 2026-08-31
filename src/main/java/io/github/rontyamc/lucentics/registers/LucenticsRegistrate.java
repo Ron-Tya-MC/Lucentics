@@ -5,6 +5,7 @@ import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.builders.BlockEntityBuilder.BlockEntityFactory;
 import com.tterrag.registrate.builders.Builder;
 import com.tterrag.registrate.builders.ItemBuilder;
+import com.tterrag.registrate.util.entry.BlockEntry;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
@@ -25,6 +26,7 @@ import net.neoforged.neoforge.registries.DeferredHolder;
 
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.IdentityHashMap;
 import java.util.Map;
@@ -74,13 +76,13 @@ public class LucenticsRegistrate extends AbstractRegistrate<LucenticsRegistrate>
         return entry;
     }
 
-    public <T extends Block> BlockBuilder<T, LucenticsRegistrate> lucenticsBlockBuilder(String itemCategory , String name, NonNullFunction<BlockBehaviour.Properties, T> factory) {
+    public <T extends Block> BlockBuilder<T, LucenticsRegistrate> lucenticsBlockBuilder(String itemCategory, String name, NonNullFunction<BlockBehaviour.Properties, T> factory) {
         LucenticsTabRegister.ITEM_CATEGORY.put(Lucentics.MOD_ID + ":" + name, itemCategory);
 
         return block(name, factory);
     }
 
-    public <T extends Item> ItemBuilder<T, LucenticsRegistrate> lucenticsItemBuilder(String category , String name, NonNullFunction<Item.Properties, T> factory) {
+    public <T extends Item> ItemBuilder<T, LucenticsRegistrate> lucenticsItemBuilder(String category, String name, NonNullFunction<Item.Properties, T> factory) {
         LucenticsTabRegister.ITEM_CATEGORY.put(Lucentics.MOD_ID + ":" + name, category);
 
         return item(name, factory);

@@ -9,7 +9,7 @@ public class InjectingProvider {
 
     public InjectingProvider() {}
 
-    protected static void buildRecipes(RecipeProvider provider, RecipeOutput recipeOutput) {
+    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         provider.generic(LucenticsItemRegister.DUSK_BRICK)

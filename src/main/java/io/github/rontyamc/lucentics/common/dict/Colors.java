@@ -5,6 +5,9 @@ import net.minecraft.world.item.DyeColor;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Optional;
 
 public enum Colors implements StringRepresentable {
@@ -72,5 +75,31 @@ public enum Colors implements StringRepresentable {
         }
 
         return Optional.empty();
+    }
+
+    public static Colors[] getAllColors() {
+        return Colors.values();
+    }
+
+    public static ArrayList<Colors> get16Colors() {
+        ArrayList<Colors> colors = new ArrayList<>();
+
+        for (Colors color : Colors.values()) {
+            if (!Objects.equals(color.getName(), "sunlight")) colors.add(color);
+        }
+
+        return colors;
+    }
+
+    public static ArrayList<Colors> byTier(int tier) {
+        ArrayList<Colors> colors = new ArrayList<>();
+
+        for (Colors color : Colors.values()) {
+            if (color.getTier() == tier) {
+                colors.add(color);
+            }
+        }
+
+        return colors;
     }
 }

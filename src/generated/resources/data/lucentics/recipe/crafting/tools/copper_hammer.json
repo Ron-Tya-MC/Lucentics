@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:copper_block"
+    },
+    "D": {
+      "item": "lucentics:dusk_brick"
+    },
+    "M": {
+      "item": "minecraft:copper_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "BDM",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:copper_hammer"
+  }
+}

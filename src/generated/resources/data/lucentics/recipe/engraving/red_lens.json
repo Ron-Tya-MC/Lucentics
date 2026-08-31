@@ -1,0 +1,87 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "lucentics:lens_frame"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:red_lens"
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:iron_pickaxe"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:iron_axe"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:iron_shovel"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:iron_sword"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:tnt"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:tnt_minecart"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:red_stained_glass"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

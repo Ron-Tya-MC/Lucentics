@@ -1,0 +1,71 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "minecraft:copper_ingot"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:light_copper"
+      }
+    }
+  ],
+  "processing_duration": 100,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:iron_nugget"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:gold_nugget"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:gold_nugget"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:gold_nugget"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "input": {
+            "count": 1,
+            "item": "minecraft:iron_nugget"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

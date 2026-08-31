@@ -91,6 +91,7 @@ public class EmitterRenderer implements BlockEntityRenderer<EmitterBlockEntity> 
             default -> {}
         }
         poseStack.translate(-0.5, 0.0, -0.5);
+        //Lucentics.LOGGER.info("{}", behavior.getEndpoint());
         if (behavior.getEndpoint() == null) poseStack.translate(0, -0.4375, 0);
 
         BeaconRenderer.renderBeaconBeam(poseStack, bufferSource, BEAM_TEXTURE,

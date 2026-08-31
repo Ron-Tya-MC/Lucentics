@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics;
 
+import com.tterrag.registrate.util.entry.RegistryEntry;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
@@ -12,10 +13,12 @@ import io.github.rontyamc.lucentics.registers.*;
 
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
 
+import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -125,6 +128,7 @@ public class Lucentics {
         @SubscribeEvent
         static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
+                ItemBlockRenderTypes.setRenderLayer(LucenticsBlockRegister.PRISM_BLANK.get(), RenderType.translucent());
                 ItemBlockRenderTypes.setRenderLayer(LucenticsBlockRegister.PRISM_RITUAL.get(), RenderType.translucent());
             });
         }
