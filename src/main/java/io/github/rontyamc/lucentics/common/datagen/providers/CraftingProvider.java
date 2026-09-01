@@ -49,6 +49,18 @@ public class CraftingProvider {
                         .pattern("LLL")
                         .pattern("LLL"));
 
+        provider.generic(LucenticsBlockRegister.TANK_LIGHT_COPPER).unlockedBy(LucenticsItemRegister.LIGHT_COPPER)
+                .shaped(b -> b.define('L', LucenticsItemRegister.LIGHT_COPPER.get())
+                        .define('G', Items.GLASS)
+                        .pattern(" L ")
+                        .pattern("LGL")
+                        .pattern(" L "));
+        provider.generic(LucenticsBlockRegister.TANK_LIGHT_COPPER_BOLD).unlockedBy(LucenticsBlockRegister.TANK_LIGHT_COPPER)
+                .shapeless(b -> b.requires(LucenticsBlockRegister.TANK_LIGHT_COPPER.get()));
+        provider.generic(LucenticsBlockRegister.TANK_LIGHT_COPPER).unlockedBy(LucenticsBlockRegister.TANK_LIGHT_COPPER_BOLD)
+                .suffix("_from_bold")
+                .shapeless(b -> b.requires(LucenticsBlockRegister.TANK_LIGHT_COPPER_BOLD.get()));
+
 
         provider.enterFolder("machines");
 
@@ -84,6 +96,29 @@ public class CraftingProvider {
                         .pattern("DGD")
                         .pattern(" D ")
                         .pattern("DDD"));
+
+
+        provider.generic(LucenticsBlockRegister.MILLING_TABLE).unlockedBy(LucenticsBlockRegister.RED_DUSK_BRICKS)
+                .shaped(b -> b.define('B', LucenticsBlockRegister.RED_DUSK_BRICKS.get())
+                        .define('L', LucenticsItemRegister.LIGHT_COPPER)
+                        .define('D', LucenticsBlockRegister.DAWNSTONE)
+                        .pattern(" B ")
+                        .pattern("LDL")
+                        .pattern("BBB"));
+        provider.generic(LucenticsBlockRegister.MIXING_TABLE).unlockedBy(LucenticsBlockRegister.RED_DUSK_BRICKS)
+                .shaped(b -> b.define('B', LucenticsBlockRegister.RED_DUSK_BRICKS.get())
+                        .define('T', LucenticsBlockRegister.TANK_LIGHT_COPPER)
+                        .define('D', LucenticsBlockRegister.DAWNSTONE)
+                        .pattern("DDD")
+                        .pattern(" T ")
+                        .pattern("BBB"));
+        provider.generic(LucenticsBlockRegister.ASSEMBLING_TABLE).unlockedBy(LucenticsBlockRegister.GREEN_DUSK_BRICKS)
+                .shaped(b -> b.define('B', LucenticsBlockRegister.GREEN_DUSK_BRICKS.get())
+                        .define('L', LucenticsItemRegister.LIGHT_COPPER)
+                        .define('D', LucenticsBlockRegister.DAWNSTONE)
+                        .pattern("DDD")
+                        .pattern("LBL")
+                        .pattern("BBB"));
 
 
         provider.enterFolder("ingredients");

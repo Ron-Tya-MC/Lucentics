@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.blocks.pedestals;
 
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorIHandler;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
@@ -69,7 +69,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        if (!getContent().isEmpty() && !io.github.rontyamc.lucentics.common.ItemUtilities.isSameItem(getContent(), stack, false)) {
+        if (!getContent().isEmpty() && !ItemUtilities.isSameItem(getContent(), stack, false)) {
             return stack;
         }
 
@@ -119,6 +119,13 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     public void consumeItem(int amount) {
         if (getContent().isEmpty()) return;
         content.shrink(amount);
+        blockEntity.updated();
+    }
+
+    @Override
+    public void damageItem(int damage) {
+        if (getContent().isEmpty()) return;
+        content = ItemUtilities.hurtAndUpdate(damage, content);
         blockEntity.updated();
     }
 

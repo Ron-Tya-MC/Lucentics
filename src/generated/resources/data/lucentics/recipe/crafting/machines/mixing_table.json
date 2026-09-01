@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "lucentics:red_dusk_bricks"
+    },
+    "D": {
+      "item": "lucentics:dawnstone"
+    },
+    "T": {
+      "item": "lucentics:tank_light_copper"
+    }
+  },
+  "pattern": [
+    "DDD",
+    " T ",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:mixing_table"
+  }
+}

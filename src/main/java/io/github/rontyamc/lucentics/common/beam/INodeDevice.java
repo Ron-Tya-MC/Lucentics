@@ -6,4 +6,5 @@ public interface INodeDevice {
     ItemStack getContent();
 
     void consumeItem(int amount);
+    void damageItem(int damage);
 }

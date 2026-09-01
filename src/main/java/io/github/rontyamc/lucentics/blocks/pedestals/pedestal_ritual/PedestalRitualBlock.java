@@ -26,7 +26,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class PedestalRitualBlock extends BaseEntityBlock implements IBlockEntities<PedestalRitualBlockEntity> {
-    public static final MapCodec<InjectorBlock> CODEC = simpleCodec(InjectorBlock::new);
+    public static final MapCodec<PedestalRitualBlock> CODEC = simpleCodec(PedestalRitualBlock::new);
     private static final VoxelShape SHAPE = Block.box(5.0, 0.0, 5.0, 11.0, 10.0, 11.0);
 
     @Override

@@ -7,10 +7,7 @@ import io.github.rontyamc.lucentics.common.datagen.builders.InjectingBuilder;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.recipes.RecipeCategory;
-import net.minecraft.data.recipes.RecipeOutput;
-import net.minecraft.data.recipes.RecipeProvider;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
+import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
@@ -110,6 +107,16 @@ public class LucenticsRecipeProvider extends RecipeProvider {
             return register(output -> {
                 ShapedRecipeBuilder b =
                         builder.apply(ShapedRecipeBuilder.shaped(RecipeCategory.MISC, result.get(), count));
+                if (unlockedBy != null)
+                    b.unlockedBy("has_item", has(unlockedBy.get()));
+                b.save(output, createLocation("crafting"));
+            });
+        }
+
+        public GeneratedRecipe shapeless(UnaryOperator<ShapelessRecipeBuilder> builder) {
+            return register(output -> {
+                ShapelessRecipeBuilder b =
+                        builder.apply(ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, result.get(), count));
                 if (unlockedBy != null)
                     b.unlockedBy("has_item", has(unlockedBy.get()));
                 b.save(output, createLocation("crafting"));

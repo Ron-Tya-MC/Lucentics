@@ -1,9 +1,7 @@
 package io.github.rontyamc.lucentics.registers;
 
-import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.entry.BlockEntry;
 
-import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBehavior;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlock;
@@ -16,15 +14,14 @@ import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRit
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlock;
 import io.github.rontyamc.lucentics.blocks.prism.PrismBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_ritual.PrismRitualBlock;
+import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlock;
+import io.github.rontyamc.lucentics.common.ModelUtilities;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.registers.LucenticsTabRegister.CategoryType;
 
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
-
-import java.util.ArrayList;
 
 public class LucenticsBlockRegister {
     public static final LucenticsRegistrate REGISTRATE = Lucentics.registrate();
@@ -92,42 +89,42 @@ public class LucenticsBlockRegister {
             .initialProperties(() -> Blocks.STONE)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.simpleBlockState(""))
             .item()
             .build()
             .register();
     public static final BlockEntry<EmitterBlock> EMITTER = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"emitter", EmitterBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.horizontalDirectionalBlockState(""))
             .item()
             .build()
             .register();
     public static final BlockEntry<EngravingTableBlock> ENGRAVING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"engraving_table", EngravingTableBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.simpleBlockState(""))
             .item()
             .build()
             .register();
     public static final BlockEntry<Block> MILLING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"milling_table", Block::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.simpleBlockState(""))
             .item()
             .build()
             .register();
     public static final BlockEntry<Block> MIXING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"mixing_table", Block::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.simpleBlockState(""))
             .item()
             .build()
             .register();
     public static final BlockEntry<Block> ASSEMBLING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"assembling_table", Block::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.simpleBlockState(""))
             .item()
             .build()
             .register();
@@ -135,10 +132,33 @@ public class LucenticsBlockRegister {
     public static final BlockEntry<PedestalRitualBlock> PEDESTAL_RITUAL = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"pedestal_ritual", PedestalRitualBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> {})
+            .blockstate(ModelUtilities.simpleBlockState("pedestals"))
             .item()
             .model((context, provider) -> provider.withExistingParent(context.getName(),
                     Lucentics.defaultLocation("block/pedestals/" + context.getName())))
+            .build()
+            .register();
+
+    public static final BlockEntry<TankLightCopperBlock> TANK_LIGHT_COPPER = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"tank_light_copper", TankLightCopperBlock::new)
+            .initialProperties(() -> Blocks.COPPER_BLOCK)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .blockstate(ModelUtilities.simpleBlockState("tanks"))
+            .lang("Light Copper Tank")
+            .item()
+            .model((context, provider) -> provider.withExistingParent(context.getName(),
+                    Lucentics.defaultLocation("block/tanks/" + context.getName())))
+            .build()
+            .register();
+    public static final BlockEntry<TankLightCopperBlock> TANK_LIGHT_COPPER_BOLD = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"tank_light_copper_bold", TankLightCopperBlock::new)
+            .initialProperties(() -> Blocks.COPPER_BLOCK)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .blockstate(ModelUtilities.simpleBlockState("tanks"))
+            .lang("Bold Light Copper Tank")
+            .item()
+            .model((context, provider) -> provider.withExistingParent(context.getName(),
+                    Lucentics.defaultLocation("block/tanks/" + context.getName())))
             .build()
             .register();
 
@@ -146,9 +166,7 @@ public class LucenticsBlockRegister {
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> provider.simpleBlock(context.getEntry(),
-                    provider.models().cubeAll(context.getName(),
-                            Lucentics.defaultLocation("block/prisms/" + context.getName()))))
+            .blockstate(ModelUtilities.cubeAllBlockState("prisms"))
             .lang("Blank Prism")
             .item()
             .build()
@@ -157,10 +175,7 @@ public class LucenticsBlockRegister {
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
-            .blockstate((context, provider) -> provider.simpleBlock(context.getEntry(),
-                    provider.models().cubeColumn(context.getName(),
-                            Lucentics.defaultLocation("block/prisms/" + context.getName()),
-                            Lucentics.defaultLocation("block/prisms/prism_blank"))))
+            .blockstate(ModelUtilities.cubeColumnBlockState("prisms/prism_ritual", "prisms/prism_blank"))
             .lang("Ritual Prism")
             .item()
             .build()

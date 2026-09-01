@@ -16,6 +16,8 @@
     "lucentics:mixing_table",
     "lucentics:assembling_table",
     "lucentics:pedestal_ritual",
+    "lucentics:tank_light_copper",
+    "lucentics:tank_light_copper_bold",
     "lucentics:prism_blank",
     "lucentics:prism_ritual"
   ]

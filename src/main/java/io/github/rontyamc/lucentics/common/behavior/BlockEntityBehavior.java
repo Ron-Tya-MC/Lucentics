@@ -50,6 +50,8 @@ public abstract class BlockEntityBehavior {
     protected void lazyTick() {
     }
 
+    public abstract void dropContents(Level level, BlockPos pos);
+
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
 
     }

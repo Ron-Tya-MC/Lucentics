@@ -24,6 +24,11 @@
   "block.lucentics.emitter": "放射器",
   "block.lucentics.engraving_table": "彩刻台",
   "block.lucentics.pedestal_ritual": "儀式の台座",
+  "block.lucentics.milling_table": "粉挽台",
+  "block.lucentics.mixing_table": "調合台",
+  "block.lucentics.assembling_table": "組立台",
+  "block.lucentics.tank_light_copper": "光銅のタンク",
+  "block.lucentics.tank_light_copper_bold": "光銅の太枠タンク",
 
   "block.lucentics.prism_blank": "無地のプリズム",
   "block.lucentics.prism_ritual": "儀式のプリズム",

@@ -5,6 +5,7 @@ import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
+import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
 import io.github.rontyamc.lucentics.client.particle.GlowParticle;
 import io.github.rontyamc.lucentics.client.particle.SphereParticle;
 import io.github.rontyamc.lucentics.common.datagen.AddRawLang;
@@ -113,6 +114,11 @@ public class Lucentics {
                 LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(),
                 (be, side) -> be.getPedestalRitualBehavior().iHandler
         );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(),
+                (be, side) -> be.getTankLightCopperBehavior().fHandler
+        );
     }
 
     public static ResourceLocation defaultLocation(String path) {
@@ -139,6 +145,7 @@ public class Lucentics {
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(), EngravingTableRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(), TankRenderer::new);
         }
 
         @SubscribeEvent

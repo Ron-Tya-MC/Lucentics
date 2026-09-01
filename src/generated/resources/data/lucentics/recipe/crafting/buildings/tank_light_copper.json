@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "L": {
+      "item": "lucentics:light_copper"
+    }
+  },
+  "pattern": [
+    " L ",
+    "LGL",
+    " L "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:tank_light_copper"
+  }
+}

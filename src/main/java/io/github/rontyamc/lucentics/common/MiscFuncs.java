@@ -2,7 +2,6 @@ package io.github.rontyamc.lucentics.common;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import io.github.rontyamc.lucentics.common.datagen.LangProviderJp;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 
