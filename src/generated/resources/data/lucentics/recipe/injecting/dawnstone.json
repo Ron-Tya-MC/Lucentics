@@ -1,5 +1,5 @@
 {
-  "type": "lucentics:injection",
+  "type": "lucentics:injecting",
   "daylight_condition": 7,
   "input": {
     "count": 1,

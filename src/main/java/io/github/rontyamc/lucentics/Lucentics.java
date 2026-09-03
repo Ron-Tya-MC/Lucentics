@@ -1,47 +1,41 @@
 package io.github.rontyamc.lucentics;
 
-import com.tterrag.registrate.util.entry.RegistryEntry;
+import com.mojang.logging.LogUtils;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
+import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
 import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
 import io.github.rontyamc.lucentics.client.particle.GlowParticle;
 import io.github.rontyamc.lucentics.client.particle.SphereParticle;
 import io.github.rontyamc.lucentics.common.datagen.AddRawLang;
-import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
+import io.github.rontyamc.lucentics.network.LucenticsNetwork;
 import io.github.rontyamc.lucentics.registers.*;
-
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
-
-import net.minecraft.world.item.Item;
 import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.fml.config.ModConfig;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import org.slf4j.Logger;
-
-import com.mojang.logging.LogUtils;
-
-import net.neoforged.bus.api.IEventBus;
-import net.neoforged.bus.api.SubscribeEvent;
-import net.neoforged.fml.common.Mod;
-import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.ModContainer;
-import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Lucentics.MOD_ID)
@@ -70,6 +64,7 @@ public class Lucentics {
 
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(LucenticsNetwork::register);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
 
@@ -119,6 +114,11 @@ public class Lucentics {
                 LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(),
                 (be, side) -> be.getTankLightCopperBehavior().fHandler
         );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.MILLING_TABLE.get(),
+                (be, side) -> be.getMillingTableBehavior().iHandler
+        );
     }
 
     public static ResourceLocation defaultLocation(String path) {
@@ -146,6 +146,7 @@ public class Lucentics {
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(), EngravingTableRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(), TankRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MILLING_TABLE.get(), MillingTableRenderer::new);
         }
 
         @SubscribeEvent

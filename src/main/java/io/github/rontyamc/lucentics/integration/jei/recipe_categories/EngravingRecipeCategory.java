@@ -2,10 +2,10 @@ package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRecipe;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -27,7 +27,7 @@ import net.minecraft.world.item.ItemStack;
 
 import java.util.List;
 
-public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTableRecipe> {
+public class EngravingRecipeCategory extends AbstractRecipeCategory<TrailRecipe> {
 
     // こうは書いているが、4本までを推奨(それ以上はGUIサイズによってはみ出す)
     private static final int MAX_BEAMS = 6;
@@ -76,7 +76,7 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
     }
 
     @Override
-    public void draw(EngravingTableRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         arrowLight.draw(guiGraphics, WIDTH / 2 - 24 , 4);
 
         List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
@@ -117,7 +117,7 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
 
     @SuppressWarnings("removal")
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, EngravingTableRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, TrailRecipe recipe, IFocusGroup focuses) {
         recipe.getMainInput().ifPresent(sized ->
                 builder.addInputSlot(WIDTH / 2 - 50, 5)
                         .setStandardSlotBackground()
@@ -166,12 +166,12 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
     }
 
     @Override
-    public void createRecipeExtras(IRecipeExtrasBuilder builder, EngravingTableRecipe recipe, IFocusGroup focuses) {
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, TrailRecipe recipe, IFocusGroup focuses) {
         addDaylightCondition(builder, recipe);
         addProcessingDuration(builder, recipe);
     }
 
-    protected void addDaylightCondition(IRecipeExtrasBuilder builder, EngravingTableRecipe recipe) {
+    protected void addDaylightCondition(IRecipeExtrasBuilder builder, TrailRecipe recipe) {
         int daylightCondition = recipe.getDayLightCondition();
         if (daylightCondition <= 0) {
             daylightCondition = 0;
@@ -184,7 +184,7 @@ public class EngravingRecipeCategory extends AbstractRecipeCategory<EngravingTab
                 .setColor(0xFF808080);
     }
 
-    protected void addProcessingDuration(IRecipeExtrasBuilder builder, EngravingTableRecipe recipe) {
+    protected void addProcessingDuration(IRecipeExtrasBuilder builder, TrailRecipe recipe) {
         int processingDuration = recipe.getProcessingDuration();
         if (processingDuration <= 0) {
             processingDuration = 0;

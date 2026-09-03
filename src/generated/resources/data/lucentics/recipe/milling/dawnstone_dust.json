@@ -1,0 +1,33 @@
+{
+  "type": "lucentics:milling",
+  "input": {
+    "count": 1,
+    "item": "lucentics:dawnstone"
+  },
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:dawnstone_dust"
+      }
+    }
+  ],
+  "processing_duration": 20,
+  "trail_inputs": [
+    {
+      "color": "red",
+      "inputs": [
+        {
+          "input": {
+            "count": 1,
+            "item": "lucentics:copper_hammer"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

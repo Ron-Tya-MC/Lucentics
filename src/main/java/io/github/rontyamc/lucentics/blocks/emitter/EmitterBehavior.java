@@ -1,6 +1,8 @@
 package io.github.rontyamc.lucentics.blocks.emitter;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.beam.BeamNode;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.EmitBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
@@ -9,6 +11,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
@@ -136,14 +139,37 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
         if (!getLensContainer().isEmpty()) nbt.put("lens", getLensContainer().save(registries, new CompoundTag()));
         nbt.putInt("beam_length", beamLength);
         nbt.putString("color", color.getSerializedName());
+
+        if (!trail.isEmpty()) {
+            BeamNode.CODEC.listOf().encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), trail)
+                    .resultOrPartial(Lucentics.LOGGER::error)
+                    .ifPresent(tag -> nbt.put("trail", tag));
+        }
+
+        if (endpoint != null) {
+            BeamNode.CODEC.encodeStart(registries.createSerializationContext(NbtOps.INSTANCE), endpoint)
+                    .resultOrPartial(Lucentics.LOGGER::error)
+                    .ifPresent(tag -> nbt.put("endpoint", tag));
+        }
     }
 
     @Override
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         lensContainer = nbt.contains("lens") ? ItemStack.parse(registries, nbt.getCompound("lens")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
         beamLength = nbt.getInt("beam_length");
-        String colorName = nbt.getString("color");
-        color = Colors.byName(colorName).orElse(Colors.SUNLIGHT);
+        color = Colors.byName(nbt.getString("color")).orElse(Colors.SUNLIGHT);
+
+        trail = nbt.contains("trail")
+                ? BeamNode.CODEC.listOf().parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get("trail"))
+                  .resultOrPartial(Lucentics.LOGGER::error)
+                  .orElse(List.of())
+                : List.of();
+
+        endpoint = nbt.contains("endpoint")
+                ? BeamNode.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get("endpoint"))
+                  .resultOrPartial(Lucentics.LOGGER::error)
+                  .orElse(null)
+                : null;
     }
 
     @Override

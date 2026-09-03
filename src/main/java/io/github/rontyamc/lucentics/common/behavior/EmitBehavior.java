@@ -22,8 +22,8 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
 
     protected int beamLength = 0;
 
-    private List<BeamNode> trail = List.of();
-    private BeamNode endpoint = null;
+    protected List<BeamNode> trail = List.of();
+    protected BeamNode endpoint = null;
     protected Colors color = Colors.SUNLIGHT;
 
     private boolean stopBeam = true;

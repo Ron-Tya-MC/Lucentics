@@ -1,4 +1,4 @@
-package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
+package io.github.rontyamc.lucentics.recipes.injecting;
 
 import io.github.rontyamc.lucentics.common.recipe.BaseRecipe;
 import io.github.rontyamc.lucentics.common.recipe.IRecipeInfo;
@@ -7,9 +7,9 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
-public class InjectorRecipe extends BaseRecipe<InjectorRecipeInput, RecipeArguments> {
+public class InjectingRecipe extends BaseRecipe<InjectingRecipeInput, RecipeArguments> {
 
-    public InjectorRecipe(IRecipeInfo recipeInfo, RecipeArguments args) {
+    public InjectingRecipe(IRecipeInfo recipeInfo, RecipeArguments args) {
         super(recipeInfo, args);
 
         if (outputs.size() != 1 || outputs.getFirst().item().isEmpty()) {
@@ -25,7 +25,7 @@ public class InjectorRecipe extends BaseRecipe<InjectorRecipeInput, RecipeArgume
     }
 
     @Override
-    public boolean matches(InjectorRecipeInput input, Level level) {
+    public boolean matches(InjectingRecipeInput input, Level level) {
         return mainInput.map(sized -> sized.test(input.input())).orElse(false);
     }
 
@@ -35,7 +35,7 @@ public class InjectorRecipe extends BaseRecipe<InjectorRecipeInput, RecipeArgume
     }
 
     @Override
-    public ItemStack assemble(InjectorRecipeInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(InjectingRecipeInput input, HolderLookup.Provider registries) {
         return getResultItem(registries).copy();
     }
 }

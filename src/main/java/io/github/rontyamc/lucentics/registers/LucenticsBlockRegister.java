@@ -9,6 +9,7 @@ import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.Engr
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlock;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlock;
+import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBlock;
 import io.github.rontyamc.lucentics.blocks.misc.DawnstoneBlock;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlock;
@@ -107,7 +108,7 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
-    public static final BlockEntry<Block> MILLING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"milling_table", Block::new)
+    public static final BlockEntry<MillingTableBlock> MILLING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.MACHINES,"milling_table", MillingTableBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate(ModelUtilities.simpleBlockState(""))

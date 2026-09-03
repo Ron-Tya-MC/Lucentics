@@ -2,8 +2,7 @@ package io.github.rontyamc.lucentics.common.datagen.builders;
 
 import com.mojang.datafixers.util.Either;
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
-import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
+import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -101,7 +100,7 @@ public class InjectingBuilder implements RecipeBuilder {
                 daylightCondition
         );
 
-        InjectorRecipe recipe = new InjectorRecipe(LucenticsRecipeTypesRegister.INJECTION_INFO, args);
+        InjectingRecipe recipe = new InjectingRecipe(LucenticsRecipeTypesRegister.INJECTING_INFO, args);
         output.accept(id, recipe, null);
     }
 }

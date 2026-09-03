@@ -1,4 +1,4 @@
-package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
+package io.github.rontyamc.lucentics.recipes.trail;
 
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import net.minecraft.world.item.ItemStack;
@@ -6,7 +6,7 @@ import net.minecraft.world.item.crafting.RecipeInput;
 
 import java.util.List;
 
-public record EngravingTableRecipeInput(ItemStack mainInput, List<Beam> beams) implements RecipeInput {
+public record TrailRecipeInput(ItemStack mainInput, List<Beam> beams) implements RecipeInput {
 
     @Override
     public ItemStack getItem(int index) {

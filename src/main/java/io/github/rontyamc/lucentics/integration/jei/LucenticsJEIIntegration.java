@@ -1,8 +1,8 @@
 package io.github.rontyamc.lucentics.integration.jei;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRecipe;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
+import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
+import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.integration.jei.recipe_categories.EngravingRecipeCategory;
 import io.github.rontyamc.lucentics.integration.jei.recipe_categories.InjectingRecipeCategory;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
@@ -14,7 +14,6 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
 import mezz.jei.api.registration.IRecipeCategoryRegistration;
 import mezz.jei.api.registration.IRecipeRegistration;
-import mezz.jei.api.runtime.IJeiRuntime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.resources.ResourceLocation;
@@ -22,21 +21,18 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeInput;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @JeiPlugin
 public class LucenticsJEIIntegration implements IModPlugin {
     private static final ResourceLocation PLUGIN_ID = Lucentics.defaultLocation("jei_plugin");
 
-    private static IJeiRuntime runtime;
-    private static List<InjectorRecipe> lastInjectorRecipes = new ArrayList<>();
-    private static List<EngravingTableRecipe> lastEngravingRecipes = new ArrayList<>();
-
-    public static final RecipeType<InjectorRecipe> INJECTION =
-            RecipeType.create(Lucentics.MOD_ID, "injector", InjectorRecipe.class);
-    public static final RecipeType<EngravingTableRecipe> ENGRAVING =
-            RecipeType.create(Lucentics.MOD_ID, "engraving", EngravingTableRecipe.class);
+    public static final RecipeType<InjectingRecipe> INJECTION =
+            RecipeType.create(Lucentics.MOD_ID, "injector", InjectingRecipe.class);
+    public static final RecipeType<TrailRecipe> ENGRAVING =
+            RecipeType.create(Lucentics.MOD_ID, "engraving", TrailRecipe.class);
+    public static final RecipeType<TrailRecipe> HAMMER =
+            RecipeType.create(Lucentics.MOD_ID, "hammer", TrailRecipe.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -55,7 +51,7 @@ public class LucenticsJEIIntegration implements IModPlugin {
         var level = Minecraft.getInstance().level;
         if (level == null) return;
 
-        registerStream(registration, level, LucenticsRecipeTypesRegister.INJECTION_TYPE.get(), INJECTION);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.INJECTING_TYPE.get(), INJECTION);
         registerStream(registration, level, LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), ENGRAVING);
     }
 
@@ -64,6 +60,7 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCatalysts(INJECTION, LucenticsBlockRegister.INJECTOR);
 
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.ENGRAVING_TABLE);
+        registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.EMITTER);
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.PRISM_RITUAL);
     }
 

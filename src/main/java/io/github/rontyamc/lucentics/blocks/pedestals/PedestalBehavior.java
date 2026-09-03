@@ -130,6 +130,9 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     }
 
     @Override
+    public void catalyst() {}
+
+    @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         if (!getContent().isEmpty()) {
             nbt.put("content", getContent().save(registries, new CompoundTag()));

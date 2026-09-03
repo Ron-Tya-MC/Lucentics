@@ -3,9 +3,9 @@ package io.github.rontyamc.lucentics.registers;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlock;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlockEntity;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
+import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBlockEntity;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlockEntity;
 import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlockEntity;
 
@@ -29,6 +29,10 @@ public class LucenticsBlockEntityRegister {
     public static final BlockEntityEntry<TankLightCopperBlockEntity> TANK_LIGHT_COPPER = REGISTRATE.blockEntity("tank_light_copper", TankLightCopperBlockEntity::new)
             .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER)
             .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER_BOLD)
+            .register();
+
+    public static final BlockEntityEntry<MillingTableBlockEntity> MILLING_TABLE = REGISTRATE.blockEntity("milling_table", MillingTableBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.MILLING_TABLE)
             .register();
 
     public static void register() {

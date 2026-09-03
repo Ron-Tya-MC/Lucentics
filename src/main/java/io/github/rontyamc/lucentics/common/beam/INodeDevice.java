@@ -7,4 +7,5 @@ public interface INodeDevice {
 
     void consumeItem(int amount);
     void damageItem(int damage);
+    void catalyst();
 }

@@ -1,14 +1,11 @@
-package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
+package io.github.rontyamc.lucentics.recipes.trail;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.beam.BeamNode;
 import io.github.rontyamc.lucentics.common.beam.DeviceSlot;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
-import io.github.rontyamc.lucentics.common.recipe.BaseRecipe;
-import io.github.rontyamc.lucentics.common.recipe.IRecipeInfo;
-import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
-import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
+import io.github.rontyamc.lucentics.common.recipe.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.world.item.ItemStack;
@@ -19,16 +16,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class EngravingTableRecipe extends BaseRecipe<EngravingTableRecipeInput, RecipeArguments> {
-    private EngravingTableRecipeInput cachedInput;
-    private Optional<List<ConsumptionEntry>> cachedResult;
+public class TrailRecipe extends BaseRecipe<TrailRecipeInput, RecipeArguments> {
+    private TrailRecipeInput cachedInput;
+    private Optional<List<ConsumptionEntry>> cachedResult = Optional.empty();
 
-    public EngravingTableRecipe(IRecipeInfo recipeInfo, RecipeArguments args) {
+    public TrailRecipe(IRecipeInfo recipeInfo, RecipeArguments args) {
         super(recipeInfo, args);
     }
 
     @Override
-    public boolean matches(EngravingTableRecipeInput input, Level level) {
+    public boolean matches(TrailRecipeInput input, Level level) {
         return resolveConsumptionCached(input, level).isPresent();
     }
 
@@ -74,11 +71,11 @@ public class EngravingTableRecipe extends BaseRecipe<EngravingTableRecipeInput, 
     }
 
     @Override
-    public ItemStack assemble(EngravingTableRecipeInput input, HolderLookup.Provider registries) {
+    public ItemStack assemble(TrailRecipeInput input, HolderLookup.Provider registries) {
         return getResultItem(registries).copy();
     }
 
-    public Optional<List<ConsumptionEntry>> resolveConsumption(EngravingTableRecipeInput input, Level level) {
+    public Optional<List<ConsumptionEntry>> resolveConsumption(TrailRecipeInput input, Level level) {
         if (mainInput.isEmpty() || !mainInput.get().test(input.mainInput())) return Optional.empty();
         if (input.beams().size() != trailInputs.size()) return Optional.empty();
 
@@ -99,16 +96,15 @@ public class EngravingTableRecipe extends BaseRecipe<EngravingTableRecipeInput, 
 
             for (int i = 0; i < devices.size(); i++) {
                 RecipeArguments.OrderingInput ordering = orderings.get(i);
-                if (ordering.notConsume()) continue;
                 int amount = ordering.ingredient().left().map(SizedIngredient::count).orElse(0);
-                entries.add(new ConsumptionEntry(devices.get(i).device(), amount));
+                entries.add(new ConsumptionEntry(devices.get(i).device(), amount, ordering.notConsume()));
             }
         }
         return Optional.of(entries);
     }
 
-    public Optional<List<ConsumptionEntry>> resolveConsumptionCached(EngravingTableRecipeInput input, Level level) {
-        if (input == cachedInput) {
+    public Optional<List<ConsumptionEntry>> resolveConsumptionCached(TrailRecipeInput input, Level level) {
+        if (input.equals(cachedInput)) {
             return cachedResult;
         }
         cachedInput = input;
@@ -116,7 +112,7 @@ public class EngravingTableRecipe extends BaseRecipe<EngravingTableRecipeInput, 
         return cachedResult;
     }
 
-    public record ConsumptionEntry(INodeDevice device, int amount) {}
+    public record ConsumptionEntry(INodeDevice device, int amount, boolean notConsume) {}
 
     private boolean backtrackWithAssignment(List<Beam> beams, List<List<DeviceSlot>> perBeamDevices, boolean[] used, int[] assignment, int beamIndex) {
         if (beamIndex == beams.size()) return true;

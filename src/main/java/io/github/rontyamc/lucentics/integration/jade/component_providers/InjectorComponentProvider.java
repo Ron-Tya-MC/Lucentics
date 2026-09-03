@@ -1,20 +1,12 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipeInput;
-import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.TagTypes;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.ui.IElementHelper;
 
 public enum InjectorComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;

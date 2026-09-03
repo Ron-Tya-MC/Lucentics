@@ -1,4 +1,4 @@
-package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
+package io.github.rontyamc.lucentics.blocks.milling_table;
 
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
@@ -9,9 +9,11 @@ import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
+import io.github.rontyamc.lucentics.network.MillingProcessPayload;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -24,33 +26,35 @@ import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public class EngravingTableBehavior extends TrailCraftingBehavior implements Clearable {
-    public static final BehaviorType<EngravingTableBehavior> TYPE = new BehaviorType<>("engraving_table");
+public class MillingTableBehavior extends TrailCraftingBehavior implements Clearable {
+    public static final BehaviorType<MillingTableBehavior> TYPE = new BehaviorType<>("milling_table");
 
     private final RandomSource randomSource = RandomSource.create();
 
     private ItemStack container = ItemStack.EMPTY;
     private final List<ItemStack> buffer = new ArrayList<>();
-    private boolean hasOutputItem = false;
+    private boolean hasOutputItem;
     private Supplier<Integer> maxStackSize;
-    public EngravingTableIHandler iHandler;
+    public MillingTableIHandler iHandler;
     private boolean blockMerge;
 
-    public EngravingTableBehavior(BaseBlockEntity be) {
+    public MillingTableBehavior(BaseBlockEntity be) {
         super(be);
 
         hasOutputItem = false;
         maxStackSize = () -> 64;
         setBlockMerge(true);
-        iHandler = new EngravingTableIHandler(this);
+        iHandler = new MillingTableIHandler(this);
         clearContent();
     }
 
@@ -67,19 +71,23 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         return TYPE;
     }
 
+    @Override
     public ItemStack getContainer() {
         return container == null ? ItemStack.EMPTY : container;
     }
 
+    @Override
     public List<ItemStack> getBuffer() {
         return buffer;
     }
 
+    @Override
     public ItemStack getBuffetAt(int index) {
         if (index < 0 || index >= buffer.size()) return ItemStack.EMPTY;
         return buffer.get(index) == null ? ItemStack.EMPTY : buffer.get(index);
     }
 
+    @Override
     public List<ItemStack> collectBuffer() {
         List<ItemStack> collected = new ArrayList<>(buffer);
         buffer.clear();
@@ -196,51 +204,40 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         clearContent();
     }
 
-    private void spawnCraftingParticles(ServerLevel level, BlockPos pos, List<Beam> beams) {
-        double dx = randomSource.nextDouble() < 0.5 ? 3.0d / 32 : 29.0d / 32;
-        double dy = Mth.lerp(randomSource.nextDouble(), 0.1, 0.5);
-        double dz = randomSource.nextDouble() < 0.5 ? 3.0d / 32 : 29.0d / 32;
-
-        double Sx = pos.getX() + dx;
-        double Sy = pos.getY() + 7.0d / 8;
-        double Sz = pos.getZ() + dz;
+    private void spawnCraftingParticles(ServerLevel level, List<Beam> beams, BlockPos pos) {
+        double Sx = pos.getX() + Mth.lerp(randomSource.nextDouble(), 3.0f / 8, 5.0f / 8);
+        double Sy = pos.getY() + Mth.lerp(randomSource.nextDouble(), 3.0f / 8, 1.0);
+        double Sz = pos.getZ() + Mth.lerp(randomSource.nextDouble(), 3.0f / 8, 5.0f / 8);
 
         double Tx = Sx + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
-        double Ty = Sy + dy;
+        double Ty = pos.getY() + 1.2;
         double Tz = Sz + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
 
         double Vx = Tx - Sx;
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        int rgb;
-
-        if (!beams.isEmpty()) {
-            List<Integer> colors = new ArrayList<>();
-            for (Beam beam : beams) {
-                colors.add(beam.color().getColorCode());
-            }
-            rgb = colors.get(Mth.lerpInt(randomSource.nextFloat(), 1, colors.size()) - 1);
-        } else {
-            rgb = Colors.SUNLIGHT.getColorCode();
-        }
+        int rgb = Colors.RED.getColorCode();
         float r = ((rgb >> 16) & 0xFF) / 255f;
         float g = ((rgb >> 8) & 0xFF) / 255f;
         float b = (rgb & 0xFF) / 255f;
 
-        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.07);
+        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.15);
     }
 
-    private void spawnCraftCompleteParticles(ServerLevel level, BlockPos pos) {
+    private void spawnCraftCompleteParticles(ServerLevel level) {
+        BlockPos pos = getPos();
+
         double Sx = pos.getX() + 0.5;
         double Sy = pos.getY() + 0.8;
         double Sz = pos.getZ() + 0.5;
 
-        level.sendParticles(ParticleTypes.END_ROD, Sx, Sy, Sz, 9, 0.3, 0, 0.3, 0.1);
+        level.sendParticles(ParticleTypes.END_ROD, Sx, Sy, Sz, 2, 0.3, 0, 0.3, 0.1);
     }
 
     @Override
     public void tick() {
+        processingContinueMax = processingTimeMax * 2;
         super.tick();
     }
 
@@ -253,35 +250,40 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
 
     protected Optional<RecipeHolder<TrailRecipe>> getCurrentRecipe(ServerLevel level, TrailRecipeInput input) {
         if (level == null || input.isEmpty()) return Optional.empty();
-        return level.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), input, level);
+        return level.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.MILLING_TYPE.get(), input, level);
     }
 
     protected void craft(ServerLevel level, TrailRecipe recipe, TrailRecipeInput input) {
         super.craft(level, recipe, input);
-
-        Optional<List<TrailRecipe.ConsumptionEntry>> catalysts = getCachedCatalysts();
-        if (catalysts.isPresent()) {
-            for (TrailRecipe.ConsumptionEntry entry : catalysts.get()) {
-                entry.device().catalyst();
-            }
-        }
     }
 
+    @Override
     protected void onCraftStarted(ServerLevel level, BlockPos pos, List<Beam> beams) {}
 
+    @Override
     protected void whileCrafting(ServerLevel level, BlockPos pos, List<Beam> beams) {
-        if (processingTime %3 == 0) {
-            spawnCraftingParticles(level, pos, beams);
-            spawnCraftingParticles(level, pos, beams);
+        if (processingTime %7 == 0) {
+            spawnCraftingParticles(level, beams, pos);
+            spawnCraftingParticles(level, beams, pos);
         }
-        if (processingTime %7 == processingTimeMax %7) {
-            level.playSound(null, pos, SoundEvents.BEACON_AMBIENT, SoundSource.BLOCKS, 0.4f, 1.5f);
+        if (processingTime %2 == 0) {
+            double Sx = pos.getX() + 0.5;
+            double Sy = pos.getY() + 0.5;
+            double Sz = pos.getZ() + 0.5;
+
+            level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, container), Sx, Sy, Sz, 2, 0.3, 0.1, 0.3, 0.01);
+        }
+        if (processingTime %2 == 0) {
+            float p = Mth.lerp(randomSource.nextFloat(), 0.1f, 0.3f);
+            level.playSound(null, pos, SoundEvents.TUFF_BREAK, SoundSource.BLOCKS, 0.4f, p);
         }
     }
 
+    @Override
     protected void onCraftCompleted(ServerLevel level, BlockPos pos, List<Beam> beams) {
-        spawnCraftCompleteParticles(level, pos);
-        level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.4f, 1.5f);
+        spawnCraftCompleteParticles(level);
+
+        if (randomSource.nextFloat() < 0.5f) level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 0.4f, 0.5f);
     }
 
     @Override
@@ -296,12 +298,13 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
             if (!stack.isEmpty()) bufferList.add(stack.save(registries, new CompoundTag()));
         }
         nbt.put("buffer", bufferList);
+        nbt.putInt("processing_continue", processingContinue);
         nbt.putBoolean("has_output_item", hasOutputItem);
     }
 
     @Override
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-        super.read(nbt, registries, clientPacket);
+        super.write(nbt, registries, clientPacket);
 
         container = nbt.contains("container")
                 ? ItemStack.parse(registries, nbt.getCompound("container")).orElse(ItemStack.EMPTY)
@@ -312,12 +315,27 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         for (int i = 0; i < bufferList.size(); i++) {
             ItemStack.parse(registries, bufferList.getCompound(i)).ifPresent(buffer::add);
         }
-
+        processingContinue = nbt.getInt("processing_continue");
         hasOutputItem = nbt.getBoolean("has_output_item");
     }
 
     @Override
     public boolean isSafeNBT() { return true; }
 
-    protected void syncProgressToClient(ServerLevel level) {}
+    private int processingContinueClient = 0;
+    private int processingTimeMaxClient = -1;
+
+    public void applyClientProgress(int processingContinue, int processingTimeMax) {
+        this.processingContinueClient = processingContinue;
+        this.processingTimeMaxClient = processingTimeMax;
+    }
+
+    public int getProcessingContinueClient() { return processingContinueClient; }
+
+    public int getProcessingTimeMaxClient() { return processingTimeMaxClient; }
+
+    protected void syncProgressToClient(ServerLevel level) {
+        var payload = new MillingProcessPayload(getPos(), processingContinue, processingTimeMax);
+        PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(getPos()), payload);
+    }
 }

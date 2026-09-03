@@ -1,11 +1,10 @@
 package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRecipe;
+import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.placement.HorizontalAlignment;
@@ -19,7 +18,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectorRecipe> {
+public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRecipe> {
     private static final int WIDTH = 120;
     private static final int HEIGHT = 40;
 
@@ -42,12 +41,12 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectorReci
     }
 
     @Override
-    public void draw(InjectorRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+    public void draw(InjectingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         arrow.draw(guiGraphics, WIDTH / 2 - 24, 4);
     }
 
     @Override
-    public void setRecipe(IRecipeLayoutBuilder builder, InjectorRecipe recipe, IFocusGroup focuses) {
+    public void setRecipe(IRecipeLayoutBuilder builder, InjectingRecipe recipe, IFocusGroup focuses) {
         recipe.getMainInput().ifPresent(sized ->
                 builder.addInputSlot(10, 5)
                         .setStandardSlotBackground()
@@ -60,12 +59,12 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectorReci
     }
 
     @Override
-    public void createRecipeExtras(IRecipeExtrasBuilder builder, InjectorRecipe recipe, IFocusGroup focuses) {
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, InjectingRecipe recipe, IFocusGroup focuses) {
         addDaylightCondition(builder, recipe);
         addProcessingDuration(builder, recipe);
     }
 
-    protected void addDaylightCondition(IRecipeExtrasBuilder builder, InjectorRecipe recipe) {
+    protected void addDaylightCondition(IRecipeExtrasBuilder builder, InjectingRecipe recipe) {
         int daylightCondition = recipe.getDayLightCondition();
         if (daylightCondition <= 0) {
             daylightCondition = 0;
@@ -78,7 +77,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectorReci
                     .setColor(0xFF808080);
     }
 
-    protected void addProcessingDuration(IRecipeExtrasBuilder builder, InjectorRecipe recipe) {
+    protected void addProcessingDuration(IRecipeExtrasBuilder builder, InjectingRecipe recipe) {
         int processingDuration = recipe.getProcessingDuration();
         if (processingDuration <= 0) {
             processingDuration = 0;

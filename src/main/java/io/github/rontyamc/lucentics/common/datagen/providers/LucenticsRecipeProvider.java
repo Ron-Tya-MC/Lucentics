@@ -2,9 +2,10 @@ package io.github.rontyamc.lucentics.common.datagen.providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.ItemUtilities;
-import io.github.rontyamc.lucentics.common.datagen.builders.EngravingBuilder;
 import io.github.rontyamc.lucentics.common.datagen.builders.InjectingBuilder;
+import io.github.rontyamc.lucentics.common.datagen.builders.TrailRecipeBuilder;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
+import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
@@ -38,6 +39,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         CraftingProvider.buildRecipes(this, recipeOutput);
         InjectingProvider.buildRecipes(this, recipeOutput);
         EngravingProvider.buildRecipes(this, recipeOutput);
+        MillingProvider.buildRecipes(this, recipeOutput);
 
         generatedRecipes.forEach(c -> c.register(recipeOutput));
     }
@@ -131,11 +133,23 @@ public class LucenticsRecipeProvider extends RecipeProvider {
             });
         }
 
-        public GeneratedRecipe engraving(UnaryOperator<EngravingBuilder> builder) {
+        public GeneratedRecipe engraving(UnaryOperator<TrailRecipeBuilder> builder) {
             return register(output -> {
-                EngravingBuilder b =
-                        builder.apply(EngravingBuilder.create(SizedIngredient.EMPTY, result.get(), count));
+                TrailRecipeBuilder b =
+                        builder.apply(TrailRecipeBuilder.create(SizedIngredient.EMPTY, result.get(), count));
+                b.setFolder("engraving");
+                b.setRecipeInfo(LucenticsRecipeTypesRegister.ENGRAVING_INFO);
                 b.save(output, createLocation("engraving"));
+            });
+        }
+
+        public GeneratedRecipe milling(UnaryOperator<TrailRecipeBuilder> builder) {
+            return register(output -> {
+                TrailRecipeBuilder b =
+                        builder.apply(TrailRecipeBuilder.create(SizedIngredient.EMPTY, result.get(), count));
+                b.setFolder("milling");
+                b.setRecipeInfo(LucenticsRecipeTypesRegister.MILLING_INFO);
+                b.save(output, createLocation("milling"));
             });
         }
     }
