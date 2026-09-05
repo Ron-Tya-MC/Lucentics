@@ -1,7 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 

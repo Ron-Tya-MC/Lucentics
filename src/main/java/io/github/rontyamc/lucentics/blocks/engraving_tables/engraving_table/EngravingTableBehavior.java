@@ -2,7 +2,7 @@ package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;

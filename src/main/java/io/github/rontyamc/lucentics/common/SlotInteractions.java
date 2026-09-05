@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.common;
 
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;

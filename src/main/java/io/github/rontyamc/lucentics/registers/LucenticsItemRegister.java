@@ -1,23 +1,17 @@
 package io.github.rontyamc.lucentics.registers;
 
 import com.tterrag.registrate.util.entry.ItemEntry;
-
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.items.HammerItem;
 import io.github.rontyamc.lucentics.items.LensItem;
 import io.github.rontyamc.lucentics.registers.LucenticsTabRegister.CategoryType;
-
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.Tag;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.tags.TagEntry;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.PickaxeItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.component.Tool;
-import net.neoforged.neoforge.registries.DeferredRegister;
 
 import java.util.EnumMap;
 import java.util.List;
@@ -29,6 +23,8 @@ public class LucenticsItemRegister {
     static {
         REGISTRATE.setCreativeTab(LucenticsTabRegister.CREATIVE_MODE_TAB_INGREDIENTS);
     }
+    public static final ItemEntry<Item> NOTHING = REGISTRATE.lucenticsItemBuilder(CategoryType.NONE, "nothing", Item::new)
+            .register();
 
     public static final ItemEntry<Item> DUSK_BRICK = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dusk_brick", Item::new)
             .register();
@@ -83,7 +79,7 @@ public class LucenticsItemRegister {
             .register();
     public static final ItemEntry<HammerItem> IRON_HAMMER = REGISTRATE
             .lucenticsItemBuilder(CategoryType.TOOLS, "iron_hammer",
-                    p -> new HammerItem(p.durability(320), 3, 4))
+                    p -> new HammerItem(p.durability(512), 3, 4))
             .properties(p -> p.attributes(
                     PickaxeItem.createAttributes(Tiers.IRON, 5, -3.0f))
                     .component(DataComponents.TOOL, new Tool(

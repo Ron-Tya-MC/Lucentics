@@ -1,9 +1,7 @@
-package io.github.rontyamc.lucentics.common;
+package io.github.rontyamc.lucentics.common.util;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +18,5 @@ public class MiscFuncs {
         } catch (IOException exception) {
             throw new RuntimeException(exception);
         }
-    }
-
-    public static Vec3 getCenter(BlockPos pos) {
-        return new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }
 }

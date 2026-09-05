@@ -61,6 +61,7 @@ public class Lucentics {
         LucenticsParticleRegister.register(modEventBus);
 
         LucenticsRecipeTypesRegister.register(modEventBus);
+        LucenticsAttachmentRegister.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerCapabilities);

@@ -1,0 +1,24 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.tuff.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.tuff.hit",
+    "source": "block"
+  },
+  "damage_per_hit": 10,
+  "input": "lucentics:dawnstone",
+  "outputs": [
+    {
+      "item": {
+        "count": 1,
+        "id": "lucentics:dawnstone_dust"
+      }
+    }
+  ],
+  "tool": {
+    "item": "lucentics:golden_hammer"
+  }
+}

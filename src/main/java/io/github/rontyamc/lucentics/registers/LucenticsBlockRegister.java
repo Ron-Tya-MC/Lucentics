@@ -1,7 +1,6 @@
 package io.github.rontyamc.lucentics.registers;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
-
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBehavior;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlock;
@@ -10,16 +9,14 @@ import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.Engr
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlock;
 import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBlock;
-import io.github.rontyamc.lucentics.blocks.misc.DawnstoneBlock;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlock;
 import io.github.rontyamc.lucentics.blocks.prism.PrismBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_ritual.PrismRitualBlock;
 import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlock;
-import io.github.rontyamc.lucentics.common.ModelUtilities;
+import io.github.rontyamc.lucentics.common.util.ModelUtilities;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.registers.LucenticsTabRegister.CategoryType;
-
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -55,7 +52,7 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
-    public static final BlockEntry<DawnstoneBlock> DAWNSTONE = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"dawnstone", DawnstoneBlock::new)
+    public static final BlockEntry<Block> DAWNSTONE = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"dawnstone", Block::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .item()

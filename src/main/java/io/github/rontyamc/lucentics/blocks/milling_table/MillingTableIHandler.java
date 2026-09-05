@@ -1,6 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.milling_table;
 
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 

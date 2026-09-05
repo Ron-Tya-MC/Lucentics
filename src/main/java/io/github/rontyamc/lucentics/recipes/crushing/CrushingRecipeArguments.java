@@ -3,8 +3,8 @@ package io.github.rontyamc.lucentics.recipes.crushing;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.github.rontyamc.lucentics.common.SoundSpec;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
-import net.minecraft.core.Holder;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryCodecs;
@@ -12,7 +12,6 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.neoforge.network.codec.NeoForgeStreamCodecs;
@@ -24,8 +23,8 @@ public record CrushingRecipeArguments(
     Ingredient tool,
     int requiredHits,
     int damagePerHit,
-    Optional<Holder<SoundEvent>> clickSound,
-    Optional<Holder<SoundEvent>> breakSound,
+    Optional<SoundSpec> clickSound,
+    Optional<SoundSpec> breakSound,
     NonNullList<RecipeArguments.Output> outputs
     ) {
 
@@ -38,8 +37,8 @@ public record CrushingRecipeArguments(
             Ingredient.CODEC.fieldOf("tool").forGetter(CrushingRecipeArguments::tool),
             Codec.INT.optionalFieldOf("required_hit", 1).forGetter(CrushingRecipeArguments::requiredHits),
             Codec.INT.optionalFieldOf("damage_per_hit", 1).forGetter(CrushingRecipeArguments::damagePerHit),
-            SoundEvent.CODEC.optionalFieldOf("click_sound").forGetter(CrushingRecipeArguments::clickSound),
-            SoundEvent.CODEC.optionalFieldOf("break_sound").forGetter(CrushingRecipeArguments::breakSound),
+            SoundSpec.CODEC.optionalFieldOf("click_sound").forGetter(CrushingRecipeArguments::clickSound),
+            SoundSpec.CODEC.optionalFieldOf("break_sound").forGetter(CrushingRecipeArguments::breakSound),
             RecipeArguments.Output.CODEC.codec().listOf().xmap(list -> {
                 NonNullList<RecipeArguments.Output> out = NonNullList.create();
                 out.addAll(list);
@@ -52,8 +51,8 @@ public record CrushingRecipeArguments(
             Ingredient.CONTENTS_STREAM_CODEC, CrushingRecipeArguments::tool,
             ByteBufCodecs.VAR_INT, CrushingRecipeArguments::requiredHits,
             ByteBufCodecs.VAR_INT, CrushingRecipeArguments::damagePerHit,
-            ByteBufCodecs.holderRegistry(Registries.SOUND_EVENT).apply(ByteBufCodecs::optional), CrushingRecipeArguments::clickSound,
-            ByteBufCodecs.holderRegistry(Registries.SOUND_EVENT).apply(ByteBufCodecs::optional), CrushingRecipeArguments::breakSound,
+            SoundSpec.STREAM_CODEC.apply(ByteBufCodecs::optional), CrushingRecipeArguments::clickSound,
+            SoundSpec.STREAM_CODEC.apply(ByteBufCodecs::optional), CrushingRecipeArguments::breakSound,
             ByteBufCodecs.collection(size -> NonNullList.create(), RecipeArguments.Output.STREAM_CODEC), CrushingRecipeArguments::outputs,
             CrushingRecipeArguments::new
     );

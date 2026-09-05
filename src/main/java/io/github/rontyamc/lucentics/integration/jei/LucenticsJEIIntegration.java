@@ -1,6 +1,8 @@
 package io.github.rontyamc.lucentics.integration.jei;
 
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.integration.jei.recipe_categories.CrushingRecipeCategory;
+import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.integration.jei.recipe_categories.EngravingRecipeCategory;
@@ -27,12 +29,12 @@ import java.util.List;
 public class LucenticsJEIIntegration implements IModPlugin {
     private static final ResourceLocation PLUGIN_ID = Lucentics.defaultLocation("jei_plugin");
 
-    public static final RecipeType<InjectingRecipe> INJECTION =
-            RecipeType.create(Lucentics.MOD_ID, "injector", InjectingRecipe.class);
+    public static final RecipeType<InjectingRecipe> INJECTING =
+            RecipeType.create(Lucentics.MOD_ID, "injecting", InjectingRecipe.class);
     public static final RecipeType<TrailRecipe> ENGRAVING =
             RecipeType.create(Lucentics.MOD_ID, "engraving", TrailRecipe.class);
-    public static final RecipeType<TrailRecipe> HAMMER =
-            RecipeType.create(Lucentics.MOD_ID, "hammer", TrailRecipe.class);
+    public static final RecipeType<CrushingRecipe> CRUSHING =
+            RecipeType.create(Lucentics.MOD_ID, "crushing", CrushingRecipe.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -44,6 +46,7 @@ public class LucenticsJEIIntegration implements IModPlugin {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new InjectingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new EngravingRecipeCategory(guiHelper));
+        registration.addRecipeCategories(new CrushingRecipeCategory(guiHelper));
     }
 
     @Override
@@ -51,13 +54,14 @@ public class LucenticsJEIIntegration implements IModPlugin {
         var level = Minecraft.getInstance().level;
         if (level == null) return;
 
-        registerStream(registration, level, LucenticsRecipeTypesRegister.INJECTING_TYPE.get(), INJECTION);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.INJECTING_TYPE.get(), INJECTING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), ENGRAVING);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.CRUSHING_TYPE.get(), CRUSHING);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalysts(INJECTION, LucenticsBlockRegister.INJECTOR);
+        registration.addRecipeCatalysts(INJECTING, LucenticsBlockRegister.INJECTOR);
 
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.ENGRAVING_TABLE);
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.EMITTER);

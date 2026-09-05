@@ -34,11 +34,13 @@
 
   "jei.lucentics.category.injector": "Light Injecting",
   "jei.lucentics.category.engraving": "Engraving",
+  "jei.lucentics.category.crushing": "Crushing",
 
-  "jei.lucentics.info.daylight_condition": "Required DayLight: %s",
+  "jei.lucentics.info.daylight_condition": "DayLight: %s",
   "jei.lucentics.info.processing_duration": "%s Seconds",
   "jei.lucentics.info.engraving.too_much_beam": "Any more beams can't be displayed!",
   "jei.lucentics.info.engraving.too_much_beam2": "Please check the manual for the detailed recipe.",
-  "jei.lucentics.info.not_consume": "Not Consumed"
-
+  "jei.lucentics.info.not_consume": "Not Consumed",
+  "jei.lucentics.info.required_hits": "Hit %s Times",
+  "jei.lucentics.info.damage_per_hits": "%s Damage"
 }

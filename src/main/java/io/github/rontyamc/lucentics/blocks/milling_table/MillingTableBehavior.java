@@ -2,7 +2,7 @@ package io.github.rontyamc.lucentics.blocks.milling_table;
 
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
@@ -304,7 +304,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
 
     @Override
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(nbt, registries, clientPacket);
+        super.read(nbt, registries, clientPacket);
 
         container = nbt.contains("container")
                 ? ItemStack.parse(registries, nbt.getCompound("container")).orElse(ItemStack.EMPTY)

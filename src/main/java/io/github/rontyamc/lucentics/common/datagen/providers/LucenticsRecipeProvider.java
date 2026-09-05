@@ -1,7 +1,8 @@
 package io.github.rontyamc.lucentics.common.datagen.providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.datagen.builders.CrushingBuilder;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.datagen.builders.InjectingBuilder;
 import io.github.rontyamc.lucentics.common.datagen.builders.TrailRecipeBuilder;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
@@ -10,6 +11,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +41,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         CraftingProvider.buildRecipes(this, recipeOutput);
         InjectingProvider.buildRecipes(this, recipeOutput);
         EngravingProvider.buildRecipes(this, recipeOutput);
+        CrushingProvider.buildRecipes(this, recipeOutput);
         MillingProvider.buildRecipes(this, recipeOutput);
 
         generatedRecipes.forEach(c -> c.register(recipeOutput));
@@ -140,6 +143,14 @@ public class LucenticsRecipeProvider extends RecipeProvider {
                 b.setFolder("engraving");
                 b.setRecipeInfo(LucenticsRecipeTypesRegister.ENGRAVING_INFO);
                 b.save(output, createLocation("engraving"));
+            });
+        }
+
+        public GeneratedRecipe crushing(UnaryOperator<CrushingBuilder> builder) {
+            return register(output -> {
+                CrushingBuilder b =
+                        builder.apply(CrushingBuilder.create(Ingredient.EMPTY, result.get()));
+                b.save(output, createLocation("crushing"));
             });
         }
 

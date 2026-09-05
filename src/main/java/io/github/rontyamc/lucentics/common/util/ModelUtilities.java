@@ -1,4 +1,4 @@
-package io.github.rontyamc.lucentics.common;
+package io.github.rontyamc.lucentics.common.util;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;

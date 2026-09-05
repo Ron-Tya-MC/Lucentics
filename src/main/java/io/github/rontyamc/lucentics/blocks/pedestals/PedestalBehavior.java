@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.blocks.pedestals;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;

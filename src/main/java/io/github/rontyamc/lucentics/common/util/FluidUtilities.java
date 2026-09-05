@@ -1,4 +1,4 @@
-package io.github.rontyamc.lucentics.common;
+package io.github.rontyamc.lucentics.common.util;
 
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;

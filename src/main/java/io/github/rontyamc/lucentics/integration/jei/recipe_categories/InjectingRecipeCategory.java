@@ -28,7 +28,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRec
 
     public InjectingRecipeCategory(IGuiHelper guiHelper) {
         super(
-                LucenticsJEIIntegration.INJECTION,
+                LucenticsJEIIntegration.INJECTING,
                 Component.translatable("jei.lucentics.category.injector"),
                 guiHelper.createDrawableItemStack(LucenticsBlockRegister.INJECTOR.asStack()),
                 WIDTH,
@@ -71,7 +71,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRec
         }
 
         Component text = Component.translatable("jei.lucentics.info.daylight_condition", daylightCondition);
-        builder.addText(text, getWidth() - 20, 10)
+        builder.addText(text, getWidth() / 2, 10)
                     .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.LEFT, VerticalAlignment.BOTTOM)
                     .setTextAlignment(HorizontalAlignment.LEFT)
                     .setColor(0xFF808080);
@@ -84,7 +84,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRec
         }
 
         Component text = Component.translatable("jei.lucentics.info.processing_duration", LucenticsJEIIntegration.makeSecond(processingDuration));
-        builder.addText(text, getWidth() - 20, 10)
+        builder.addText(text, getWidth() / 2, 10)
                 .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM)
                 .setTextAlignment(HorizontalAlignment.RIGHT)
                 .setColor(0xFF808080);

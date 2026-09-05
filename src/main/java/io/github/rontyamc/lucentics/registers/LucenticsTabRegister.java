@@ -169,6 +169,7 @@ public class LucenticsTabRegister {
         }
 
     public static class CategoryType {
+        public static final String NONE = "none";
         public static final String INGREDIENTS = "ingredients";
         public static final String BLOCKS = "blocks";
         public static final String MACHINES = "machines";

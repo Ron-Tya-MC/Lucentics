@@ -55,4 +55,8 @@ public class CrushingRecipe implements Recipe<CrushingRecipeInput> {
     public boolean isSpecial() {
         return true;
     }
+
+    public CrushingRecipeArguments getArguments() {
+        return arguments;
+    }
 }

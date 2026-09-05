@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.common.behavior;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
@@ -73,7 +73,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
             syncProgressToClient(serverLevel);
         }
 
-        List<Beam> beams = new ArrayList<>(getTrails().stream().toList());
+        List<Beam> beams = List.copyOf(getTrails());
         trails.clear();
         BlockPos pos = getPos();
 
@@ -88,27 +88,30 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
         }
 
         TrailRecipeInput input = new TrailRecipeInput(getContainer(), beams);
+        Optional<RecipeHolder<TrailRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
+        if (recipeHolder.isEmpty()) {
+            metDayLightCondition = true;
+            setIdle();
+            return;
+        }
 
-        if (!isIdle()) {
-            if (checkDayLightCondition(serverLevel, input) && hasRecipe(serverLevel, input)) {
-                processingTime--;
-                if (processingContinue < processingContinueMax) processingContinue++;
-                syncProgressToClient(serverLevel);
-                whileCrafting(serverLevel, pos, beams);
-                if (processingTime > 0) return;
+        TrailRecipe recipe = recipeHolder.get().value();
 
-                Optional<RecipeHolder<TrailRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
-                if (recipeHolder.isEmpty()) {
-                    setIdle();
-                } else {
-                    TrailRecipe recipe = recipeHolder.get().value();
-                    craft(serverLevel, recipe, input);
-                }
-            } else {
-                setIdle();
-            }
-        } else if (checkDayLightCondition(serverLevel, input) && hasRecipe(serverLevel, input)) {
-            startProcessing(serverLevel, input);
+        if (!checkDayLightCondition(serverLevel, recipe)) {
+            setIdle();
+            return;
+        }
+        if (isIdle()) {
+            startProcessing(serverLevel, recipe, beams);
+            return;
+        }
+
+        processingTime--;
+        if (processingContinue < processingContinueMax) processingContinue++;
+        syncProgressToClient(serverLevel);
+        whileCrafting(serverLevel, pos, beams);
+        if (processingTime <= 0) {
+            craft(serverLevel, recipe, input);
         }
     }
 
@@ -122,11 +125,8 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
 
     protected abstract void flushBuffer();
 
-    protected boolean checkDayLightCondition(ServerLevel level, TrailRecipeInput input) {
-        int daylight = getCurrentRecipe(level, input)
-                .map(r -> r.value().getDayLightCondition())
-                .orElse(0);
-        metDayLightCondition = getDaylight(level, getPos()) >= daylight;
+    protected boolean checkDayLightCondition(ServerLevel level, TrailRecipe recipe) {
+        metDayLightCondition = getDaylight(level, getPos()) >= recipe.getDayLightCondition();
         return metDayLightCondition;
     }
 
@@ -136,14 +136,6 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
 
     public boolean isIdle() {
         return processingTime == -1;
-    }
-
-    protected boolean hasRecipe(ServerLevel level, TrailRecipeInput input) {
-        if (getCurrentRecipe(level, input).isEmpty()) {
-            metDayLightCondition = true;
-            return false;
-        }
-        else return true;
     }
 
     protected abstract Optional<RecipeHolder<TrailRecipe>> getCurrentRecipe(ServerLevel level, TrailRecipeInput input);
@@ -170,10 +162,8 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
         if (getContainer().isEmpty()) {
             flushBuffer();
             setIdle();
-        } else if (hasRecipe(level, input)) {
-            startProcessing(level, input);
         } else {
-            setIdle();
+            startProcessing(level, new TrailRecipeInput(getContainer(), input.beams()));
         }
 
         cachedCatalysts = Optional.of(catalysts);
@@ -182,14 +172,18 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
     }
 
     protected void startProcessing(ServerLevel level, TrailRecipeInput input) {
-        processingTime = getCurrentRecipe(level, input)
-                .map(r -> r.value().getProcessingDuration())
-                .orElse(-1);
+        getCurrentRecipe(level, input)
+                .ifPresentOrElse(recipe -> startProcessing(level, recipe.value(), input.beams()),
+                        this::setIdle);
+    }
+
+    protected void startProcessing(ServerLevel level, TrailRecipe recipe, List<Beam> beams) {
+        processingTime = recipe.getProcessingDuration();
         if (processingTime <= 0) {
             processingTime = -1;
         }
         processingTimeMax = processingTime;
-        onCraftStarted(level, getPos(), input.beams());
+        onCraftStarted(level, getPos(), beams);
     }
 
     protected abstract void onCraftStarted(ServerLevel level, BlockPos pos, List<Beam> beams);

@@ -2,7 +2,7 @@ package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
@@ -135,18 +135,13 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         InjectingRecipeInput input = new InjectingRecipeInput(getContainer());
 
         if (!isIdle()) {
-            if (checkDayLightCondition(serverLevel, input) && !swapped) {
+            Optional<RecipeHolder<InjectingRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
+            if (recipeHolder.isPresent() && checkDayLightCondition(serverLevel, recipeHolder.get().value()) && !swapped) {
                 if (!(processingTime == 1 && getRemainingSpaceBuffer() <= 0)) processingTime--;
                 if (processingTime %5 == 0) spawnCraftingParticles(serverLevel);
                 blockEntity.setChanged();
                 if (processingTime <= 0) {
-                    Optional<RecipeHolder<InjectingRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
-                    if (recipeHolder.isEmpty()) {
-                        setIdle();
-                    } else {
-                        InjectingRecipe recipe = recipeHolder.get().value();
-                        craft(serverLevel, recipe, input);
-                    }
+                    craft(serverLevel, recipeHolder.get().value(), input);
                 }
             } else {
                 setIdle();
@@ -155,9 +150,11 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         } else {
             if (inserted) recipeCheck = true;
             if (recipeCheck) {
-                if (hasRecipe(serverLevel, input)) {
-                    if (checkDayLightCondition(serverLevel, input)) {
-                        startProcessing(serverLevel, input);
+                Optional<RecipeHolder<InjectingRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
+                if (recipeHolder.isPresent()) {
+                    InjectingRecipe recipe = recipeHolder.get().value();
+                    if (checkDayLightCondition(serverLevel, recipe)) {
+                        startProcessing(recipe);
                     }
                 } else {
                     recipeCheck = false;
@@ -187,10 +184,8 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         if (getContainer().isEmpty()) {
             flushBuffer();
             setIdle();
-        } else if (hasRecipe(level, input)) {
-            startProcessing(level, input);
         } else {
-            setIdle();
+            startProcessing(level, new InjectingRecipeInput(getContainer()));
         }
 
         spawnCraftCompleteParticles(level);
@@ -198,9 +193,13 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     }
 
     private void startProcessing(ServerLevel level, InjectingRecipeInput input) {
-        processingTime = getCurrentRecipe(level, input)
-                .map(r -> r.value().getProcessingDuration())
-                .orElse(-1);
+        getCurrentRecipe(level, input)
+                .ifPresentOrElse(recipe -> startProcessing(recipe.value()),
+                        this::setIdle);
+    }
+
+    private void startProcessing(InjectingRecipe recipe) {
+        processingTime = recipe.getProcessingDuration();
         if (processingTime <= 0) {
             processingTime = -1;
         }
@@ -221,19 +220,8 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         return processingTime == -1;
     }
 
-    private boolean hasRecipe(ServerLevel level, InjectingRecipeInput input) {
-        if (getCurrentRecipe(level, input).isEmpty()) {
-            metDayLightCondition = true;
-            return false;
-        }
-        else return true;
-    }
-
-    private boolean checkDayLightCondition(ServerLevel level, InjectingRecipeInput input) {
-        int daylight = getCurrentRecipe(level, input)
-                .map(r -> r.value().getDayLightCondition())
-                .orElse(0);
-        metDayLightCondition = getDaylight(level, getPos()) >= daylight;
+    private boolean checkDayLightCondition(ServerLevel level, InjectingRecipe recipe) {
+        metDayLightCondition = getDaylight(level, getPos()) >= recipe.getDayLightCondition();
         return metDayLightCondition;
     }
 

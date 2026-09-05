@@ -105,8 +105,8 @@ public class CraftingProvider {
                         .pattern(" B ")
                         .pattern("LDL")
                         .pattern("BBB"));
-        provider.generic(LucenticsBlockRegister.MIXING_TABLE).unlockedBy(LucenticsBlockRegister.RED_DUSK_BRICKS)
-                .shaped(b -> b.define('B', LucenticsBlockRegister.RED_DUSK_BRICKS.get())
+        provider.generic(LucenticsBlockRegister.MIXING_TABLE).unlockedBy(LucenticsBlockRegister.BLUE_DUSK_BRICKS)
+                .shaped(b -> b.define('B', LucenticsBlockRegister.BLUE_DUSK_BRICKS.get())
                         .define('T', LucenticsBlockRegister.TANK_LIGHT_COPPER)
                         .define('D', LucenticsBlockRegister.DAWNSTONE)
                         .pattern("DDD")

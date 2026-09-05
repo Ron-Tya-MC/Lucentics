@@ -83,7 +83,7 @@ public class InjectingBuilder implements RecipeBuilder {
     @Override
     public void save(RecipeOutput output) {
         ResourceLocation defaultId = RecipeBuilder.getDefaultRecipeId(getResult());
-        ResourceLocation id = Lucentics.defaultLocation("injection/" + defaultId.getPath() + suffix);
+        ResourceLocation id = Lucentics.defaultLocation("injecting/" + defaultId.getPath() + suffix);
         save(output, id);
     }
 

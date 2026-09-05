@@ -2,8 +2,7 @@ package io.github.rontyamc.lucentics.common.datagen;
 
 import com.google.gson.JsonObject;
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.MiscFuncs;
-import io.github.rontyamc.lucentics.registers.LucenticsRegistrate;
+import io.github.rontyamc.lucentics.common.util.MiscFuncs;
 
 public class AddRawLang {
     static {
