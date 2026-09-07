@@ -42,5 +42,9 @@
   "jei.lucentics.info.engraving.too_much_beam2": "Please check the manual for the detailed recipe.",
   "jei.lucentics.info.not_consume": "Not Consumed",
   "jei.lucentics.info.required_hits": "Hit %s Times",
-  "jei.lucentics.info.damage_per_hits": "%s Damage"
+  "jei.lucentics.info.damage_per_hits": "%s Damage",
+  "jei.lucentics.info.count": "%s drop",
+  "jei.lucentics.info.weight": "Weight: %s ( %s%% chance )",
+  "jei.lucentics.info.probability": "%s%% chance"
+
 }

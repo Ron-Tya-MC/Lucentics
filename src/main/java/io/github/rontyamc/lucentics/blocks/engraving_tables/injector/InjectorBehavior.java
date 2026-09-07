@@ -2,10 +2,12 @@ package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.recipe.OutputReceiver;
+import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipeInput;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -14,22 +16,22 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Clearable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
-import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
 
-public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
+public class InjectorBehavior extends BlockEntityBehavior implements Clearable, OutputReceiver {
     public static final BehaviorType<InjectorBehavior> TYPE = new BehaviorType<>("injector");
 
     private final RandomSource randomSource = RandomSource.create();
@@ -37,7 +39,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     private ItemStack container;
     private ItemStack buffer;
     private boolean hasOutputItem;
-    private Supplier<Integer> maxStackSize;
+    private final Integer maxStackSize;
     public InjectorIHandler iHandler;
     private boolean blockMerge;
     private boolean metDayLightCondition;
@@ -53,7 +55,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
 
         hasOutputItem = false;
         metDayLightCondition = true;
-        maxStackSize = () -> 64;
+        maxStackSize = 64;
         setBlockMerge(true);
         iHandler = new InjectorIHandler(this);
         clearContent();
@@ -103,6 +105,12 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         return hasOutputItem;
     }
 
+    public void setHasOutputItem(boolean hasOutputItem) {
+        this.hasOutputItem = hasOutputItem;
+    }
+    
+    public Integer getMaxStackSize() {return maxStackSize;}
+
     public boolean metDayLightCondition() {
         return metDayLightCondition;
     }
@@ -138,7 +146,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
             Optional<RecipeHolder<InjectingRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
             if (recipeHolder.isPresent() && checkDayLightCondition(serverLevel, recipeHolder.get().value()) && !swapped) {
                 if (!(processingTime == 1 && getRemainingSpaceBuffer() <= 0)) processingTime--;
-                if (processingTime %5 == 0) spawnCraftingParticles(serverLevel);
+                whileCrafting(serverLevel, getPos());
                 blockEntity.setChanged();
                 if (processingTime <= 0) {
                     craft(serverLevel, recipeHolder.get().value(), input);
@@ -166,19 +174,11 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     }
 
     private void craft(ServerLevel level, InjectingRecipe recipe, InjectingRecipeInput input) {
-        ItemStack result = recipe.getArguments().outputs().getFirst().item().orElse(ItemStack.EMPTY);
-
         if (recipe.getMainInput().isPresent()) container.shrink(recipe.getMainInput().get().count());
 
-        if (buffer.isEmpty()) {
-            buffer = result.copy();
-        } else if (getRemainingSpaceBuffer() >= result.getCount()) {
-            buffer.grow(result.getCount());
-        } else {
-            ItemStack stack = result.copyWithCount(result.getCount() - getRemainingSpaceBuffer());
-            buffer.grow(getRemainingSpaceBuffer());
-            Vec3 vec = getCenter(getPos());
-            Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
+        for (OutputRoller.RolledOutput rolled : OutputRoller.roll(randomSource, recipe.getOutputs())) {
+            rolled.item().ifPresent(this::acceptItem);
+            rolled.fluid().ifPresent(this::acceptFluid);
         }
 
         if (getContainer().isEmpty()) {
@@ -188,8 +188,19 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
             startProcessing(level, new InjectingRecipeInput(getContainer()));
         }
 
-        spawnCraftCompleteParticles(level);
+        onCraftCompleted(level, getPos());
         blockEntity.updated();
+    }
+
+    protected void onCraftStarted(ServerLevel level, BlockPos pos) {}
+
+    protected void whileCrafting(ServerLevel level, BlockPos pos) {
+        if (processingTime %5 == 0) spawnCraftingParticles(level, pos);
+    }
+
+    protected void onCraftCompleted(ServerLevel level, BlockPos pos) {
+        spawnCraftCompleteParticles(level, pos);
+        level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.4f, 1.5f);
     }
 
     private void startProcessing(ServerLevel level, InjectingRecipeInput input) {
@@ -252,25 +263,25 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
     }
 
     public int getRemainingSpace() {
-        int max = maxStackSize.get();
+        int max = maxStackSize;
         if (getContainer().isEmpty()) return max;
         return Math.min(max, getContainer().getMaxStackSize()) - getContainer().getCount();
     }
 
     public int getRemainingSpaceBuffer() {
-        int max = maxStackSize.get();
+        int max = maxStackSize;
         if (getBuffer().isEmpty()) return max;
         return Math.min(max, getBuffer().getMaxStackSize()) - getBuffer().getCount();
     }
 
     public int getSlotLimit() {
         int limit = getContainer().isEmpty() ? 64 : getContainer().getMaxStackSize();
-        return Math.min(maxStackSize.get(), limit);
+        return Math.min(maxStackSize, limit);
     }
 
     public int getBufferSlotLimit() {
         int limit = buffer.isEmpty() ? 64 : buffer.getMaxStackSize();
-        return Math.min(maxStackSize.get(), limit);
+        return Math.min(maxStackSize, limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
@@ -281,7 +292,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         if (remainingSpace <= 0) return stack;
 
         int insertCount = Math.min(remainingSpace, stack.getCount());
-        ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
+        ItemStack leftover = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
             if (getContainer().isEmpty()) {
@@ -294,7 +305,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
             blockEntity.updated();
         }
 
-        return returnStack;
+        return leftover;
     }
 
     public ItemStack extract(int amount, boolean simulate) {
@@ -327,21 +338,31 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         return extracted;
     }
 
-    public void dropContents(Level level, BlockPos pos) {
-        Vec3 vec = getCenter(pos);
-        List<ItemStack> contents = getContents();
+    @Override
+    public void acceptItem(ItemStack stack) {
+        if (stack.isEmpty()) return;
 
-        if (!contents.isEmpty()) {
-            for (ItemStack stack : contents) {
-                Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
-            }
+        ItemStack leftover = stack.copy();
+
+        if (buffer.isEmpty()) {
+            buffer = leftover.split(Math.min(stack.getMaxStackSize(), maxStackSize));
+        } else if (ItemUtilities.isSameItem(buffer, stack, false)) {
+            int insertCount = Math.min(getRemainingSpaceBuffer(), stack.getCount());
+            leftover = stack.copyWithCount(buffer.getCount() - insertCount);
+            if (insertCount > 0) buffer.grow(insertCount);
         }
+        ItemUtilities.dropItem(getWorld(), getPos(), leftover);
+    }
+
+    @Override
+    public void acceptFluid(FluidStack stack) {}
+
+    public void dropContents(Level level, BlockPos pos) {
+        ItemUtilities.dropItem(level, pos, getContents());
         clearContent();
     }
 
-    private void spawnCraftingParticles(ServerLevel level) {
-        BlockPos pos = getPos();
-
+    private void spawnCraftingParticles(ServerLevel level, BlockPos pos) {
         double Sx = pos.getX() + Mth.lerp(randomSource.nextDouble(), 0.1, 0.9);
         double Sy = pos.getY() + 0.9;
         double Sz = pos.getZ() + Mth.lerp(randomSource.nextDouble(), 0.1, 0.9);
@@ -362,9 +383,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable {
         level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.05);
     }
 
-    private void spawnCraftCompleteParticles(ServerLevel level) {
-        BlockPos pos = getPos();
-
+    private void spawnCraftCompleteParticles(ServerLevel level, BlockPos pos) {
         double Sx = pos.getX() + 0.5;
         double Sy = pos.getY() + 0.75;
         double Sz = pos.getZ() + 0.5;

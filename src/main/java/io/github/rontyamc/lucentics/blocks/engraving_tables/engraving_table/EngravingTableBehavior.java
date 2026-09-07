@@ -2,11 +2,11 @@ package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -21,11 +21,10 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Clearable;
-import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +36,11 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
 
     private final RandomSource randomSource = RandomSource.create();
 
-    private ItemStack container = ItemStack.EMPTY;
+    private ItemStack container;
     private final List<ItemStack> buffer = new ArrayList<>();
-    private boolean hasOutputItem = false;
-    private Supplier<Integer> maxStackSize;
+    private boolean hasOutputItem;
+    private final Integer maxStackSize;
+    private final Supplier<Integer> maxBufferSize;
     public EngravingTableIHandler iHandler;
     private boolean blockMerge;
 
@@ -48,7 +48,8 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         super(be);
 
         hasOutputItem = false;
-        maxStackSize = () -> 64;
+        maxStackSize = 64;
+        maxBufferSize = () -> 6;
         setBlockMerge(true);
         iHandler = new EngravingTableIHandler(this);
         clearContent();
@@ -97,6 +98,10 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         this.hasOutputItem = hasOutputItem;
     }
 
+    public Integer getMaxStackSize() {return maxStackSize;}
+
+    public Supplier<Integer> getMaxBufferSize() {return maxBufferSize;}
+
     public List<ItemStack> getContents() {
         List<ItemStack> list = new ArrayList<>();
 
@@ -116,7 +121,7 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
     }
 
     public int getRemainingSpace() {
-        int max = maxStackSize.get();
+        int max = maxStackSize;
         if (getContainer().isEmpty()) return max;
         return Math.min(max, getContainer().getMaxStackSize()) - getContainer().getCount();
     }
@@ -125,7 +130,7 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         int limit;
         if (slot == 0) limit = getContainer().isEmpty() ? 64 : getContainer().getMaxStackSize();
         else limit = getBuffetAt(slot - 1).isEmpty() ? 64 : getBuffetAt(slot - 1).getMaxStackSize();
-        return Math.min(maxStackSize.get(), limit);
+        return Math.min(maxStackSize, limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
@@ -136,7 +141,7 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         if (remainingSpace <= 0) return stack;
 
         int insertCount = Math.min(remainingSpace, stack.getCount());
-        ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
+        ItemStack leftover = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
             if (getContainer().isEmpty()) {
@@ -148,7 +153,7 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
             blockEntity.updated();
         }
 
-        return returnStack;
+        return leftover;
     }
 
     public ItemStack extract(int amount, boolean simulate) {
@@ -184,15 +189,22 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         return extracted;
     }
 
-    public void dropContents(Level level, BlockPos pos) {
-        Vec3 vec = getCenter(pos);
-        List<ItemStack> contents = getContents();
-
-        if (!contents.isEmpty()) {
-            for (ItemStack stack : contents) {
-                Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
-            }
+    @Override
+    public void acceptItem(ItemStack stack) {
+        if (stack.isEmpty()) return;
+        ItemUtilities.stackOrAppend(buffer, stack);
+        if (buffer.size() > maxBufferSize.get()) {
+            List<ItemStack> leftovers = new ArrayList<>(buffer.subList(maxBufferSize.get(), buffer.size()));
+            buffer.subList(maxBufferSize.get(), buffer.size()).clear();
+            ItemUtilities.dropItem(getWorld(), getPos(), leftovers);
         }
+    }
+
+    @Override
+    public void acceptFluid(FluidStack stack) {}
+
+    public void dropContents(Level level, BlockPos pos) {
+        ItemUtilities.dropItem(level, pos, getContents());
         clearContent();
     }
 

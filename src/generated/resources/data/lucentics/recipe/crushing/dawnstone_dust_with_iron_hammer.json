@@ -12,9 +12,12 @@
   "input": "lucentics:dawnstone",
   "outputs": [
     {
-      "item": {
+      "content": {
         "count": 1,
-        "id": "lucentics:dawnstone_dust"
+        "item": {
+          "count": 1,
+          "id": "lucentics:dawnstone_dust"
+        }
       }
     }
   ],

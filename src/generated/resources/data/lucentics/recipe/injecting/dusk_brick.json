@@ -7,9 +7,12 @@
   },
   "outputs": [
     {
-      "item": {
+      "content": {
         "count": 1,
-        "id": "lucentics:dusk_brick"
+        "item": {
+          "count": 1,
+          "id": "lucentics:dusk_brick"
+        }
       }
     }
   ],

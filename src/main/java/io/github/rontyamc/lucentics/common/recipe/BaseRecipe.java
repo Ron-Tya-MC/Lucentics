@@ -7,6 +7,7 @@ import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
+import java.util.List;
 import java.util.Optional;
 
 public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArguments> implements Recipe<I> {
@@ -14,7 +15,7 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
     protected Optional<SizedIngredient> mainInput;
     protected Optional<SizedFluidIngredient> mainFluidInput;
     protected NonNullList<RecipeArguments.TrailInput> trailInputs;
-    protected NonNullList<RecipeArguments.Output> outputs;
+    protected NonNullList<List<RecipeArguments.WeightedOutput>> outputs;
     protected int processingDuration;
     protected int dayLightCondition;
 
@@ -52,7 +53,7 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
         return trailInputs;
     }
 
-    public NonNullList<RecipeArguments.Output> getOutputs() {
+    public NonNullList<List<RecipeArguments.WeightedOutput>> getOutputs() {
         return outputs;
     }
 
@@ -88,10 +89,15 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
 
     @Override
     public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return outputs.stream()
-                .flatMap(o -> o.item().stream())
-                .findFirst()
-                .orElse(ItemStack.EMPTY);
+        for (var group : outputs) {
+            for (var candidate : group) {
+                Optional<ItemStack> item = candidate.content().left()
+                        .map(RecipeArguments.WeightedOutput.ItemOutput::stack)
+                        .filter(stack -> !stack.isEmpty());
+                if (item.isPresent()) return item.get();
+            }
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override

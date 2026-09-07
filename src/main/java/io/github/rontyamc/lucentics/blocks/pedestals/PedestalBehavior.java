@@ -1,10 +1,10 @@
 package io.github.rontyamc.lucentics.blocks.pedestals;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -14,20 +14,18 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.function.Supplier;
-
 public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice, Clearable {
     public static final BehaviorType<PedestalBehavior> TYPE = new BehaviorType<>("pedestal");
 
     private ItemStack content = ItemStack.EMPTY;
-    private Supplier<Integer> maxStackSize;
+    private final Integer maxStackSize;
     public PedestalIHandler iHandler;
     private boolean blockMerge;
 
     public PedestalBehavior(BaseBlockEntity be) {
         super(be);
 
-        maxStackSize = () -> 64;
+        maxStackSize = 64;
         setBlockMerge(true);
         iHandler = new PedestalIHandler(this);
         clearContent();
@@ -56,15 +54,17 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
         content = ItemStack.EMPTY;
     }
 
+    public Integer getMaxStackSize() {return maxStackSize;}
+
     public int getRemainingSpace() {
-        int max = maxStackSize.get();
+        int max = maxStackSize;
         if (getContent().isEmpty()) return max;
         return Math.min(max, getContent().getMaxStackSize()) - getContent().getCount();
     }
 
     public int getSlotLimit() {
         int limit = getContent().isEmpty() ? 64 : getContent().getMaxStackSize();
-        return Math.min(maxStackSize.get(), limit);
+        return Math.min(maxStackSize, limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
@@ -77,7 +77,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
         if (remainingSpace <= 0) return stack;
 
         int insertCount = Math.min(remainingSpace, stack.getCount());
-        ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
+        ItemStack leftover = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
             if (getContent().isEmpty()) {
@@ -88,7 +88,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
             blockEntity.updated();
         }
 
-        return returnStack;
+        return leftover;
     }
 
     public ItemStack extract(int amount, boolean simulate) {

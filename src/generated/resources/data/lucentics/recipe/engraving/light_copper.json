@@ -7,9 +7,12 @@
   },
   "outputs": [
     {
-      "item": {
+      "content": {
         "count": 1,
-        "id": "lucentics:light_copper"
+        "item": {
+          "count": 1,
+          "id": "lucentics:light_copper"
+        }
       }
     }
   ],

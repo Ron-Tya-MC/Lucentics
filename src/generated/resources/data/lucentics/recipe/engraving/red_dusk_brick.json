@@ -6,9 +6,12 @@
   },
   "outputs": [
     {
-      "item": {
+      "content": {
         "count": 1,
-        "id": "lucentics:red_dusk_brick"
+        "item": {
+          "count": 1,
+          "id": "lucentics:red_dusk_brick"
+        }
       }
     }
   ],

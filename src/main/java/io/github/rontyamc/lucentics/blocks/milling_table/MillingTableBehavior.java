@@ -29,6 +29,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -44,7 +45,8 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     private ItemStack container = ItemStack.EMPTY;
     private final List<ItemStack> buffer = new ArrayList<>();
     private boolean hasOutputItem;
-    private Supplier<Integer> maxStackSize;
+    private final Integer maxStackSize;
+    private final Supplier<Integer> maxBufferSize;
     public MillingTableIHandler iHandler;
     private boolean blockMerge;
 
@@ -52,7 +54,8 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
         super(be);
 
         hasOutputItem = false;
-        maxStackSize = () -> 64;
+        maxStackSize = 64;
+        maxBufferSize = () -> 6;
         setBlockMerge(true);
         iHandler = new MillingTableIHandler(this);
         clearContent();
@@ -105,6 +108,10 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
         this.hasOutputItem = hasOutputItem;
     }
 
+    public Integer getMaxStackSize() {return maxStackSize;}
+
+    public Supplier<Integer> getMaxBufferSize() {return maxBufferSize;}
+
     public List<ItemStack> getContents() {
         List<ItemStack> list = new ArrayList<>();
 
@@ -124,7 +131,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     }
 
     public int getRemainingSpace() {
-        int max = maxStackSize.get();
+        int max = maxStackSize;
         if (getContainer().isEmpty()) return max;
         return Math.min(max, getContainer().getMaxStackSize()) - getContainer().getCount();
     }
@@ -133,7 +140,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
         int limit;
         if (slot == 0) limit = getContainer().isEmpty() ? 64 : getContainer().getMaxStackSize();
         else limit = getBuffetAt(slot - 1).isEmpty() ? 64 : getBuffetAt(slot - 1).getMaxStackSize();
-        return Math.min(maxStackSize.get(), limit);
+        return Math.min(maxStackSize, limit);
     }
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
@@ -144,7 +151,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
         if (remainingSpace <= 0) return stack;
 
         int insertCount = Math.min(remainingSpace, stack.getCount());
-        ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
+        ItemStack leftover = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
             if (getContainer().isEmpty()) {
@@ -156,7 +163,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
             blockEntity.updated();
         }
 
-        return returnStack;
+        return leftover;
     }
 
     public ItemStack extract(int amount, boolean simulate) {
@@ -191,6 +198,21 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
 
         return extracted;
     }
+
+    @Override
+    public void acceptItem(ItemStack stack) {
+        if (stack.isEmpty()) return;
+        ItemUtilities.stackOrAppend(buffer, stack);
+        if (buffer.size() > maxBufferSize.get()) {
+            List<ItemStack> leftovers = new ArrayList<>(buffer.subList(maxBufferSize.get(), buffer.size()));
+            buffer.subList(maxBufferSize.get(), buffer.size()).clear();
+            ItemUtilities.dropItem(getWorld(), getPos(), leftovers);
+        }
+    }
+
+    @Override
+    public void acceptFluid(FluidStack stack) {}
+
 
     public void dropContents(Level level, BlockPos pos) {
         Vec3 vec = getCenter(pos);

@@ -1,9 +1,13 @@
 package io.github.rontyamc.lucentics.common.util;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
 import java.util.function.Supplier;
@@ -41,5 +45,22 @@ public class ItemUtilities {
         int currentDamage = stack.getDamageValue();
         stack.setDamageValue(currentDamage + damage);
         return currentDamage + damage < stack.getMaxDamage() ? stack : ItemStack.EMPTY;
+    }
+
+    public static void dropItem(Level level, BlockPos pos, ItemStack stack) {
+        Vec3 vec = Vec3.atCenterOf(pos);
+        Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
+    }
+
+    public static void dropItem(Level level, BlockPos pos, List<ItemStack> stacks) {
+        if (level == null) return;
+        if (level.isClientSide) return;
+        Vec3 vec = Vec3.atCenterOf(pos);
+
+        if (!stacks.isEmpty()) {
+            for (ItemStack stack : stacks) {
+                Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
+            }
+        }
     }
 }

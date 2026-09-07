@@ -2,15 +2,18 @@ package io.github.rontyamc.lucentics.common.datagen.providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.datagen.builders.CrushingBuilder;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.datagen.builders.IdPathResolvable;
 import io.github.rontyamc.lucentics.common.datagen.builders.InjectingBuilder;
 import io.github.rontyamc.lucentics.common.datagen.builders.TrailRecipeBuilder;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +58,10 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         return generic(result, 1);
     }
 
+    protected GeneratedRecipeBuilder generic() {
+        return generic(() -> Items.AIR, 1);
+    }
+
     String currentFolder = "";
 
     void enterFolder(String folder) {
@@ -76,6 +83,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         protected final Supplier<? extends ItemLike> result;
         protected final int count;
         protected String folder;
+        protected String path;
         protected String suffix;
         @Nullable
         protected Supplier<? extends ItemLike> unlockedBy;
@@ -84,11 +92,19 @@ public class LucenticsRecipeProvider extends RecipeProvider {
             this.result = result;
             this.count = count;
             this.folder = currentFolder;
+            this.path = "";
             this.suffix = "";
+
+            unlockedBy(LucenticsItemRegister.NOTHING);
         }
 
         public GeneratedRecipeBuilder unlockedBy(Supplier<? extends ItemLike> item) {
             this.unlockedBy = item;
+            return this;
+        }
+
+        public GeneratedRecipeBuilder path(String path) {
+            this.path = path;
             return this;
         }
 
@@ -98,8 +114,17 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         }
 
         protected ResourceLocation createLocation(String category) {
-            ResourceLocation id = ItemUtilities.getId(result);
-            return folder.isEmpty() ? Lucentics.defaultLocation(category + "/" + id.getPath() + suffix) : Lucentics.defaultLocation(category + "/" + folder + "/" + id.getPath() + suffix);
+            if (path.isEmpty()) path = ItemUtilities.getId(result).getPath();
+            return folder.isEmpty()
+                    ? Lucentics.defaultLocation(category + "/" + path + suffix)
+                    : Lucentics.defaultLocation(category + "/" + folder + "/" + path + suffix);
+        }
+
+        protected ResourceLocation createLocation(String category, IdPathResolvable b) {
+            if (path.isEmpty()) path = result.get() == Items.AIR ? b.resolveIdPath() : ItemUtilities.getId(result).getPath();
+            return folder.isEmpty()
+                    ? Lucentics.defaultLocation(category + "/" + path + suffix)
+                    : Lucentics.defaultLocation(category + "/" + folder + "/" + path + suffix);
         }
 
         protected GeneratedRecipe register(Consumer<RecipeOutput> callback) {
@@ -132,7 +157,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
             return register(output -> {
                 InjectingBuilder b =
                         builder.apply(InjectingBuilder.create(SizedIngredient.EMPTY, result.get(), count));
-                b.save(output, createLocation("injecting"));
+                b.save(output, createLocation("injecting", b));
             });
         }
 
@@ -142,7 +167,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
                         builder.apply(TrailRecipeBuilder.create(SizedIngredient.EMPTY, result.get(), count));
                 b.setFolder("engraving");
                 b.setRecipeInfo(LucenticsRecipeTypesRegister.ENGRAVING_INFO);
-                b.save(output, createLocation("engraving"));
+                b.save(output, createLocation("engraving", b));
             });
         }
 
@@ -150,7 +175,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
             return register(output -> {
                 CrushingBuilder b =
                         builder.apply(CrushingBuilder.create(Ingredient.EMPTY, result.get()));
-                b.save(output, createLocation("crushing"));
+                b.save(output, createLocation("crushing", b));
             });
         }
 
@@ -160,7 +185,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
                         builder.apply(TrailRecipeBuilder.create(SizedIngredient.EMPTY, result.get(), count));
                 b.setFolder("milling");
                 b.setRecipeInfo(LucenticsRecipeTypesRegister.MILLING_INFO);
-                b.save(output, createLocation("milling"));
+                b.save(output, createLocation("milling", b));
             });
         }
     }

@@ -1,0 +1,41 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.grass.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.grass.hit",
+    "source": "block"
+  },
+  "input": "minecraft:tall_grass",
+  "outputs": [
+    {
+      "content": {
+        "count": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 2,
+          "min_inclusive": 1
+        },
+        "item": {
+          "count": 1,
+          "id": "minecraft:wheat_seeds"
+        }
+      },
+      "probability": 0.3
+    },
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "minecraft:green_dye"
+        }
+      },
+      "probability": 0.07
+    }
+  ],
+  "tool": {
+    "tag": "lucentics:hammers"
+  }
+}

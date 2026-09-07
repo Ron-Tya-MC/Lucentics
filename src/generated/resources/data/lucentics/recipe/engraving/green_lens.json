@@ -7,9 +7,12 @@
   },
   "outputs": [
     {
-      "item": {
+      "content": {
         "count": 1,
-        "id": "lucentics:green_lens"
+        "item": {
+          "count": 1,
+          "id": "lucentics:green_lens"
+        }
       }
     }
   ],

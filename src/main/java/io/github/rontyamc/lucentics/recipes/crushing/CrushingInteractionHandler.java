@@ -1,20 +1,19 @@
 package io.github.rontyamc.lucentics.recipes.crushing;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
+import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraft.world.phys.Vec3;
 import net.neoforged.bus.api.EventPriority;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -79,10 +78,8 @@ public class CrushingInteractionHandler {
 
             serverLevel.destroyBlock(pos, false, serverPlayer);
 
-            Vec3 dropPos = Vec3.atCenterOf(pos);
-            for (RecipeArguments.Output output : args.outputs()) {
-                output.item().ifPresent(item ->
-                        Containers.dropItemStack(serverLevel, dropPos.x, dropPos.y, dropPos.z, item.copy()));
+            for (OutputRoller.RolledOutput rolled : OutputRoller.roll(serverLevel.getRandom(), recipe.getOutputs())) {
+                rolled.item().ifPresent(item -> ItemUtilities.dropItem(serverLevel, pos, item));
             }
         } else {
             int progress = Mth.clamp((int) ((float) hits / args.requiredHits() * 9), 0, 9);

@@ -4,23 +4,30 @@ import com.mojang.datafixers.util.Either;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.recipe.IRecipeInfo;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.TrailInput;
+import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.material.Fluid;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-public class TrailRecipeBuilder implements RecipeBuilder {
+public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
     private SizedIngredient input;
-    private final ItemStack output;
-    private final NonNullList<RecipeArguments.TrailInput> trails = NonNullList.create();
+    private final ItemStack primaryOutput;
+    private final List<List<WeightedOutput>> outputGroups = NonNullList.create();
+    private final NonNullList<TrailInput> trails = NonNullList.create();
     protected String folder;
     protected String suffix;
     protected IRecipeInfo recipeInfo;
@@ -29,7 +36,8 @@ public class TrailRecipeBuilder implements RecipeBuilder {
 
     protected TrailRecipeBuilder(SizedIngredient input, ItemStack output) {
         this.input = input;
-        this.output = output;
+        this.primaryOutput = output;
+        if (!output.isEmpty()) this.outputGroups.add(List.of(OutputSpec.of(output).build()));
         this.folder = "";
         this.suffix = "";
     }
@@ -74,6 +82,28 @@ public class TrailRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
+    public TrailRecipeBuilder output(OutputSpec spec) {
+        outputGroups.add(List.of(spec.build()));
+        return this;
+    }
+
+    public TrailRecipeBuilder outputGroup(OutputSpec... specs) {
+        outputGroups.add(Arrays.stream(specs).map(OutputSpec::build).toList());
+        return this;
+    }
+
+    public TrailRecipeBuilder output(ItemLike item) {
+        return output(OutputSpec.of(item));
+    }
+
+    public TrailRecipeBuilder output(ItemLike item, int count) {
+        return output(OutputSpec.of(item).amount(count));
+    }
+
+    public TrailRecipeBuilder output(Fluid fluid, int amount) {
+        return output(OutputSpec.of(fluid).amount(amount));
+    }
+
     @Override
     public TrailRecipeBuilder unlockedBy(String criterionName, Criterion<?> criterion) {
         return this;
@@ -91,7 +121,25 @@ public class TrailRecipeBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        return output.getItem();
+        return primaryOutput.getItem();
+    }
+
+    @Override
+    public String resolveIdPath() {
+        if (!primaryOutput.isEmpty()) {
+            return BuiltInRegistries.ITEM.getKey(primaryOutput.getItem()).getPath();
+        }
+        for (List<WeightedOutput> group : outputGroups) {
+            for (WeightedOutput candidate : group) {
+                Optional<String> path = candidate.content().left()
+                        .filter(item -> !item.stack().isEmpty())
+                        .map(item -> BuiltInRegistries.ITEM.getKey(item.stack().getItem()).getPath())
+                        .or(() -> candidate.content().right()
+                                .map(fluid -> BuiltInRegistries.FLUID.getKey(fluid.stack().getFluid()).getPath()));
+                if (path.isPresent()) return path.get();
+            }
+        }
+        throw new IllegalStateException("Cannot resolve recipe id: no non-empty item or fluid output found. Specify path(String path) explicitly.");
     }
 
     @Override
@@ -105,8 +153,8 @@ public class TrailRecipeBuilder implements RecipeBuilder {
     public void save(RecipeOutput output, ResourceLocation id) {
         if (recipeInfo == null) throw new IllegalArgumentException("Recipe info of the recipe \"" + id + "\" cannot be null");
 
-        NonNullList<RecipeArguments.Output> outputs = NonNullList.create();
-        outputs.add(new RecipeArguments.Output(Optional.of(this.output), Optional.empty()));
+        NonNullList<List<WeightedOutput>> outputs = NonNullList.create();
+        outputs.addAll(outputGroups);
 
         RecipeArguments args = new RecipeArguments(
                 Either.left(input),

@@ -13,7 +13,7 @@ public class EngravingTableIHandler implements IItemHandler {
 
     @Override
     public int getSlots() {
-        return behavior.getBuffer().size() + 1;
+        return Math.min(behavior.getBuffer().size(), behavior.getMaxBufferSize().get()) + 1;
     }
 
     @Override

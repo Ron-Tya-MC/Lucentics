@@ -20,19 +20,18 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
-import java.util.function.Supplier;
 
 public class EmitterBehavior extends EmitBehavior implements Clearable {
     public static final BehaviorType<EmitterBehavior> TYPE = new BehaviorType<>("emitter");
 
     private ItemStack lensContainer;
-    private Supplier<Integer> maxStackSize;
+    private final Integer maxStackSize;
     public EmitterIHandler iHandler;
 
     public EmitterBehavior(BaseBlockEntity be) {
         super(be);
 
-        maxStackSize = () -> 1;
+        maxStackSize = 1;
         iHandler = new EmitterIHandler(this);
         clearContent();
     }
@@ -47,6 +46,8 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     public void clearContent() {
         lensContainer = ItemStack.EMPTY;
     }
+
+    public Integer getMaxStackSize() {return maxStackSize;}
 
     @Override
     public Colors getColor() {
@@ -87,7 +88,7 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     }
 
     public int getRemainingSpace() {
-        return getLensContainer().isEmpty() ? maxStackSize.get() : 0;
+        return getLensContainer().isEmpty() ? maxStackSize : 0;
     }
 
     public int getSlotLimit() {
@@ -99,15 +100,15 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
         if (!getLensContainer().isEmpty()) return stack;
         if (!(stack.getItem() instanceof LensItem)) return stack;
 
-        int insertCount = maxStackSize.get();
-        ItemStack returnStack = stack.copyWithCount(stack.getCount() - insertCount);
+        int insertCount = maxStackSize;
+        ItemStack leftover = stack.copyWithCount(stack.getCount() - insertCount);
 
         if (!simulate) {
             lensContainer = stack.copyWithCount(insertCount);
             blockEntity.updated();
         }
 
-        return returnStack;
+        return leftover;
     }
 
     public ItemStack extract(int amount, boolean simulate) {

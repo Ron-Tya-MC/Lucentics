@@ -1,27 +1,27 @@
 {
   "type": "lucentics:crushing",
   "break_sound": {
-    "sound": "minecraft:block.tuff.break",
+    "sound": "minecraft:block.deepslate_bricks.break",
     "source": "block"
   },
   "click_sound": {
-    "sound": "minecraft:block.tuff.hit",
+    "sound": "minecraft:block.deepslate_bricks.hit",
     "source": "block"
   },
-  "damage_per_hit": 10,
-  "input": "lucentics:dawnstone",
+  "input": "minecraft:bricks",
   "outputs": [
     {
       "content": {
-        "count": 1,
+        "count": 4,
         "item": {
           "count": 1,
-          "id": "lucentics:dawnstone_dust"
+          "id": "minecraft:brick"
         }
       }
     }
   ],
+  "required_hit": 2,
   "tool": {
-    "item": "lucentics:golden_hammer"
+    "tag": "minecraft:pickaxes"
   }
 }

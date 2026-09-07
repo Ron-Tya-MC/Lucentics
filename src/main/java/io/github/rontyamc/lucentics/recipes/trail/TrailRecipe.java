@@ -5,10 +5,11 @@ import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.beam.BeamNode;
 import io.github.rontyamc.lucentics.common.beam.DeviceSlot;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
-import io.github.rontyamc.lucentics.common.recipe.*;
+import io.github.rontyamc.lucentics.common.recipe.BaseRecipe;
+import io.github.rontyamc.lucentics.common.recipe.IRecipeInfo;
+import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.HolderLookup;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 
@@ -63,16 +64,6 @@ public class TrailRecipe extends BaseRecipe<TrailRecipeInput, RecipeArguments> {
             });
         }
         return devices;
-    }
-
-    @Override
-    public ItemStack getResultItem(HolderLookup.Provider registries) {
-        return outputs.stream().flatMap(o -> o.item().stream()).findFirst().orElse(ItemStack.EMPTY);
-    }
-
-    @Override
-    public ItemStack assemble(TrailRecipeInput input, HolderLookup.Provider registries) {
-        return getResultItem(registries).copy();
     }
 
     public Optional<List<ConsumptionEntry>> resolveConsumption(TrailRecipeInput input, Level level) {

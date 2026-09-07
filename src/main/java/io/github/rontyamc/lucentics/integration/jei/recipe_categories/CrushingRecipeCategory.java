@@ -1,7 +1,9 @@
 package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.integration.jei.CommonSlots;
 import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
+import io.github.rontyamc.lucentics.integration.jei.ProbabilisticOutputSlots;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
@@ -13,7 +15,6 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
-import mezz.jei.library.util.RecipeUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,8 +23,10 @@ import net.minecraft.world.item.ItemStack;
 import java.util.List;
 
 public class CrushingRecipeCategory extends AbstractRecipeCategory<CrushingRecipe> {
-    private static final int WIDTH = 140;
+    private static final int WIDTH = 160;
     private static final int HEIGHT = 60;
+
+    private static final int LEFT_SPACE = 20;
 
     private static final ResourceLocation ARROW_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/normal_arrow_60.png");
 
@@ -45,25 +48,28 @@ public class CrushingRecipeCategory extends AbstractRecipeCategory<CrushingRecip
 
     @Override
     public void draw(CrushingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        arrow.draw(guiGraphics, WIDTH / 2 - 30, 24);
+        int left = recipe.getOutputs().size() >= 2 ? LEFT_SPACE - 10 : LEFT_SPACE;
+
+        arrow.draw(guiGraphics, left + 30, 24);
+        ProbabilisticOutputSlots.drawRangeBadges(guiGraphics, recipeSlotsView, recipe.getOutputs(), left + 102, 25, 20, 4);
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, CrushingRecipe recipe, IFocusGroup focuses) {
+        int left = recipe.getOutputs().size() >= 2 ? LEFT_SPACE - 10 : LEFT_SPACE;
+
         List<ItemStack> stacks = recipe.getArguments().block().stream()
                 .map(holder -> new ItemStack(holder.value().asItem()))
                 .toList();
-        builder.addInputSlot(10, 25)
-                .setStandardSlotBackground()
+        builder.addInputSlot(left, 25)
+                .setBackground(CommonSlots.slot_normal, -1, -1)
                 .addItemStacks(stacks);
 
-        builder.addInputSlot(WIDTH / 2 - 7, 5)
-                .setStandardSlotBackground()
+        builder.addInputSlot(left + 51, 10)
+                .setBackground(CommonSlots.slot_framed, -1, -1)
                 .addIngredients(recipe.getArguments().tool());
 
-        builder.addOutputSlot(WIDTH - 27, 25)
-                .setStandardSlotBackground()
-                .addItemStack(RecipeUtil.getResultItem(recipe));
+        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), left + 102, 25, 20, 4);
     }
 
     @Override

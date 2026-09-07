@@ -2,12 +2,14 @@ package io.github.rontyamc.lucentics.common.datagen.builders;
 
 import com.mojang.datafixers.util.Either;
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
+import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.NonNullList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.RecipeBuilder;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -15,23 +17,31 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
-public class InjectingBuilder implements RecipeBuilder {
+public class InjectingBuilder implements RecipeBuilder, IdPathResolvable {
     private SizedIngredient input;
-    private final ItemStack result;
+    private final ItemStack primaryOutput;
+    private final List<List<WeightedOutput>> outputGroups = NonNullList.create();
     protected String suffix;
     private int processingDuration = 100;
     private int daylightCondition = 0;
 
-    public InjectingBuilder(SizedIngredient input, ItemLike result, int count) {
+    public InjectingBuilder(SizedIngredient input, ItemStack output) {
         this.input = input;
-        this.result = new ItemStack(result, count);
+        this.primaryOutput = output;
+        if (!output.isEmpty()) this.outputGroups.add(List.of(OutputSpec.of(output).build()));
         this.suffix = "";
     }
 
+    public static InjectingBuilder create(SizedIngredient input, ItemStack result) {
+        return new InjectingBuilder(input, result);
+    }
+
     public static InjectingBuilder create(SizedIngredient input, ItemLike result, int count) {
-        return new InjectingBuilder(input, result, count);
+        return create(input, new ItemStack(result, count));
     }
     public static InjectingBuilder create(SizedIngredient input, ItemLike result) {
         return create(input, result, 1);
@@ -60,6 +70,24 @@ public class InjectingBuilder implements RecipeBuilder {
         return this;
     }
 
+    public InjectingBuilder output(OutputSpec spec) {
+        outputGroups.add(List.of(spec.build()));
+        return this;
+    }
+
+    public InjectingBuilder outputGroup(OutputSpec... specs) {
+        outputGroups.add(Arrays.stream(specs).map(OutputSpec::build).toList());
+        return this;
+    }
+
+    public InjectingBuilder output(ItemLike item) {
+        return output(OutputSpec.of(item));
+    }
+
+    public InjectingBuilder output(ItemLike item, int count) {
+        return output(OutputSpec.of(item).amount(count));
+    }
+
     @Override
     public InjectingBuilder unlockedBy(String criterionName, Criterion<?> criterion) {
         return this;
@@ -77,7 +105,25 @@ public class InjectingBuilder implements RecipeBuilder {
 
     @Override
     public Item getResult() {
-        return result.getItem();
+        return primaryOutput.getItem();
+    }
+
+    @Override
+    public String resolveIdPath() {
+        if (!primaryOutput.isEmpty()) {
+            return BuiltInRegistries.ITEM.getKey(primaryOutput.getItem()).getPath();
+        }
+        for (List<WeightedOutput> group : outputGroups) {
+            for (WeightedOutput candidate : group) {
+                Optional<String> path = candidate.content().left()
+                        .filter(item -> !item.stack().isEmpty())
+                        .map(item -> BuiltInRegistries.ITEM.getKey(item.stack().getItem()).getPath())
+                        .or(() -> candidate.content().right()
+                                .map(fluid -> BuiltInRegistries.FLUID.getKey(fluid.stack().getFluid()).getPath()));
+                if (path.isPresent()) return path.get();
+            }
+        }
+        throw new IllegalStateException("Cannot resolve recipe id: no non-empty item or fluid output found. Specify path(String path) explicitly.");
     }
 
     @Override
@@ -89,8 +135,8 @@ public class InjectingBuilder implements RecipeBuilder {
 
     @Override
     public void save(RecipeOutput output, ResourceLocation id) {
-        NonNullList<RecipeArguments.Output> outputs = NonNullList.create();
-        outputs.add(new RecipeArguments.Output(Optional.of(result), Optional.empty()));
+        NonNullList<List<WeightedOutput>> outputs = NonNullList.create();
+        outputs.addAll(outputGroups);
 
         RecipeArguments args = new RecipeArguments(
                 Either.left(input),

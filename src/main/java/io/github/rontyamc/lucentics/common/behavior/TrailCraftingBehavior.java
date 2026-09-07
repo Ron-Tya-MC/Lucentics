@@ -1,8 +1,9 @@
 package io.github.rontyamc.lucentics.common.behavior;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
 import io.github.rontyamc.lucentics.common.beam.Beam;
+import io.github.rontyamc.lucentics.common.recipe.OutputReceiver;
+import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
 import net.minecraft.core.BlockPos;
@@ -19,7 +20,7 @@ import java.util.Optional;
 
 import static io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior.getDaylight;
 
-public abstract class TrailCraftingBehavior extends ReceiveBehavior {
+public abstract class TrailCraftingBehavior extends ReceiveBehavior implements OutputReceiver {
     protected int processingTime = -1;
     protected int processingTimeMax = -1;
     protected int processingContinue = 0;
@@ -155,8 +156,9 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior {
             }
         }
 
-        for (var output : recipe.getArguments().outputs()) {
-            output.item().ifPresent(item -> ItemUtilities.stackOrAppend(getBuffer(), item));
+        for (OutputRoller.RolledOutput rolled : OutputRoller.roll(level.getRandom(), recipe.getOutputs())) {
+            rolled.item().ifPresent(this::acceptItem);
+            rolled.fluid().ifPresent(this::acceptFluid);
         }
 
         if (getContainer().isEmpty()) {

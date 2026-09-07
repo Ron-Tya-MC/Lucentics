@@ -11,6 +11,7 @@ import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -44,6 +45,8 @@ public class LucenticsJEIIntegration implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
+        CommonSlots.buildCommonSlots(guiHelper);
+
         registration.addRecipeCategories(new InjectingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new EngravingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new CrushingRecipeCategory(guiHelper));
