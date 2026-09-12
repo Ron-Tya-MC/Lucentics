@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.integration.jei;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.integration.jei.recipe_categories.CrushingRecipeCategory;
+import io.github.rontyamc.lucentics.integration.jei.recipe_categories.MillingRecipeCategory;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
@@ -11,7 +12,6 @@ import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.IRecipeCatalystRegistration;
@@ -36,6 +36,8 @@ public class LucenticsJEIIntegration implements IModPlugin {
             RecipeType.create(Lucentics.MOD_ID, "engraving", TrailRecipe.class);
     public static final RecipeType<CrushingRecipe> CRUSHING =
             RecipeType.create(Lucentics.MOD_ID, "crushing", CrushingRecipe.class);
+    public static final RecipeType<TrailRecipe> MILLING =
+            RecipeType.create(Lucentics.MOD_ID, "milling", TrailRecipe.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -45,11 +47,12 @@ public class LucenticsJEIIntegration implements IModPlugin {
     @Override
     public void registerCategories(IRecipeCategoryRegistration registration) {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
-        CommonSlots.buildCommonSlots(guiHelper);
+        CommonParts.buildCommonParts(guiHelper);
 
         registration.addRecipeCategories(new InjectingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new EngravingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new CrushingRecipeCategory(guiHelper));
+        registration.addRecipeCategories(new MillingRecipeCategory(guiHelper));
     }
 
     @Override
@@ -60,6 +63,7 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registerStream(registration, level, LucenticsRecipeTypesRegister.INJECTING_TYPE.get(), INJECTING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), ENGRAVING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.CRUSHING_TYPE.get(), CRUSHING);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.MILLING_TYPE.get(), MILLING);
     }
 
     @Override
@@ -69,6 +73,10 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.ENGRAVING_TABLE);
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.EMITTER);
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.PRISM_RITUAL);
+
+        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.MILLING_TABLE);
+        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.EMITTER);
+        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.PRISM_RITUAL);
     }
 
     private<I extends RecipeInput, T extends Recipe<I>> void registerStream(IRecipeRegistration registration, ClientLevel level, net.minecraft.world.item.crafting.RecipeType<T> typeMC, RecipeType<T> typeJEI) {

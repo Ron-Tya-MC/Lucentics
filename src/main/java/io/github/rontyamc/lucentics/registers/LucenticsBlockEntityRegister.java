@@ -6,6 +6,7 @@ import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlockEntity;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBlockEntity;
+import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableBlockEntity;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlockEntity;
 import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlockEntity;
 
@@ -33,6 +34,10 @@ public class LucenticsBlockEntityRegister {
 
     public static final BlockEntityEntry<MillingTableBlockEntity> MILLING_TABLE = REGISTRATE.blockEntity("milling_table", MillingTableBlockEntity::new)
             .validBlock(LucenticsBlockRegister.MILLING_TABLE)
+            .register();
+
+    public static final BlockEntityEntry<MixingTableBlockEntity> MIXING_TABLE = REGISTRATE.blockEntity("mixing_table", MixingTableBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.MIXING_TABLE)
             .register();
 
     public static void register() {

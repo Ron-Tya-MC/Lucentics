@@ -1,6 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.injector;
 
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
@@ -48,6 +48,6 @@ public class InjectorIHandler implements IItemHandler {
     @Override
     public boolean isItemValid(int slot, ItemStack itemStack) {
         if (slot != 0) return false;
-        return behavior.getContainer().isEmpty() || ItemUtilities.isSameItem(behavior.getContainer(), itemStack, false);
+        return behavior.getContainer().isEmpty() || ItemUtil.isSameItem(behavior.getContainer(), itemStack, false);
     }
 }

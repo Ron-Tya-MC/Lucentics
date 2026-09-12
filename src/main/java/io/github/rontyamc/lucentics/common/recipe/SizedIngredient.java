@@ -1,7 +1,6 @@
 package io.github.rontyamc.lucentics.common.recipe;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -14,12 +13,12 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.neoforged.neoforge.common.util.NeoForgeExtraCodecs;
 import org.jetbrains.annotations.Nullable;
-import org.jline.terminal.Size;
 
 import java.util.Objects;
 import java.util.stream.Stream;
 
-public final class SizedIngredient {
+// 純正のものを少し改造。Lucenticsではこっちを使う
+public class SizedIngredient {
     private final Ingredient ingredient;
     private final int count;
 

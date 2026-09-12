@@ -1,12 +1,12 @@
 package io.github.rontyamc.lucentics.common.datagen.builders;
 
-import com.mojang.datafixers.util.Either;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.recipe.IRecipeInfo;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.TrailInput;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
+import io.github.rontyamc.lucentics.common.recipe.SizedThingIngredient;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.NonNullList;
@@ -18,13 +18,14 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
 public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
-    private SizedIngredient input;
+    private SizedThingIngredient input;
     private final ItemStack primaryOutput;
     private final List<List<WeightedOutput>> outputGroups = NonNullList.create();
     private final NonNullList<TrailInput> trails = NonNullList.create();
@@ -34,7 +35,7 @@ public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
     private int processingDuration = 100;
     private int daylightCondition = 0;
 
-    protected TrailRecipeBuilder(SizedIngredient input, ItemStack output) {
+    protected TrailRecipeBuilder(SizedThingIngredient input, ItemStack output) {
         this.input = input;
         this.primaryOutput = output;
         if (!output.isEmpty()) this.outputGroups.add(List.of(OutputSpec.of(output).build()));
@@ -42,20 +43,30 @@ public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
         this.suffix = "";
     }
 
-    public static TrailRecipeBuilder create(SizedIngredient input, ItemStack output) {
+    public static TrailRecipeBuilder create(SizedThingIngredient input, ItemStack output) {
         return new TrailRecipeBuilder(input, output);
     }
 
-    public static TrailRecipeBuilder create(SizedIngredient input, ItemLike result, int count) {
+    public static TrailRecipeBuilder create(SizedThingIngredient input, ItemLike result, int count) {
         return new TrailRecipeBuilder(input, new ItemStack(result, count));
     }
 
-    public static TrailRecipeBuilder create(SizedIngredient input, ItemLike result) {
+    public static TrailRecipeBuilder create(SizedThingIngredient input, ItemLike result) {
         return new TrailRecipeBuilder(input, new ItemStack(result, 1));
     }
 
-    public TrailRecipeBuilder input(SizedIngredient input) {
+    public TrailRecipeBuilder input(SizedThingIngredient input) {
         this.input = input;
+        return this;
+    }
+
+    public TrailRecipeBuilder input(SizedIngredient input) {
+        this.input = SizedThingIngredient.of(input);
+        return this;
+    }
+
+    public TrailRecipeBuilder input(SizedFluidIngredient input) {
+        this.input = SizedThingIngredient.of(input);
         return this;
     }
 
@@ -157,7 +168,7 @@ public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
         outputs.addAll(outputGroups);
 
         RecipeArguments args = new RecipeArguments(
-                Either.left(input),
+                input,
                 trails,
                 outputs,
                 processingDuration,

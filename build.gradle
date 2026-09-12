@@ -80,10 +80,7 @@ dependencies {
     localRuntime "curse.maven:tooltips-reforged-1277444:7314753"
     localRuntime "curse.maven:jupiter-1072905:7738312"
 
-    localRuntime "curse.maven:patchouli-306770:7730942"
-
     localRuntime "curse.maven:create-328085:7963363"
-    localRuntime "curse.maven:actually-additions-228404:7676502"
 
     jarJar(api("com.tterrag.registrate:Registrate:$registrate_version"))
 }

@@ -25,7 +25,7 @@ public class MillingTableRenderer implements BlockEntityRenderer<MillingTableBlo
         float radius = 0.2f;
 
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        ItemStack container = blockEntity.getMillingTableBehavior().getContainer();
+        ItemStack container = blockEntity.getMillingTableBehavior().getContainer().asItemOrEmpty();
         int count = container.getCount();
         if (count == 0) return;
         if (count >= 12) count = 12;

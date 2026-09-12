@@ -17,7 +17,7 @@ public class TankFHandler implements IFluidHandler {
 
     @Override
     public FluidStack getFluidInTank(int tank) {
-        return behavior.getContainer();
+        return behavior.getContent();
     }
 
     @Override

@@ -7,7 +7,7 @@ import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.OutputReceiver;
 import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipeInput;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -174,7 +174,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
     }
 
     private void craft(ServerLevel level, InjectingRecipe recipe, InjectingRecipeInput input) {
-        if (recipe.getMainInput().isPresent()) container.shrink(recipe.getMainInput().get().count());
+        if (recipe.getMainInput().isItem()) container.shrink(recipe.getMainInput().amount());
 
         for (OutputRoller.RolledOutput rolled : OutputRoller.roll(randomSource, recipe.getOutputs())) {
             rolled.item().ifPresent(this::acceptItem);
@@ -286,7 +286,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        if (!getContainer().isEmpty() && !ItemUtilities.isSameItem(getContainer(), stack, false)) return stack;
+        if (!getContainer().isEmpty() && !ItemUtil.isSameItem(getContainer(), stack, false)) return stack;
 
         int remainingSpace = getRemainingSpace();
         if (remainingSpace <= 0) return stack;
@@ -346,19 +346,19 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
 
         if (buffer.isEmpty()) {
             buffer = leftover.split(Math.min(stack.getMaxStackSize(), maxStackSize));
-        } else if (ItemUtilities.isSameItem(buffer, stack, false)) {
+        } else if (ItemUtil.isSameItem(buffer, stack, false)) {
             int insertCount = Math.min(getRemainingSpaceBuffer(), stack.getCount());
             leftover = stack.copyWithCount(buffer.getCount() - insertCount);
             if (insertCount > 0) buffer.grow(insertCount);
         }
-        ItemUtilities.dropItem(getWorld(), getPos(), leftover);
+        ItemUtil.dropItem(getWorld(), getPos(), leftover);
     }
 
     @Override
     public void acceptFluid(FluidStack stack) {}
 
     public void dropContents(Level level, BlockPos pos) {
-        ItemUtilities.dropItem(level, pos, getContents());
+        ItemUtil.dropItem(level, pos, getContents());
         clearContent();
     }
 

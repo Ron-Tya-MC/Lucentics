@@ -88,7 +88,7 @@ public class MillingTableBlock extends BaseEntityBlock implements IBlockEntities
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
 
         MillingTableBehavior behavior = be.getMillingTableBehavior();
-        ItemStack container = behavior.getContainer();
+        ItemStack container = behavior.getContainer().asItemOrEmpty();
         boolean handled = false;
 
         SlotInteractions.SingleItemSlot slot = new SlotInteractions.SingleItemSlot() {

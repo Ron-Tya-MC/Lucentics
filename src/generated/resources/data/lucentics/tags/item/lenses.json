@@ -1,0 +1,20 @@
+{
+  "values": [
+    "lucentics:red_lens",
+    "lucentics:blue_lens",
+    "lucentics:green_lens",
+    "lucentics:yellow_lens",
+    "lucentics:magenta_lens",
+    "lucentics:light_blue_lens",
+    "lucentics:pink_lens",
+    "lucentics:cyan_lens",
+    "lucentics:lime_lens",
+    "lucentics:gray_lens",
+    "lucentics:light_gray_lens",
+    "lucentics:brown_lens",
+    "lucentics:purple_lens",
+    "lucentics:orange_lens",
+    "lucentics:white_lens",
+    "lucentics:black_lens"
+  ]
+}

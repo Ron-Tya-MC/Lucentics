@@ -2,7 +2,6 @@ package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -24,7 +23,7 @@ public class EngravingTableRenderer implements BlockEntityRenderer<EngravingTabl
     @Override
     public void render(EngravingTableBlockEntity blockEntity, float partialTick, PoseStack poseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        ItemStack container = blockEntity.getEngravingTableBehavior().getContainer();
+        ItemStack container = blockEntity.getEngravingTableBehavior().getContainer().asItemOrEmpty();
 
         poseStack.pushPose();
         poseStack.translate(0.5f, 1.0f, 0.5f);

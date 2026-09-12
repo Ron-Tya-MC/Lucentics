@@ -1,11 +1,11 @@
 package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
-import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
+import io.github.rontyamc.lucentics.integration.jei.CommonParts;
 import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
+import io.github.rontyamc.lucentics.integration.jei.ProbabilisticOutputSlots;
+import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
-import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.gui.placement.HorizontalAlignment;
 import mezz.jei.api.gui.placement.VerticalAlignment;
@@ -13,18 +13,12 @@ import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.category.AbstractRecipeCategory;
-import mezz.jei.library.util.RecipeUtil;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 
 public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRecipe> {
     private static final int WIDTH = 120;
     private static final int HEIGHT = 40;
-
-    private static final ResourceLocation ARROW_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/injector_arrow.png");
-
-    private final IDrawableStatic arrow;
 
     public InjectingRecipeCategory(IGuiHelper guiHelper) {
         super(
@@ -34,28 +28,22 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRec
                 WIDTH,
                 HEIGHT
         );
-
-        this.arrow = guiHelper.drawableBuilder(ARROW_TEXTURE, 0, 0, 48, 18)
-                .setTextureSize(48, 18)
-                .build();
     }
 
     @Override
     public void draw(InjectingRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        arrow.draw(guiGraphics, WIDTH / 2 - 24, 4);
+        CommonParts.arrowLight.draw(guiGraphics, WIDTH / 2 - 24, 4);
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, InjectingRecipe recipe, IFocusGroup focuses) {
-        recipe.getMainInput().ifPresent(sized ->
+        recipe.getMainInput().asItem().ifPresent(sized ->
                 builder.addInputSlot(10, 5)
-                        .setStandardSlotBackground()
+                        .setBackground(CommonParts.slot_normal, -1, -1)
                         .addIngredients(sized.ingredient())
         );
 
-        builder.addOutputSlot(93, 5)
-                .setStandardSlotBackground()
-                .addItemStack(RecipeUtil.getResultItem(recipe));
+        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), 93, 5, 20, 1);
     }
 
     @Override

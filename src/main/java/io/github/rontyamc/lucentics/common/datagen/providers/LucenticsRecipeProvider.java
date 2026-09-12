@@ -5,8 +5,8 @@ import io.github.rontyamc.lucentics.common.datagen.builders.CrushingBuilder;
 import io.github.rontyamc.lucentics.common.datagen.builders.IdPathResolvable;
 import io.github.rontyamc.lucentics.common.datagen.builders.InjectingBuilder;
 import io.github.rontyamc.lucentics.common.datagen.builders.TrailRecipeBuilder;
-import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.recipe.SizedThingIngredient;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.HolderLookup;
@@ -114,14 +114,14 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         }
 
         protected ResourceLocation createLocation(String category) {
-            if (path.isEmpty()) path = ItemUtilities.getId(result).getPath();
+            if (path.isEmpty()) path = ItemUtil.getId(result).getPath();
             return folder.isEmpty()
                     ? Lucentics.defaultLocation(category + "/" + path + suffix)
                     : Lucentics.defaultLocation(category + "/" + folder + "/" + path + suffix);
         }
 
         protected ResourceLocation createLocation(String category, IdPathResolvable b) {
-            if (path.isEmpty()) path = result.get() == Items.AIR ? b.resolveIdPath() : ItemUtilities.getId(result).getPath();
+            if (path.isEmpty()) path = result.get() == Items.AIR ? b.resolveIdPath() : ItemUtil.getId(result).getPath();
             return folder.isEmpty()
                     ? Lucentics.defaultLocation(category + "/" + path + suffix)
                     : Lucentics.defaultLocation(category + "/" + folder + "/" + path + suffix);
@@ -156,7 +156,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         public GeneratedRecipe injecting(UnaryOperator<InjectingBuilder> builder) {
             return register(output -> {
                 InjectingBuilder b =
-                        builder.apply(InjectingBuilder.create(SizedIngredient.EMPTY, result.get(), count));
+                        builder.apply(InjectingBuilder.create(SizedThingIngredient.EMPTY, result.get(), count));
                 b.save(output, createLocation("injecting", b));
             });
         }
@@ -164,7 +164,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         public GeneratedRecipe engraving(UnaryOperator<TrailRecipeBuilder> builder) {
             return register(output -> {
                 TrailRecipeBuilder b =
-                        builder.apply(TrailRecipeBuilder.create(SizedIngredient.EMPTY, result.get(), count));
+                        builder.apply(TrailRecipeBuilder.create(SizedThingIngredient.EMPTY, result.get(), count));
                 b.setFolder("engraving");
                 b.setRecipeInfo(LucenticsRecipeTypesRegister.ENGRAVING_INFO);
                 b.save(output, createLocation("engraving", b));
@@ -182,7 +182,7 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         public GeneratedRecipe milling(UnaryOperator<TrailRecipeBuilder> builder) {
             return register(output -> {
                 TrailRecipeBuilder b =
-                        builder.apply(TrailRecipeBuilder.create(SizedIngredient.EMPTY, result.get(), count));
+                        builder.apply(TrailRecipeBuilder.create(SizedThingIngredient.EMPTY, result.get(), count));
                 b.setFolder("milling");
                 b.setRecipeInfo(LucenticsRecipeTypesRegister.MILLING_INFO);
                 b.save(output, createLocation("milling", b));

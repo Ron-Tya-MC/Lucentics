@@ -5,15 +5,13 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
-import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.List;
 import java.util.Optional;
 
 public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArguments> implements Recipe<I> {
     protected A arguments;
-    protected Optional<SizedIngredient> mainInput;
-    protected Optional<SizedFluidIngredient> mainFluidInput;
+    protected SizedThingIngredient mainInput;
     protected NonNullList<RecipeArguments.TrailInput> trailInputs;
     protected NonNullList<List<RecipeArguments.WeightedOutput>> outputs;
     protected int processingDuration;
@@ -25,8 +23,7 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
 
     public BaseRecipe(IRecipeInfo recipeInfo, A args) {
         this.arguments = args;
-        this.mainInput = args.mainInput().left();
-        this.mainFluidInput = args.mainInput().right();
+        this.mainInput = args.mainInput();
         this.trailInputs = args.trailInputs();
         this.outputs = args.outputs();
         this.processingDuration = args.processingDuration();
@@ -41,12 +38,8 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
         return arguments;
     }
 
-    public Optional<SizedIngredient> getMainInput() {
+    public SizedThingIngredient getMainInput() {
         return mainInput;
-    }
-
-    public Optional<SizedFluidIngredient> getMainFluidInput() {
-        return mainFluidInput;
     }
 
     public NonNullList<RecipeArguments.TrailInput> getTrailInputs() {
@@ -73,10 +66,10 @@ public abstract class BaseRecipe<I extends RecipeInput, A extends RecipeArgument
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> list = NonNullList.create();
-        mainInput.ifPresent(sized -> list.add(sized.ingredient()));
+        mainInput.asItem().ifPresent(sized -> list.add(sized.ingredient()));
         for (RecipeArguments.TrailInput trail : trailInputs) {
             for (RecipeArguments.OrderingInput ordering : trail.inputs()) {
-                ordering.ingredient().left().ifPresent(sized -> list.add(sized.ingredient()));
+                ordering.ingredient().asItem().ifPresent(sized -> list.add(sized.ingredient()));
             }
         }
         return list;

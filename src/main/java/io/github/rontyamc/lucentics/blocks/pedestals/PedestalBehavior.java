@@ -1,10 +1,11 @@
 package io.github.rontyamc.lucentics.blocks.pedestals;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.ThingStack;
 import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
@@ -45,6 +46,10 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     }
 
     @Override
+    public ThingStack getStack() {
+        return ThingStack.of(content);
+    }
+
     public ItemStack getContent() {
         return content;
     }
@@ -69,7 +74,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
 
     public ItemStack insert(ItemStack stack, boolean simulate) {
         if (stack.isEmpty()) return ItemStack.EMPTY;
-        if (!getContent().isEmpty() && !ItemUtilities.isSameItem(getContent(), stack, false)) {
+        if (!getContent().isEmpty() && !ItemUtil.isSameItem(getContent(), stack, false)) {
             return stack;
         }
 
@@ -116,7 +121,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     }
 
     @Override
-    public void consumeItem(int amount) {
+    public void consume(int amount) {
         if (getContent().isEmpty()) return;
         content.shrink(amount);
         blockEntity.updated();
@@ -125,7 +130,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     @Override
     public void damageItem(int damage) {
         if (getContent().isEmpty()) return;
-        content = ItemUtilities.hurtAndUpdate(damage, content);
+        content = ItemUtil.hurtAndUpdate(damage, content);
         blockEntity.updated();
     }
 

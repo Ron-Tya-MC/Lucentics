@@ -1,11 +1,11 @@
 package io.github.rontyamc.lucentics.common.beam;
 
-import net.minecraft.world.item.ItemStack;
+import io.github.rontyamc.lucentics.common.ThingStack;
 
 public interface INodeDevice {
-    ItemStack getContent();
+    ThingStack getStack();
 
-    void consumeItem(int amount);
+    void consume(int amount);
     void damageItem(int damage);
     void catalyst();
 }

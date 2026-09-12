@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "lucentics:item/green_lens"
+    "layer0": "lucentics:item/lenses/green_lens"
   }
 }

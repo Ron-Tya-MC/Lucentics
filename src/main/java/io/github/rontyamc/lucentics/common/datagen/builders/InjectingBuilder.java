@@ -1,10 +1,10 @@
 package io.github.rontyamc.lucentics.common.datagen.builders;
 
-import com.mojang.datafixers.util.Either;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
 import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
+import io.github.rontyamc.lucentics.common.recipe.SizedThingIngredient;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.advancements.Criterion;
@@ -22,33 +22,38 @@ import java.util.List;
 import java.util.Optional;
 
 public class InjectingBuilder implements RecipeBuilder, IdPathResolvable {
-    private SizedIngredient input;
+    private SizedThingIngredient input;
     private final ItemStack primaryOutput;
     private final List<List<WeightedOutput>> outputGroups = NonNullList.create();
     protected String suffix;
     private int processingDuration = 100;
     private int daylightCondition = 0;
 
-    public InjectingBuilder(SizedIngredient input, ItemStack output) {
+    public InjectingBuilder(SizedThingIngredient input, ItemStack output) {
         this.input = input;
         this.primaryOutput = output;
         if (!output.isEmpty()) this.outputGroups.add(List.of(OutputSpec.of(output).build()));
         this.suffix = "";
     }
 
-    public static InjectingBuilder create(SizedIngredient input, ItemStack result) {
+    public static InjectingBuilder create(SizedThingIngredient input, ItemStack result) {
         return new InjectingBuilder(input, result);
     }
 
-    public static InjectingBuilder create(SizedIngredient input, ItemLike result, int count) {
+    public static InjectingBuilder create(SizedThingIngredient input, ItemLike result, int count) {
         return create(input, new ItemStack(result, count));
     }
-    public static InjectingBuilder create(SizedIngredient input, ItemLike result) {
+    public static InjectingBuilder create(SizedThingIngredient input, ItemLike result) {
         return create(input, result, 1);
     }
 
-    public InjectingBuilder input(SizedIngredient input) {
+    public InjectingBuilder input(SizedThingIngredient input) {
         this.input = input;
+        return this;
+    }
+
+    public InjectingBuilder input(SizedIngredient input) {
+        this.input = SizedThingIngredient.of(input);
         return this;
     }
 
@@ -139,7 +144,7 @@ public class InjectingBuilder implements RecipeBuilder, IdPathResolvable {
         outputs.addAll(outputGroups);
 
         RecipeArguments args = new RecipeArguments(
-                Either.left(input),
+                input,
                 NonNullList.create(),
                 outputs,
                 processingDuration,

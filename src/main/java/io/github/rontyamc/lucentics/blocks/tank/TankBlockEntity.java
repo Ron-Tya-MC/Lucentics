@@ -1,7 +1,5 @@
 package io.github.rontyamc.lucentics.blocks.tank;
 
-import io.github.rontyamc.lucentics.blocks.pedestals.PedestalBehavior;
-import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
 import net.minecraft.core.BlockPos;
@@ -23,7 +21,6 @@ public abstract class TankBlockEntity extends BaseBlockEntity {
 
     @Override
     public void attachBehavior(List<BlockEntityBehavior> behaviors) {}
-
 
     public abstract TankBehavior getBehavior();
 

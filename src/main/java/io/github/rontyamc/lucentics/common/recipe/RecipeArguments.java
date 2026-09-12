@@ -5,7 +5,7 @@ import com.mojang.serialization.Codec;
 import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
-import io.github.rontyamc.lucentics.common.util.MiscUtilities;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
@@ -16,14 +16,13 @@ import net.minecraft.util.valueproviders.IntProvider;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
-import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 public record RecipeArguments(
-    Either<SizedIngredient, SizedFluidIngredient> mainInput,
+    SizedThingIngredient mainInput,
     NonNullList<TrailInput> trailInputs,
     NonNullList<List<WeightedOutput>> outputs,
     int processingDuration,
@@ -31,17 +30,17 @@ public record RecipeArguments(
     ) {
 
     public RecipeArguments() {
-        this(Either.left(SizedIngredient.EMPTY), NonNullList.create(), NonNullList.create(), 0, 0);
+        this(SizedThingIngredient.EMPTY, NonNullList.create(), NonNullList.create(), 0, 0);
     }
 
     public static final MapCodec<RecipeArguments> CODEC = RecordCodecBuilder.mapCodec(ins -> ins.group(
-            Codec.either(SizedIngredient.CODEC, SizedFluidIngredient.FLAT_CODEC).fieldOf("input").forGetter(RecipeArguments::mainInput),
+            SizedThingIngredient.CODEC.fieldOf("input").forGetter(RecipeArguments::mainInput),
             TrailInput.CODEC.codec().listOf().xmap(list -> {
                 NonNullList<TrailInput> inputs = NonNullList.create();
                 inputs.addAll(list);
                 return inputs;
             }, list -> list).optionalFieldOf("trail_inputs", NonNullList.create()).forGetter(RecipeArguments::trailInputs),
-            MiscUtilities.singleOrList(WeightedOutput.CODEC.codec()).listOf().xmap(list -> {
+            MiscUtil.singleOrList(WeightedOutput.CODEC.codec()).listOf().xmap(list -> {
                 NonNullList<List<WeightedOutput>> groups = NonNullList.create();
                 groups.addAll(list);
                 return groups;
@@ -51,7 +50,7 @@ public record RecipeArguments(
     ).apply(ins, RecipeArguments::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, RecipeArguments> STREAM_CODEC = StreamCodec.composite(
-            ByteBufCodecs.either(SizedIngredient.STREAM_CODEC, SizedFluidIngredient.STREAM_CODEC), RecipeArguments::mainInput,
+            SizedThingIngredient.STREAM_CODEC, RecipeArguments::mainInput,
             ByteBufCodecs.collection(size -> NonNullList.create(), TrailInput.STREAM_CODEC), RecipeArguments::trailInputs,
             ByteBufCodecs.collection(size -> NonNullList.create(), ByteBufCodecs.collection(size -> NonNullList.create(), WeightedOutput.STREAM_CODEC)), RecipeArguments::outputs,
             ByteBufCodecs.VAR_INT, RecipeArguments::processingDuration,
@@ -80,18 +79,18 @@ public record RecipeArguments(
     }
 
     public record OrderingInput(
-            Either<SizedIngredient,SizedFluidIngredient> ingredient,
+            SizedThingIngredient ingredient,
             Optional<BehaviorType> requiredType,
             boolean notConsume
     ) {
         public static final MapCodec<OrderingInput> CODEC = RecordCodecBuilder.mapCodec(ins -> ins.group(
-                Codec.either(SizedIngredient.CODEC, SizedFluidIngredient.FLAT_CODEC).fieldOf("input").forGetter(OrderingInput::ingredient),
+                SizedThingIngredient.CODEC.fieldOf("input").forGetter(OrderingInput::ingredient),
                 BehaviorType.CODEC.codec().optionalFieldOf("required_type").forGetter(OrderingInput::requiredType),
                 Codec.BOOL.optionalFieldOf("not_consume",false).forGetter(OrderingInput::notConsume)
         ).apply(ins, OrderingInput::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, OrderingInput> STREAM_CODEC = StreamCodec.composite(
-                ByteBufCodecs.either(SizedIngredient.STREAM_CODEC, SizedFluidIngredient.STREAM_CODEC), OrderingInput::ingredient,
+                SizedThingIngredient.STREAM_CODEC, OrderingInput::ingredient,
                 BehaviorType.STREAM_CODEC.apply(ByteBufCodecs::optional), OrderingInput::requiredType,
                 ByteBufCodecs.BOOL, OrderingInput::notConsume,
                 OrderingInput::new

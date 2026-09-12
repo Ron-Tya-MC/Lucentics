@@ -14,6 +14,10 @@
   "item.lucentics.golden_hammer": "金のハンマー",
   "item.lucentics.diamond_hammer": "ダイヤモンドのハンマー",
 
+  "$R:item.lucentics;16_colors/_dye_liquid_bucket" : "%Rの染料液入りバケツ",
+  "$R:item.lucentics;16_colors/_coloquid_bucket" : "%Rの彩液入りバケツ",
+
+
   "block.lucentics.dusk_bricks": "薄明石レンガ",
   "$R:block.lucentics;tier2_colors/_dusk_bricks" : "%Rの薄明石レンガ",
   "block.lucentics.dawnstone": "黎明石",
@@ -32,6 +36,13 @@
 
   "block.lucentics.prism_blank": "無地のプリズム",
   "block.lucentics.prism_ritual": "儀式のプリズム",
+
+  "$R:block.lucentics;16_colors/_dye_liquid" : "%Rの染料液",
+  "$R:block.lucentics;16_colors/_coloquid" : "%Rの彩液",
+
+
+  "$R:fluid.lucentics;16_colors/_dye_liquid" : "%Rの染料液",
+  "$R:fluid.lucentics;16_colors/_coloquid" : "%Rの彩液",
 
 
   "itemGroup.lucentics.ingredients": "Lucentics: 材料",
@@ -70,6 +81,7 @@
   "jei.lucentics.category.injector": "光注入クラフト",
   "jei.lucentics.category.engraving": "彩刻クラフト",
   "jei.lucentics.category.crushing": "粉砕クラフト",
+  "jei.lucentics.category.milling": "粉挽クラフト",
 
   "jei.lucentics.info.daylight_condition": "日光レベル: %s",
   "jei.lucentics.info.processing_duration": "%s秒",

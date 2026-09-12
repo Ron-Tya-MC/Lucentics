@@ -4,7 +4,7 @@ import io.github.rontyamc.lucentics.common.SoundSpec;
 import io.github.rontyamc.lucentics.common.datagen.builders.OutputSpec;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
-import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LItemTags;
+import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsITags;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -79,9 +79,9 @@ public class CrushingProvider {
 
         provider.generic()
                 .path("green_dye")
-                .suffix("from_short_grass")
+                .suffix("_from_short_grass")
                 .crushing(b -> b.input(Blocks.SHORT_GRASS)
-                        .tool(LItemTags.HAMMERS.tag)
+                        .tool(LucenticsITags.HAMMERS.tag)
                         .output(OutputSpec.of(Items.WHEAT_SEEDS).probability(0.3f))
                         .output(OutputSpec.of(Items.GREEN_DYE).probability(0.03f))
                         .clickSound(SoundSpec.of(SoundEvents.GRASS_HIT, SoundSource.BLOCKS))
@@ -90,9 +90,9 @@ public class CrushingProvider {
                         .requiredHits(1));
         provider.generic()
                 .path("green_dye")
-                .suffix("from_tall_grass")
+                .suffix("_from_tall_grass")
                 .crushing(b -> b.input(Blocks.TALL_GRASS)
-                        .tool(LItemTags.HAMMERS.tag)
+                        .tool(LucenticsITags.HAMMERS.tag)
                         .output(OutputSpec.of(Items.WHEAT_SEEDS).count(UniformInt.of(1,2)).probability(0.3f))
                         .output(OutputSpec.of(Items.GREEN_DYE).probability(0.07f))
                         .clickSound(SoundSpec.of(SoundEvents.GRASS_HIT, SoundSource.BLOCKS))
@@ -101,9 +101,9 @@ public class CrushingProvider {
                         .requiredHits(1));
         provider.generic()
                 .path("green_dye")
-                .suffix("from_fern")
+                .suffix("_from_fern")
                 .crushing(b -> b.input(Blocks.FERN)
-                        .tool(LItemTags.HAMMERS.tag)
+                        .tool(LucenticsITags.HAMMERS.tag)
                         .output(OutputSpec.of(Items.WHEAT_SEEDS).probability(0.1f))
                         .output(OutputSpec.of(Items.GREEN_DYE).probability(0.07f))
                         .clickSound(SoundSpec.of(SoundEvents.GRASS_HIT, SoundSource.BLOCKS))
@@ -111,9 +111,10 @@ public class CrushingProvider {
                         .damagePerHit(1)
                         .requiredHits(1));
         provider.generic()
-                .suffix("from_large_fern")
+                .path("green_dye")
+                .suffix("_from_large_fern")
                 .crushing(b -> b.input(Blocks.LARGE_FERN)
-                        .tool(LItemTags.HAMMERS.tag)
+                        .tool(LucenticsITags.HAMMERS.tag)
                         .output(OutputSpec.of(Items.WHEAT_SEEDS).count(UniformInt.of(1,2)).probability(0.1f))
                         .output(OutputSpec.of(Items.GREEN_DYE).probability(0.15f))
                         .clickSound(SoundSpec.of(SoundEvents.GRASS_HIT, SoundSource.BLOCKS))

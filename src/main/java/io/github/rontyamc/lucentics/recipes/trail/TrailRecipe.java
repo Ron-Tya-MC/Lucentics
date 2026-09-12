@@ -8,7 +8,6 @@ import io.github.rontyamc.lucentics.common.beam.INodeDevice;
 import io.github.rontyamc.lucentics.common.recipe.BaseRecipe;
 import io.github.rontyamc.lucentics.common.recipe.IRecipeInfo;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
-import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -47,8 +46,7 @@ public class TrailRecipe extends BaseRecipe<TrailRecipeInput, RecipeArguments> {
             return false;
         }
 
-        Optional<SizedIngredient> itemIngredient = ordering.ingredient().left();
-        return itemIngredient.map(sized -> sized.test(device.stack())).orElse(false);
+        return device.stack().content().map(ordering.ingredient()::test, ordering.ingredient()::test);
     }
 
     private static List<DeviceSlot> collectDevices(Beam beam, Level level) {
@@ -60,14 +58,14 @@ public class TrailRecipe extends BaseRecipe<TrailRecipeInput, RecipeArguments> {
 
             base.findBehavior(b -> b instanceof INodeDevice).ifPresent(behavior -> {
                 INodeDevice device = (INodeDevice) behavior;
-                devices.add(new DeviceSlot(behavior.getType(), device.getContent(), device));
+                devices.add(new DeviceSlot(behavior.getType(), device.getStack(), device));
             });
         }
         return devices;
     }
 
     public Optional<List<ConsumptionEntry>> resolveConsumption(TrailRecipeInput input, Level level) {
-        if (mainInput.isEmpty() || !mainInput.get().test(input.mainInput())) return Optional.empty();
+        if (!mainInput.test(input.mainInput())) return Optional.empty();
         if (input.beams().size() != trailInputs.size()) return Optional.empty();
 
         List<List<DeviceSlot>> perBeamDevices = new ArrayList<>();
@@ -87,7 +85,7 @@ public class TrailRecipe extends BaseRecipe<TrailRecipeInput, RecipeArguments> {
 
             for (int i = 0; i < devices.size(); i++) {
                 RecipeArguments.OrderingInput ordering = orderings.get(i);
-                int amount = ordering.ingredient().left().map(SizedIngredient::count).orElse(0);
+                int amount = ordering.ingredient().amount();
                 entries.add(new ConsumptionEntry(devices.get(i).device(), amount, ordering.notConsume()));
             }
         }

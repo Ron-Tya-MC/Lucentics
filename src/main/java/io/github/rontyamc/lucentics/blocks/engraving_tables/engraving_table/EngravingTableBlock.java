@@ -94,7 +94,7 @@ public class EngravingTableBlock extends BaseEntityBlock implements IBlockEntiti
         if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
 
         EngravingTableBehavior behavior = be.getEngravingTableBehavior();
-        ItemStack container = behavior.getContainer();
+        ItemStack container = behavior.getContainer().asItemOrEmpty();
         boolean handled = false;
 
         SlotInteractions.SingleItemSlot slot = new SlotInteractions.SingleItemSlot() {

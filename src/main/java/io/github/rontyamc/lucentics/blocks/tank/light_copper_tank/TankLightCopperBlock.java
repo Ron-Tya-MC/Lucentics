@@ -41,12 +41,12 @@ public class TankLightCopperBlock extends BaseEntityBlock implements IBlockEntit
     public RenderShape getRenderShape(BlockState state) {return RenderShape.MODEL;}
 
     @Override
-    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
         if (!(level.getBlockEntity(pos) instanceof TankLightCopperBlockEntity)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        var result = FluidUtil.interactWithFluidHandler(player, hand, level, pos, hitResult.getDirection());
+        var result = FluidUtil.interactWithFluidHandler(player, interactionHand, level, pos, hitResult.getDirection());
         if (result) {
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }

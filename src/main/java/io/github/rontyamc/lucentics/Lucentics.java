@@ -5,6 +5,7 @@ import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
 import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableRenderer;
+import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
 import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
 import io.github.rontyamc.lucentics.client.particle.GlowParticle;
@@ -58,6 +59,7 @@ public class Lucentics {
         LucenticsBlockRegister.register();
         LucenticsBlockEntityRegister.register();
         LucenticsItemRegister.register();
+        LucenticsFluidRegister.register();
         LucenticsParticleRegister.register(modEventBus);
 
         LucenticsRecipeTypesRegister.register(modEventBus);
@@ -120,6 +122,11 @@ public class Lucentics {
                 LucenticsBlockEntityRegister.MILLING_TABLE.get(),
                 (be, side) -> be.getMillingTableBehavior().iHandler
         );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                LucenticsBlockEntityRegister.MIXING_TABLE.get(),
+                (be, side) -> be.getMixingTableBehavior().fHandler
+        );
     }
 
     public static ResourceLocation defaultLocation(String path) {
@@ -132,12 +139,25 @@ public class Lucentics {
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
 
+        @SuppressWarnings("deprecation")
         @SubscribeEvent
         static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
-                ItemBlockRenderTypes.setRenderLayer(LucenticsBlockRegister.PRISM_BLANK.get(), RenderType.translucent());
-                ItemBlockRenderTypes.setRenderLayer(LucenticsBlockRegister.PRISM_RITUAL.get(), RenderType.translucent());
+                for (var entry : LucenticsRenderTypeRegister.getBlocks()) {
+                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), toRenderType(entry.layer()));
+                }
+                for (var entry : LucenticsRenderTypeRegister.getFluids()) {
+                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), toRenderType(entry.layer()));
+                }
             });
+        }
+
+        private static RenderType toRenderType(LucenticsRenderTypeRegister.Layer layer) {
+            return switch (layer) {
+                case CUTOUT -> RenderType.cutout();
+                case CUTOUT_MIPPED -> RenderType.cutoutMipped();
+                case TRANSLUCENT -> RenderType.translucent();
+            };
         }
 
         @SubscribeEvent
@@ -148,6 +168,7 @@ public class Lucentics {
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(), TankRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MILLING_TABLE.get(), MillingTableRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MIXING_TABLE.get(), MixingTableRenderer::new);
         }
 
         @SubscribeEvent

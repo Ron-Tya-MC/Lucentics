@@ -23,8 +23,8 @@ public class PedestalRitualBehavior extends PedestalBehavior {
     }
 
     @Override
-    public void consumeItem(int count) {
-        super.consumeItem(count);
+    public void consume(int count) {
+        super.consume(count);
 
         Level level = getWorld();
         BlockPos pos = getPos();

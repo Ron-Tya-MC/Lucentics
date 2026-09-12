@@ -159,9 +159,11 @@ public class LucenticsTabRegister {
             private List<Item> collectItemsFromCategory(String category) {
                 List<Item> items = new ReferenceArrayList<>();
                 for (RegistryEntry<Item, Item> entry : Lucentics.registrate().getAll(Registries.ITEM)) {
-                    if (LucenticsRegistrate.alreadyInCreativeTab(entry, tabFilter) || !ITEM_CATEGORY.get(entry.get().toString()).equals(category)) {
-                        continue;
-                    }
+                    if (LucenticsRegistrate.alreadyInCreativeTab(entry, tabFilter)) continue;
+
+                    String itemCategory = ITEM_CATEGORY.get(entry.get().toString());
+                    if (itemCategory == null || !itemCategory.equals(category)) continue;
+
                     items.add(entry.get());
                 }
                 return items;

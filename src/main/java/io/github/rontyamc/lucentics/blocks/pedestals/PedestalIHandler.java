@@ -1,6 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.pedestals;
 
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
@@ -39,6 +39,6 @@ public class PedestalIHandler implements IItemHandler {
 
     @Override
     public boolean isItemValid(int slot, ItemStack itemStack) {
-        return behavior.getContent().isEmpty() || ItemUtilities.isSameItem(behavior.getContent(), itemStack, false);
+        return behavior.getContent().isEmpty() || ItemUtil.isSameItem(behavior.getContent(), itemStack, false);
     }
 }

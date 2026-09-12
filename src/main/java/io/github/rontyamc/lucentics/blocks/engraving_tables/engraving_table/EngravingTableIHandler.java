@@ -1,6 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table;
 
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
@@ -18,9 +18,9 @@ public class EngravingTableIHandler implements IItemHandler {
 
     @Override
     public ItemStack getStackInSlot(int slot) {
-        if (slot == 0) return behavior.getContainer();
+        if (slot == 0) return behavior.getContainer().asItemOrEmpty();
         int index = slot - 1;
-        return behavior.getBuffetAt(index);
+        return behavior.getBufferAt(index);
     }
 
     @Override
@@ -47,6 +47,6 @@ public class EngravingTableIHandler implements IItemHandler {
     @Override
     public boolean isItemValid(int slot, ItemStack itemStack) {
         if (slot != 0) return false;
-        return behavior.getContainer().isEmpty() || ItemUtilities.isSameItem(behavior.getContainer(), itemStack, false);
+        return behavior.getContainer().isEmpty() || ItemUtil.isSameItem(behavior.getContainer().asItemOrEmpty(), itemStack, false);
     }
 }

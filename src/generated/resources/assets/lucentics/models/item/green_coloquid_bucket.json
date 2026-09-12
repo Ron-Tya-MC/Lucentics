@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "lucentics:item/buckets/green_coloquid_bucket"
+  }
+}

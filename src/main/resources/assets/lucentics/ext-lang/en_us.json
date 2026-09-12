@@ -35,6 +35,7 @@
   "jei.lucentics.category.injector": "Light Injecting",
   "jei.lucentics.category.engraving": "Engraving",
   "jei.lucentics.category.crushing": "Crushing",
+  "jei.lucentics.category.milling": "Milling",
 
   "jei.lucentics.info.daylight_condition": "DayLight: %s",
   "jei.lucentics.info.processing_duration": "%s Seconds",

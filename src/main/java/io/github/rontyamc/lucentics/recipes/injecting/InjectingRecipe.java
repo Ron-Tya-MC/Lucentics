@@ -13,6 +13,6 @@ public class InjectingRecipe extends BaseRecipe<InjectingRecipeInput, RecipeArgu
 
     @Override
     public boolean matches(InjectingRecipeInput input, Level level) {
-        return mainInput.map(sized -> sized.test(input.input())).orElse(false);
+        return mainInput.test(input.input());
     }
 }

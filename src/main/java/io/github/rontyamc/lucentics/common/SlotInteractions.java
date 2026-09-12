@@ -1,6 +1,6 @@
 package io.github.rontyamc.lucentics.common;
 
-import io.github.rontyamc.lucentics.common.util.ItemUtilities;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import net.minecraft.world.item.ItemStack;
 
 import java.util.Optional;
@@ -41,7 +41,7 @@ public class SlotInteractions {
             return extracted.isEmpty() ? Result.NONE : Result.of(Outcome.EXTRACTED, extracted);
         }
 
-        if (ItemUtilities.isSameItem(current, heldStack, false) && slot.blockMerge()) {
+        if (ItemUtil.isSameItem(current, heldStack, false) && slot.blockMerge()) {
             int mergeCount = Math.min(slot.getRemainingSpace(), heldStack.getCount());
             if (mergeCount <= 0) return Result.NONE;
             slot.insert(heldStack.copyWithCount(mergeCount), simulate);

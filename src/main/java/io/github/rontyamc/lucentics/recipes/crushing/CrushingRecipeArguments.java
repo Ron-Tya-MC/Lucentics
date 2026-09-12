@@ -5,7 +5,7 @@ import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import io.github.rontyamc.lucentics.common.SoundSpec;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
-import io.github.rontyamc.lucentics.common.util.MiscUtilities;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryCodecs;
@@ -41,7 +41,7 @@ public record CrushingRecipeArguments(
             Codec.INT.optionalFieldOf("damage_per_hit", 1).forGetter(CrushingRecipeArguments::damagePerHit),
             SoundSpec.CODEC.optionalFieldOf("click_sound").forGetter(CrushingRecipeArguments::clickSound),
             SoundSpec.CODEC.optionalFieldOf("break_sound").forGetter(CrushingRecipeArguments::breakSound),
-            MiscUtilities.singleOrList(WeightedOutput.CODEC.codec()).listOf().xmap(list -> {
+            MiscUtil.singleOrList(WeightedOutput.CODEC.codec()).listOf().xmap(list -> {
                 NonNullList<List<WeightedOutput>> groups = NonNullList.create();
                 groups.addAll(list);
                 return groups;

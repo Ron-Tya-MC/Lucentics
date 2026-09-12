@@ -3,7 +3,7 @@ package io.github.rontyamc.lucentics.common.datagen;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.util.MiscUtilities;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import net.minecraft.data.PackOutput;
 import net.neoforged.neoforge.common.data.LanguageProvider;
@@ -21,7 +21,7 @@ public class LangProviderJp extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        JsonObject json = MiscUtilities.loadJson("/assets/lucentics/ext-lang/ja_jp.json");
+        JsonObject json = MiscUtil.loadJson("/assets/lucentics/ext-lang/ja_jp.json");
         for (var entry : json.entrySet()) {
             String key = entry.getKey();
 

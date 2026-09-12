@@ -9,7 +9,7 @@ import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
-public final class OutputSpec {
+public class OutputSpec {
     private final Either<ItemStack, FluidStack> stack;
     private IntProvider amount;
     private float probability = 1.0f;

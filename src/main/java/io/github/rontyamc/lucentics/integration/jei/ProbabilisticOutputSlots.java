@@ -1,8 +1,7 @@
 package io.github.rontyamc.lucentics.integration.jei;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
-import io.github.rontyamc.lucentics.common.util.MiscUtilities;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.builder.ITooltipBuilder;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -35,12 +34,9 @@ public class ProbabilisticOutputSlots {
             int totalWeight = group.stream().mapToInt(WeightedOutput::weight).sum();
 
             IDrawableStatic background;
-            if (group.size() > 1) background = CommonSlots.slot_blue_blur;
-            else if (group.getFirst().probability() < 1.0f) background = CommonSlots.slot_yellow_blur;
-            else background = CommonSlots.slot_normal;
-
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
+            if (group.size() > 1) background = CommonParts.slot_blue_blur;
+            else if (group.getFirst().probability() < 1.0f) background = CommonParts.slot_yellow_blur;
+            else background = CommonParts.slot_normal;
 
             builder.addOutputSlot(slotX, slotY)
                     .setSlotName(slotName(i))
@@ -133,10 +129,10 @@ public class ProbabilisticOutputSlots {
                     ? Component.translatable("jei.lucentics.info.count", item.count().getMinValue() + "-" + item.count().getMaxValue())
                     : Component.empty();
             Component weightLabel = group.size() > 1
-                    ? Component.translatable("jei.lucentics.info.weight", matchedOutput.weight(), MiscUtilities.shapePercentage(100.0 * matchedOutput.weight() / totalWeight))
+                    ? Component.translatable("jei.lucentics.info.weight", matchedOutput.weight(), MiscUtil.shapePercentage(100.0 * matchedOutput.weight() / totalWeight))
                     : Component.empty();
             Component probabilityLabel = matchedOutput.probability() < 1.0f
-                    ? Component.translatable("jei.lucentics.info.probability", MiscUtilities.shapePercentage(100.0 * matchedOutput.probability()))
+                    ? Component.translatable("jei.lucentics.info.probability", MiscUtil.shapePercentage(100.0 * matchedOutput.probability()))
                     : Component.empty();
             tooltip.add(countLabel);
             tooltip.add(weightLabel);

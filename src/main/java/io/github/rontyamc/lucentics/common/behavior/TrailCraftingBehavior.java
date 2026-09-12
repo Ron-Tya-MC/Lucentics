@@ -1,6 +1,7 @@
 package io.github.rontyamc.lucentics.common.behavior;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.ThingStack;
 import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.recipe.OutputReceiver;
 import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
@@ -10,7 +11,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.Level;
 
@@ -88,7 +88,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
             return;
         }
 
-        TrailRecipeInput input = new TrailRecipeInput(getContainer(), beams);
+        TrailRecipeInput input = TrailRecipeInput.of(getContainer(), beams);
         Optional<RecipeHolder<TrailRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
         if (recipeHolder.isEmpty()) {
             metDayLightCondition = true;
@@ -116,13 +116,11 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
         }
     }
 
-    protected abstract ItemStack getContainer();
+    protected abstract ThingStack getContainer();
 
-    protected abstract List<ItemStack> getBuffer();
+    protected abstract void setContainer(ThingStack stack);
 
-    public abstract ItemStack getBuffetAt(int index);
-
-    public abstract List<ItemStack> collectBuffer();
+    protected abstract List<ThingStack> getBuffer();
 
     protected abstract void flushBuffer();
 
@@ -145,14 +143,14 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
         Optional<List<TrailRecipe.ConsumptionEntry>> consumption = recipe.resolveConsumptionCached(input, level);
         if (consumption.isEmpty()) return;
 
-        if (recipe.getMainInput().isPresent()) getContainer().shrink(recipe.getMainInput().get().count());
+        setContainer(getContainer().shrunken(recipe.getMainInput().amount()));
 
         List<TrailRecipe.ConsumptionEntry> catalysts = new ArrayList<>();
         for (TrailRecipe.ConsumptionEntry entry : consumption.get()) {
             if (entry.notConsume()) {
                 catalysts.add(entry);
             } else {
-                entry.device().consumeItem(entry.amount());
+                entry.device().consume(entry.amount());
             }
         }
 
