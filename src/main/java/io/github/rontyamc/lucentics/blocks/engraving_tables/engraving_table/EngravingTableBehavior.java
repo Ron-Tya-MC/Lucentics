@@ -42,7 +42,7 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
     private boolean hasOutputItem;
     private final Integer maxStackSize;
     private final Supplier<Integer> maxBufferSize;
-    public EngravingTableIHandler iHandler;
+    private final EngravingTableIHandler iHandler;
     private boolean blockMerge;
 
     public EngravingTableBehavior(BaseBlockEntity be) {
@@ -117,6 +117,10 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
             list.addLast(stack == null ? ItemStack.EMPTY : stack);
         }
         return list;
+    }
+
+    public EngravingTableIHandler getIHandler() {
+        return iHandler;
     }
 
     @Override

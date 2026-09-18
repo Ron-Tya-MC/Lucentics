@@ -1,14 +1,15 @@
 package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.common.util.GUIUtil;
 import io.github.rontyamc.lucentics.integration.jei.CommonParts;
 import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
 import io.github.rontyamc.lucentics.integration.jei.ProbabilisticOutputSlots;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
+import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.drawable.IDrawable;
 import mezz.jei.api.gui.drawable.IDrawableStatic;
@@ -17,6 +18,7 @@ import mezz.jei.api.gui.placement.HorizontalAlignment;
 import mezz.jei.api.gui.placement.VerticalAlignment;
 import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
 import mezz.jei.api.recipe.RecipeIngredientRole;
 import mezz.jei.api.recipe.RecipeType;
@@ -26,6 +28,7 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.List;
 
@@ -75,7 +78,7 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
             int y = HEADER_HEIGHT + row * ROW_HEIGHT + 19;
 
             Colors color = Colors.byName(trail.color()).orElse(Colors.SUNLIGHT);
-            drawColored(guiGraphics, arrowAlpha, 20, y, color);
+            GUIUtil.drawColored(guiGraphics, arrowAlpha, 20, y, color);
             arrowOverlay.draw(guiGraphics, 20, y);
 
             guiGraphics.drawString(Minecraft.getInstance().font, row + 1 + ".",
@@ -98,25 +101,22 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
         CommonParts.arrowNormal48.draw(guiGraphics, WIDTH / 2 - 24 , 4);
     }
 
-    private static void drawColored(GuiGraphics guiGraphics, IDrawableStatic drawable, int x, int y, Colors color) {
-        int rgb = color.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
-
-        RenderSystem.enableBlend();
-        RenderSystem.defaultBlendFunc();
-        RenderSystem.setShaderColor(r, g, b, 1.0f);
-        drawable.draw(guiGraphics, x, y);
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-    }
-
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, TrailRecipe recipe, IFocusGroup focuses) {
-        recipe.getMainInput().asItem().ifPresent(sized ->
-                builder.addInputSlot(WIDTH / 2 - 50, 5)
+        recipe.getMainInput().content().map(
+                item -> builder.addInputSlot(WIDTH / 2 - 50, 5)
                         .setBackground(CommonParts.slot_normal, -1, -1)
-                        .addIngredients(sized.ingredient()));
+                        .addIngredients(item.ingredient()),
+                fluid -> {
+                    List<FluidStack> stacks = List.of(fluid.getFluids());
+
+                    return builder.addInputSlot(WIDTH / 2 - 50, 5)
+                            .setBackground(CommonParts.slot_normal, -1, -1)
+                            .addIngredients(NeoForgeTypes.FLUID_STACK, stacks)
+                            .addRichTooltipCallback((view, tooltip) ->
+                                    tooltip.add(Component.literal(fluid.amount() + "mb").withColor(0xFF808080)));
+                }
+        );
 
         ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), WIDTH / 2 + 33, 5, 20, Integer.MAX_VALUE);
 
@@ -144,15 +144,28 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
                         builder.addSlot(RecipeIngredientRole.CATALYST, x, y + DEVICE_SLOT_OFFSET)
                                 .addItemStacks(deviceBlocks);
                     }
+                    else {
+                        builder.addSlot(RecipeIngredientRole.CATALYST, x, y + DEVICE_SLOT_OFFSET)
+                                .addItemStack(new ItemStack(LucenticsItemRegister.NOTHING.asItem(), 1))
+                                .addRichTooltipCallback((view, tooltip) ->
+                                        tooltip.add(Component.translatable("jei.lucentics.info.missing_catalyst").withColor(0xFFFF8080)));
+                    }
                 });
 
-                ordering.ingredient().asItem().ifPresent(sized ->
+                ordering.ingredient().asItem().ifPresent(item ->
                         builder.addSlot(RecipeIngredientRole.CATALYST, x, y + ITEM_SLOT_OFFSET)
-                                .addItemStacks(List.of(sized.getItems()))
+                                .addItemStacks(List.of(item.getItems()))
                                 .addRichTooltipCallback((slotView, tooltip) -> {
-                                    if (ordering.notConsume()) {
-                                        tooltip.add(Component.translatable("jei.lucentics.info.not_consume"));
-                                    }
+                                    if (ordering.notConsume()) tooltip.add(Component.translatable("jei.lucentics.info.not_consume"));
+                                    else if (ordering.damageItem() > 0) tooltip.add(Component.translatable("jei.lucentics.info.damage_item", ordering.damageItem()));
+                                })
+                );
+                ordering.ingredient().asFluid().ifPresent(fluid ->
+                        builder.addSlot(RecipeIngredientRole.CATALYST, x, y + ITEM_SLOT_OFFSET)
+                                .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(fluid.getFluids()))
+                                .addRichTooltipCallback((slotView, tooltip) -> {
+                                    tooltip.add(Component.literal(fluid.amount() + "mb").withColor(0xFFA0A0A0));
+                                    if (ordering.notConsume()) tooltip.add(Component.translatable("jei.lucentics.info.not_consume"));
                                 })
                 );
             }

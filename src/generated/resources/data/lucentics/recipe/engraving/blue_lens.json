@@ -22,6 +22,7 @@
       "color": "sunlight",
       "inputs": [
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:cod"
@@ -31,6 +32,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:salmon"
@@ -40,6 +42,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:kelp"
@@ -49,6 +52,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:water_bucket"
@@ -58,6 +62,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "tag": "minecraft:boats"
@@ -67,6 +72,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:ink_sac"
@@ -76,6 +82,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:blue_stained_glass"

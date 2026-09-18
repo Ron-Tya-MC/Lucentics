@@ -19,6 +19,26 @@
     "lucentics:tank_light_copper",
     "lucentics:tank_light_copper_bold",
     "lucentics:prism_blank",
-    "lucentics:prism_ritual"
+    "lucentics:prism_blank_red",
+    "lucentics:prism_blank_blue",
+    "lucentics:prism_blank_green",
+    "lucentics:prism_blank_yellow",
+    "lucentics:prism_blank_magenta",
+    "lucentics:prism_blank_light_blue",
+    "lucentics:prism_blank_pink",
+    "lucentics:prism_blank_cyan",
+    "lucentics:prism_blank_lime",
+    "lucentics:prism_blank_gray",
+    "lucentics:prism_blank_light_gray",
+    "lucentics:prism_blank_brown",
+    "lucentics:prism_blank_purple",
+    "lucentics:prism_blank_orange",
+    "lucentics:prism_blank_white",
+    "lucentics:prism_blank_black",
+    "lucentics:prism_ritual",
+    "lucentics:prism_importing",
+    "lucentics:prism_exporting",
+    "lucentics:prism_io",
+    "lucentics:prism_dyeing"
   ]
 }

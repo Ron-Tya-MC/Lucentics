@@ -40,7 +40,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
     private ItemStack buffer;
     private boolean hasOutputItem;
     private final Integer maxStackSize;
-    public InjectorIHandler iHandler;
+    private final InjectorIHandler iHandler;
     private boolean blockMerge;
     private boolean metDayLightCondition;
 
@@ -92,6 +92,10 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
         list.addLast(getContainer());
         list.addLast(getBuffer());
         return list;
+    }
+
+    public InjectorIHandler getIHandler() {
+        return iHandler;
     }
 
     @Override

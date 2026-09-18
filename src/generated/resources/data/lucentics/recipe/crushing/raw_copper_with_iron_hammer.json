@@ -1,0 +1,45 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.stone.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.stone.hit",
+    "source": "block"
+  },
+  "damage_per_hit": 4,
+  "input": "minecraft:raw_copper_block",
+  "outputs": [
+    {
+      "content": {
+        "count": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 7,
+          "min_inclusive": 5
+        },
+        "item": {
+          "count": 1,
+          "id": "minecraft:raw_copper"
+        }
+      }
+    },
+    {
+      "content": {
+        "count": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 6,
+          "min_inclusive": 4
+        },
+        "item": {
+          "count": 1,
+          "id": "lucentics:copper_dust"
+        }
+      }
+    }
+  ],
+  "required_hit": 6,
+  "tool": {
+    "item": "lucentics:iron_hammer"
+  }
+}

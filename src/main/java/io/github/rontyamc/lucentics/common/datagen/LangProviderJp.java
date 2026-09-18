@@ -17,7 +17,7 @@ public class LangProviderJp extends LanguageProvider {
     }
 
     // $R記法 見本
-    //     "$R:item.lucentics;16_colors/_lens" : "%Rのレンズ"
+    //     "$R:item.lucentics.;16_colors/_lens" : "%Rのレンズ"
 
     @Override
     protected void addTranslations() {
@@ -60,7 +60,7 @@ public class LangProviderJp extends LanguageProvider {
 
         for (var color : colors) {
             refKey = "term.lucentics.colors." + color.getName();
-            actualKey = prefix + "." + color.getName() + suffix;
+            actualKey = prefix + color.getName() + suffix;
             refElement = json.get(refKey);
             if (refElement == null) {
                 throw new IllegalStateException("Missing reference key: " + refKey + " (required by " + actualKey + ")");

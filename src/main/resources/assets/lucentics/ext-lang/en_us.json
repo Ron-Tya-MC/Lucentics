@@ -1,7 +1,7 @@
 {
   "itemGroup.lucentics.ingredients": "Lucentics: Ingredients",
   "itemGroup.lucentics.blocks": "Lucentics: Blocks",
-  "itemGroup.lucentics.machines": "Lucentics: Machines",
+  "itemGroup.lucentics.functional_blocks": "Lucentics: Functional Blocks",
   "itemGroup.lucentics.prisms": "Lucentics: Prisms",
   "itemGroup.lucentics.tools": "Lucentics: Tools",
 
@@ -32,10 +32,12 @@
   "config.jade.plugin_lucentics.pedestal_ritual": "Ritual Pedestal",
 
 
-  "jei.lucentics.category.injector": "Light Injecting",
+  "jei.lucentics.category.injecting": "Light Injecting",
   "jei.lucentics.category.engraving": "Engraving",
   "jei.lucentics.category.crushing": "Crushing",
   "jei.lucentics.category.milling": "Milling",
+  "jei.lucentics.category.mixing": "Mixing",
+  "jei.lucentics.category.dyeing": "Dyeing",
 
   "jei.lucentics.info.daylight_condition": "DayLight: %s",
   "jei.lucentics.info.processing_duration": "%s Seconds",
@@ -46,6 +48,7 @@
   "jei.lucentics.info.damage_per_hits": "%s Damage",
   "jei.lucentics.info.count": "%s drop",
   "jei.lucentics.info.weight": "Weight: %s ( %s%% chance )",
-  "jei.lucentics.info.probability": "%s%% chance"
-
+  "jei.lucentics.info.probability": "%s%% chance",
+  "jei.lucentics.info.damage_item": "%s Damage",
+  "jei.lucentics.info.missing_catalyst": "Missing Catalyst"
 }

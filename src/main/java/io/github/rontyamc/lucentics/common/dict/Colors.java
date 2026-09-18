@@ -1,12 +1,18 @@
 package io.github.rontyamc.lucentics.common.dict;
 
+import com.mojang.serialization.Codec;
+import io.netty.buffer.ByteBuf;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.Item;
 import org.jetbrains.annotations.Nullable;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -45,6 +51,17 @@ public enum Colors implements StringRepresentable {
         this.colorCode = colorCode;
         this.dyeColor = dyeColor;
     }
+
+    public static final Codec<Colors> CODEC = Codec.STRING.comapFlatMap(
+            name -> Colors.byName(name)
+                    .map(com.mojang.serialization.DataResult::success)
+                    .orElseGet(() -> com.mojang.serialization.DataResult.error(() -> "Unknown color: " + name)),
+            Colors::getSerializedName
+    );
+
+    public static final StreamCodec<ByteBuf,Colors> STREAM_CODEC = ByteBufCodecs.STRING_UTF8.map(
+            name -> Colors.byName(name).orElse(Colors.SUNLIGHT), Colors::getSerializedName
+    );
 
     @Override
     public String getSerializedName() {
@@ -101,5 +118,19 @@ public enum Colors implements StringRepresentable {
         }
 
         return colors;
+    }
+
+    public static TagKey<Item> cTag(Colors color) {
+        if (color.equals(Colors.SUNLIGHT)) return null; // ありません
+        return TagKey.create(Registries.ITEM,
+                ResourceLocation.fromNamespaceAndPath("c", "dyes/" + color.getName()));
+    }
+
+    public static Colors byDyeColor(DyeColor dyeColor) {
+        if (dyeColor == null) return null;
+        for (Colors color : Colors.values()) {
+            if (color.getDyeColor() == dyeColor) return color;
+        }
+        return null;
     }
 }

@@ -2,13 +2,16 @@ package io.github.rontyamc.lucentics.common.behavior;
 
 import io.github.rontyamc.lucentics.blocks.prism.IPrismBehavior ;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.beam.BeamNode;
+import io.github.rontyamc.lucentics.common.beam.node.BeamNode;
+import io.github.rontyamc.lucentics.common.beam.node.ISchedulable;
+import io.github.rontyamc.lucentics.common.beam.node.NodeActivationContext;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -22,7 +25,7 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
 
     protected int beamLength = 0;
 
-    protected List<BeamNode> trail = List.of();
+    protected List<BeamNode> trail = new ArrayList<>();
     protected BeamNode endpoint = null;
     protected Colors color = Colors.SUNLIGHT;
 
@@ -67,10 +70,17 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
             triggerFullScan(serverLevel, facing);
         }
 
-        for (BeamNode node : trail) {
+        for (int i = 0; i < trail.size(); i++) {
+            BeamNode node = trail.get(i);
             BlockState state = serverLevel.getBlockState(node.pos());
-            if (state.getBlock() instanceof IPrismBehavior source) {
-                source.getPrismBehavior().activate(serverLevel, node.pos(), node.pos().above());
+            if (state.getBlock() instanceof ISchedulable schedulable) {
+                schedulable.getTicker().tickSchedule(serverLevel, node.pos());
+            }
+            if (state.getBlock() instanceof IPrismBehavior prism) {
+                if (prism.getRequiredColor().isPresent() && !prism.getRequiredColor().get().equals(color)) continue;
+
+                NodeActivationContext context = NodeActivationContext.create(trail, i, endpoint, color);
+                prism.getPrismBehavior().activate(serverLevel, node.pos(), node.pos().above(), context);
             }
         }
 
@@ -96,7 +106,7 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
 
             if (state.getBlock() instanceof IPrismBehavior) {
                 ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-                newTrail.add(new BeamNode(blockId, checkPos.immutable(), level.dimension()));
+                newTrail.add(new BeamNode(blockId, checkPos.immutable(), level.dimension(), false));
                 continue;
             }
 
@@ -104,13 +114,8 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
                 continue;
             }
 
-            BlockEntity be = level.getBlockEntity(checkPos);
-            if (be instanceof BaseBlockEntity base) {
-                if (base.findBehavior(b -> b instanceof ReceiveBehavior).isPresent()) {
-                    ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-                    newEndpoint = new BeamNode(blockId, checkPos.immutable(), level.dimension());
-                }
-            }
+            ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+            newEndpoint = new BeamNode(blockId, checkPos.immutable(), level.dimension(), true);
 
             reachedDistance = distance - 1;
             break;
@@ -119,13 +124,8 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
         if (newEndpoint == null) {
             BlockPos checkPos = origin.relative(direction, MAX_DISTANCE + 1);
             BlockState state = level.getBlockState(checkPos);
-            BlockEntity be = level.getBlockEntity(checkPos);
-            if (be instanceof BaseBlockEntity base) {
-                if (base.findBehavior(b -> b instanceof ReceiveBehavior).isPresent()) {
-                    ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
-                    newEndpoint = new BeamNode(blockId, checkPos.immutable(), level.dimension());
-                }
-            }
+            ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
+            if (!state.is(BlockTags.AIR)) newEndpoint = new BeamNode(blockId, checkPos.immutable(), level.dimension(), true);
         }
 
         this.trail = newTrail;

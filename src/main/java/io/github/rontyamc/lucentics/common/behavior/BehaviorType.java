@@ -15,7 +15,7 @@ public class BehaviorType<T extends BlockEntityBehavior> {
 
     public BehaviorType(String name) {
         int i = name.indexOf(":");
-        if  (i >= 0) this.id = ResourceLocation.tryParse(name);
+        if (i >= 0) this.id = ResourceLocation.tryParse(name);
         else this.id = ResourceLocation.tryParse(Lucentics.MOD_ID + ":" + name);
     }
 

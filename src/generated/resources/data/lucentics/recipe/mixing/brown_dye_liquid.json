@@ -1,0 +1,33 @@
+{
+  "type": "lucentics:mixing",
+  "input": {
+    "amount": 1000,
+    "fluid": "minecraft:water"
+  },
+  "outputs": [
+    {
+      "content": {
+        "amount": 1000,
+        "fluid": {
+          "amount": 1000,
+          "id": "lucentics:brown_dye_liquid"
+        }
+      }
+    }
+  ],
+  "processing_duration": 80,
+  "trail_inputs": [
+    {
+      "color": "blue",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "tag": "c:dyes/brown"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -18,6 +18,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.Arrays;
@@ -78,6 +79,14 @@ public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
         return input(input, 1);
     }
 
+    public TrailRecipeBuilder input(Fluid input, int amount) {
+        return input(SizedFluidIngredient.of(input, amount));
+    }
+
+    public TrailRecipeBuilder input(Fluid input) {
+        return input(input, FluidType.BUCKET_VOLUME);
+    }
+
     public TrailRecipeBuilder trail(TrailBuilder trailBuilder) {
         trails.add(trailBuilder.build());
         return this;
@@ -98,6 +107,7 @@ public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
         return this;
     }
 
+    // {鉄×1: weight 3, 鉄×2: weight 1}のように同じアイテムを1つのグループに入れると、JEI上で正しく表示されなくなってしまう
     public TrailRecipeBuilder outputGroup(OutputSpec... specs) {
         outputGroups.add(Arrays.stream(specs).map(OutputSpec::build).toList());
         return this;

@@ -2,11 +2,18 @@ package io.github.rontyamc.lucentics.common.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.Containers;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 
 import java.util.List;
@@ -62,5 +69,32 @@ public final class ItemUtil {
                 Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
             }
         }
+    }
+
+    public static boolean isItemBlock(Item item) {
+        return !Block.byItem(item).defaultBlockState().isAir();
+    }
+
+    public static boolean isIdInTag(ResourceLocation id, TagKey<Item> tagKey, Level level) {
+        return level.registryAccess().lookup(Registries.ITEM)
+                .flatMap(registry -> registry.get(ResourceKey.create(Registries.ITEM, id)))
+                .map(holder -> holder.is(tagKey))
+                .orElse(false);
+    }
+
+    public static List<ItemStack> itemsInItemTag(TagKey<Item> tagKey) {
+        Ingredient tagged = Ingredient.of(tagKey);
+
+        return List.of(tagged.getItems());
+    }
+
+    public static List<Item> itemsInBlockTag(TagKey<Block> tagKey, Level level) {
+        return level.registryAccess().lookup(Registries.BLOCK)
+                .flatMap(registry -> registry.get(tagKey))
+                .map(holderSet -> holderSet.stream()
+                        .map(holder -> holder.value().asItem())
+                        .filter(item -> !item.equals(Items.AIR))
+                        .toList())
+                .orElse(List.of());
     }
 }

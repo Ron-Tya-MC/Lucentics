@@ -2,7 +2,11 @@ package io.github.rontyamc.lucentics.common.util;
 
 import io.github.rontyamc.lucentics.common.FluidSlot;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
 
@@ -56,5 +60,12 @@ public final class FluidUtil {
 
     public static ResourceLocation getId(Supplier<? extends Fluid> output) {
         return BuiltInRegistries.FLUID.getKey(output.get());
+    }
+
+    public static boolean isIdInTag(ResourceLocation id, TagKey<Fluid> tagKey, Level level) {
+        return level.registryAccess().lookup(Registries.FLUID)
+                .flatMap(registry -> registry.get(ResourceKey.create(Registries.FLUID, id)))
+                .map(holder -> holder.is(tagKey))
+                .orElse(false);
     }
 }

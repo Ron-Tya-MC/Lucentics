@@ -2,7 +2,7 @@ package io.github.rontyamc.lucentics.blocks.emitter;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
-import io.github.rontyamc.lucentics.common.beam.BeamNode;
+import io.github.rontyamc.lucentics.common.beam.node.BeamNode;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.EmitBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
@@ -19,14 +19,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class EmitterBehavior extends EmitBehavior implements Clearable {
     public static final BehaviorType<EmitterBehavior> TYPE = new BehaviorType<>("emitter");
 
     private ItemStack lensContainer;
     private final Integer maxStackSize;
-    public EmitterIHandler iHandler;
+    private final EmitterIHandler iHandler;
 
     public EmitterBehavior(BaseBlockEntity be) {
         super(be);
@@ -42,6 +42,10 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     }
 
     public ItemStack getLensContainer() {return lensContainer == null ? ItemStack.EMPTY : lensContainer;}
+
+    public EmitterIHandler getIHandler() {
+        return iHandler;
+    }
 
     public void clearContent() {
         lensContainer = ItemStack.EMPTY;
@@ -62,7 +66,7 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     @Override
     protected void triggerFullScan(ServerLevel level, Direction facing) {
         Colors beamColor = getLensContainer().getItem() instanceof LensItem lens ? lens.getColor() : Colors.SUNLIGHT;
-        scan(level, getPos(), facing, List.of(), beamColor);
+        scan(level, getPos(), facing, new ArrayList<>(), beamColor);
         level.sendBlockUpdated(getPos(), blockEntity.getBlockState(), blockEntity.getBlockState(), 3);
     }
 
@@ -163,8 +167,8 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
         trail = nbt.contains("trail")
                 ? BeamNode.CODEC.listOf().parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get("trail"))
                   .resultOrPartial(Lucentics.LOGGER::error)
-                  .orElse(List.of())
-                : List.of();
+                  .orElse(new ArrayList<>())
+                : new ArrayList<>();
 
         endpoint = nbt.contains("endpoint")
                 ? BeamNode.CODEC.parse(registries.createSerializationContext(NbtOps.INSTANCE), nbt.get("endpoint"))

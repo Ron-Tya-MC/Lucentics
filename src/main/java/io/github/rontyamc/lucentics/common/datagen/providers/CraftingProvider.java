@@ -1,7 +1,9 @@
 package io.github.rontyamc.lucentics.common.datagen.providers;
 
+import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
+import io.github.rontyamc.lucentics.registers.LucenticsTagRegister;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 
@@ -153,6 +155,41 @@ public class CraftingProvider {
                         .pattern(" L ")
                         .pattern("LPL")
                         .pattern(" L "));
+
+        provider.generic(LucenticsBlockRegister.PRISM_IMPORTING).unlockedBy(LucenticsItemRegister.DAWNSTONE_DUST)
+                .shaped(b -> b.define('D', LucenticsItemRegister.DAWNSTONE_DUST.get())
+                        .define('G', Items.GLASS)
+                        .define('H', Items.HOPPER)
+                        .pattern("DHD")
+                        .pattern(" G ")
+                        .pattern("D D"));
+        provider.generic(LucenticsBlockRegister.PRISM_IMPORTING).unlockedBy(LucenticsBlockRegister.PRISM_BLANK)
+                .suffix("_from_blank")
+                .shaped(b -> b.define('P', LucenticsBlockRegister.PRISM_BLANK.get())
+                        .define('H', Items.HOPPER)
+                        .pattern("H")
+                        .pattern("P"));
+
+        provider.generic(LucenticsBlockRegister.PRISM_EXPORTING).unlockedBy(LucenticsItemRegister.DAWNSTONE_DUST)
+                .shaped(b -> b.define('D', LucenticsItemRegister.DAWNSTONE_DUST.get())
+                        .define('G', Items.GLASS)
+                        .define('R', Items.DROPPER)
+                        .pattern("DRD")
+                        .pattern(" G ")
+                        .pattern("D D"));
+        provider.generic(LucenticsBlockRegister.PRISM_EXPORTING).unlockedBy(LucenticsBlockRegister.PRISM_BLANK)
+                .suffix("_from_blank")
+                .shaped(b -> b.define('P', LucenticsBlockRegister.PRISM_BLANK.get())
+                        .define('D', Items.DROPPER)
+                        .pattern("D")
+                        .pattern("P"));
+
+        provider.generic(LucenticsBlockRegister.PRISM_DYEING).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+                .shaped(b -> b.define('P', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+                        .define('D', LucenticsTagRegister.LucenticsITags.DYES.tag)
+                        .pattern(" D ")
+                        .pattern("DPD")
+                        .pattern(" D "));
 
 
         provider.enterFolder("tools");

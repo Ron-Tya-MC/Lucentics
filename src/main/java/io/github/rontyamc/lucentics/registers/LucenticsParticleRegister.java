@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.registers;
 
 import com.mojang.serialization.MapCodec;
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.client.particle.FlowingGlowParticleOptions;
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.client.particle.SphereParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -39,6 +40,19 @@ public class LucenticsParticleRegister {
                 @Override
                 public StreamCodec<? super RegistryFriendlyByteBuf, SphereParticleOptions> streamCodec() {
                     return SphereParticleOptions.STREAM_CODEC;
+                }
+            });
+
+    public static final DeferredHolder<ParticleType<?>, ParticleType<FlowingGlowParticleOptions>> FLOWING_GLOW =
+            PARTICLE_TYPES.register("flowing_glow", () -> new ParticleType<>(false) {
+                @Override
+                public MapCodec<FlowingGlowParticleOptions> codec() {
+                    return FlowingGlowParticleOptions.CODEC;
+                }
+
+                @Override
+                public StreamCodec<? super RegistryFriendlyByteBuf, FlowingGlowParticleOptions> streamCodec() {
+                    return FlowingGlowParticleOptions.STREAM_CODEC;
                 }
             });
 

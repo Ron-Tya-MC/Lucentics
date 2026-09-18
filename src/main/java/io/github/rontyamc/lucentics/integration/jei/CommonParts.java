@@ -15,6 +15,12 @@ public class CommonParts {
     private static final ResourceLocation ARROW_NORMAL_60_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/normal_arrow_60.png");
     private static final ResourceLocation ARROW_NORMAL_48_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/normal_arrow_48.png");
 
+    private static final ResourceLocation ARROW_WAVE_LEFT_21_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/waving_arrow_left_21.png");
+    private static final ResourceLocation ARROW_WHITE_RIGHT_21_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/white_arrow_right_21.png");
+    private static final ResourceLocation ARROW_SHADOW_RIGHT_21_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/arrow_right_21_shadow.png");
+
+    private static final ResourceLocation UNDER_COVER_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/under_cover.png");
+
     public static IDrawableStatic slot_normal;
     public static IDrawableStatic slot_framed;
     public static IDrawableStatic slot_blue_blur;
@@ -23,6 +29,12 @@ public class CommonParts {
     public static IDrawableStatic arrowLight;
     public static IDrawableStatic arrowNormal60;
     public static IDrawableStatic arrowNormal48;
+
+    public static IDrawableStatic arrowWaveLeft21;
+    public static IDrawableStatic arrowWhiteRight21;
+    public static IDrawableStatic arrowShadowRight21;
+
+    public static IDrawableStatic underCover;
 
     private CommonParts() {}
 
@@ -53,6 +65,22 @@ public class CommonParts {
 
         arrowNormal48 = guiHelper.drawableBuilder(ARROW_NORMAL_48_TEXTURE, 0, 0, 48, 18)
                 .setTextureSize(48, 18)
+                .build();
+
+        arrowWaveLeft21 = guiHelper.drawableBuilder(ARROW_WAVE_LEFT_21_TEXTURE, 0, 0, 21, 20)
+                .setTextureSize(21, 20)
+                .build();
+
+        arrowWhiteRight21 = guiHelper.drawableBuilder(ARROW_WHITE_RIGHT_21_TEXTURE, 0, 0, 21, 20)
+                .setTextureSize(21, 20)
+                .build();
+
+        arrowShadowRight21 = guiHelper.drawableBuilder(ARROW_SHADOW_RIGHT_21_TEXTURE, 0, 0, 21, 20)
+                .setTextureSize(21, 20)
+                .build();
+
+        underCover = guiHelper.drawableBuilder(UNDER_COVER_TEXTURE, 0, 0, 20, 20)
+                .setTextureSize(20, 20)
                 .build();
     }
 }

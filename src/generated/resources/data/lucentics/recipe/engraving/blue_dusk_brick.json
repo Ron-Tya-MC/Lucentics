@@ -21,6 +21,7 @@
       "color": "blue",
       "inputs": [
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:blue_dye"
@@ -31,6 +32,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:blue_dye"
@@ -41,6 +43,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:blue_dye"
@@ -51,6 +54,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:blue_dye"
@@ -61,6 +65,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:blue_dye"

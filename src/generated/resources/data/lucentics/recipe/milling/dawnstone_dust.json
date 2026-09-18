@@ -21,11 +21,11 @@
       "color": "red",
       "inputs": [
         {
+          "damage_item": 1,
           "input": {
             "count": 1,
-            "item": "lucentics:copper_hammer"
+            "tag": "lucentics:hammers"
           },
-          "not_consume": true,
           "required_type": {
             "id": "lucentics:pedestal_ritual"
           }

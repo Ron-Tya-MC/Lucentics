@@ -16,9 +16,9 @@ public class SphereParticle extends TextureSheetParticle {
         this.zd = zd;
         this.sprites = sprites;
         this.setColor(red, green, blue);
-        this.quadSize = 0.1F;
+        this.quadSize = 0.1f;
         this.lifetime = 20;
-        this.gravity = 0.0F;
+        this.gravity = 0.0f;
         this.setSpriteFromAge(sprites);
     }
 

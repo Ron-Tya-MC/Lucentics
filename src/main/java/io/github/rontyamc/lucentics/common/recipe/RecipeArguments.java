@@ -81,17 +81,20 @@ public record RecipeArguments(
     public record OrderingInput(
             SizedThingIngredient ingredient,
             Optional<BehaviorType> requiredType,
+            int damageItem,
             boolean notConsume
     ) {
         public static final MapCodec<OrderingInput> CODEC = RecordCodecBuilder.mapCodec(ins -> ins.group(
                 SizedThingIngredient.CODEC.fieldOf("input").forGetter(OrderingInput::ingredient),
                 BehaviorType.CODEC.codec().optionalFieldOf("required_type").forGetter(OrderingInput::requiredType),
+                Codec.INT.fieldOf("damage_item").forGetter(OrderingInput::damageItem),
                 Codec.BOOL.optionalFieldOf("not_consume",false).forGetter(OrderingInput::notConsume)
         ).apply(ins, OrderingInput::new));
 
         public static final StreamCodec<RegistryFriendlyByteBuf, OrderingInput> STREAM_CODEC = StreamCodec.composite(
                 SizedThingIngredient.STREAM_CODEC, OrderingInput::ingredient,
                 BehaviorType.STREAM_CODEC.apply(ByteBufCodecs::optional), OrderingInput::requiredType,
+                ByteBufCodecs.VAR_INT, OrderingInput::damageItem,
                 ByteBufCodecs.BOOL, OrderingInput::notConsume,
                 OrderingInput::new
         );

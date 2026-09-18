@@ -47,6 +47,11 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
         return processingContinue;
     }
 
+    public void resetProcessingContinue(ServerLevel level) {
+        processingContinue = 0;
+        syncProgressToClient(level);
+    }
+
     public int getProcessingContinueMax() {
         return processingContinueMax;
     }
@@ -140,7 +145,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
     protected abstract Optional<RecipeHolder<TrailRecipe>> getCurrentRecipe(ServerLevel level, TrailRecipeInput input);
 
     protected void craft(ServerLevel level, TrailRecipe recipe, TrailRecipeInput input) {
-        Optional<List<TrailRecipe.ConsumptionEntry>> consumption = recipe.resolveConsumptionCached(input, level);
+        Optional<List<TrailRecipe.ConsumptionEntry>> consumption = recipe.resolveConsumption(input, level);
         if (consumption.isEmpty()) return;
 
         setContainer(getContainer().shrunken(recipe.getMainInput().amount()));
@@ -149,7 +154,11 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
         for (TrailRecipe.ConsumptionEntry entry : consumption.get()) {
             if (entry.notConsume()) {
                 catalysts.add(entry);
-            } else {
+            }
+            else if (entry.damageItem() > 0) {
+                entry.device().damageItem(entry.damageItem());
+            }
+            else {
                 entry.device().consume(entry.amount());
             }
         }

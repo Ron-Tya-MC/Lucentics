@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.registers;
 
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 
@@ -14,7 +15,15 @@ public class LucenticsRenderTypeRegister {
         TRANSLUCENT
     }
 
-    public record Entry<T>(Supplier<? extends T> value, Layer layer) {}
+    public record Entry<T>(Supplier<? extends T> value, Layer layer) {
+        public RenderType toRenderType() {
+            return switch (this.layer) {
+                case CUTOUT -> RenderType.cutout();
+                case CUTOUT_MIPPED -> RenderType.cutoutMipped();
+                case TRANSLUCENT -> RenderType.translucent();
+            };
+        }
+    }
 
     private static final List<Entry<Block>> BLOCKS = new ArrayList<>();
     private static final List<Entry<Fluid>> FLUIDS = new ArrayList<>();

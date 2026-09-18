@@ -22,6 +22,7 @@
       "color": "sunlight",
       "inputs": [
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:iron_pickaxe"
@@ -31,6 +32,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:iron_axe"
@@ -40,6 +42,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:iron_shovel"
@@ -49,6 +52,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:iron_sword"
@@ -58,6 +62,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:tnt"
@@ -67,6 +72,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:tnt_minecart"
@@ -76,6 +82,7 @@
           }
         },
         {
+          "damage_item": 0,
           "input": {
             "count": 1,
             "item": "minecraft:red_stained_glass"

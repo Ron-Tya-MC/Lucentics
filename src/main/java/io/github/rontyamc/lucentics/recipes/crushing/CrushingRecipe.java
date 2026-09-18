@@ -14,14 +14,18 @@ import java.util.List;
 import java.util.Optional;
 
 public class CrushingRecipe implements Recipe<CrushingRecipeInput> {
-
     protected final IRecipeInfo recipeInfo;
     protected final CrushingRecipeArguments arguments;
     protected NonNullList<List<RecipeArguments.WeightedOutput>> outputs;
+
     public CrushingRecipe(IRecipeInfo recipeInfo, CrushingRecipeArguments arguments) {
         this.recipeInfo = recipeInfo;
         this.arguments = arguments;
         this.outputs = arguments.outputs();
+    }
+
+    public CrushingRecipeArguments getArguments() {
+        return arguments;
     }
 
     @Override
@@ -70,9 +74,5 @@ public class CrushingRecipe implements Recipe<CrushingRecipeInput> {
     @Override
     public boolean isSpecial() {
         return true;
-    }
-
-    public CrushingRecipeArguments getArguments() {
-        return arguments;
     }
 }

@@ -8,11 +8,11 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 
 import java.util.function.BiFunction;
 
-public class CrushingRecipeSerializer<R extends CrushingRecipe> implements RecipeSerializer<R> {
-    private final MapCodec<R> codec;
-    private final StreamCodec<RegistryFriendlyByteBuf, R> streamCodec;
+public class CrushingRecipeSerializer implements RecipeSerializer<CrushingRecipe> {
+    private final MapCodec<CrushingRecipe> codec;
+    private final StreamCodec<RegistryFriendlyByteBuf, CrushingRecipe> streamCodec;
 
-    public CrushingRecipeSerializer(BiFunction<IRecipeInfo, CrushingRecipeArguments, R> factory, IRecipeInfo info) {
+    public CrushingRecipeSerializer(BiFunction<IRecipeInfo, CrushingRecipeArguments, CrushingRecipe> factory, IRecipeInfo info) {
         this.codec = CrushingRecipeArguments.CODEC.xmap(
                 args -> factory.apply(info, args),
                 recipe -> recipe.arguments
@@ -24,12 +24,12 @@ public class CrushingRecipeSerializer<R extends CrushingRecipe> implements Recip
     }
 
     @Override
-    public MapCodec<R> codec() {
+    public MapCodec<CrushingRecipe> codec() {
         return codec;
     }
 
     @Override
-    public StreamCodec<RegistryFriendlyByteBuf, R> streamCodec() {
+    public StreamCodec<RegistryFriendlyByteBuf, CrushingRecipe> streamCodec() {
         return streamCodec;
     }
 }

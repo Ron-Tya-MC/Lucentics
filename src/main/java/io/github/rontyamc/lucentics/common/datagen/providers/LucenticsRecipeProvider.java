@@ -1,10 +1,7 @@
 package io.github.rontyamc.lucentics.common.datagen.providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.common.datagen.builders.CrushingBuilder;
-import io.github.rontyamc.lucentics.common.datagen.builders.IdPathResolvable;
-import io.github.rontyamc.lucentics.common.datagen.builders.InjectingBuilder;
-import io.github.rontyamc.lucentics.common.datagen.builders.TrailRecipeBuilder;
+import io.github.rontyamc.lucentics.common.datagen.builders.*;
 import io.github.rontyamc.lucentics.common.recipe.SizedThingIngredient;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
@@ -46,6 +43,8 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         EngravingProvider.buildRecipes(this, recipeOutput);
         CrushingProvider.buildRecipes(this, recipeOutput);
         MillingProvider.buildRecipes(this, recipeOutput);
+        MixingProvider.buildRecipes(this, recipeOutput);
+        DyeingProvider.buildRecipes(this, recipeOutput);
 
         generatedRecipes.forEach(c -> c.register(recipeOutput));
     }
@@ -186,6 +185,24 @@ public class LucenticsRecipeProvider extends RecipeProvider {
                 b.setFolder("milling");
                 b.setRecipeInfo(LucenticsRecipeTypesRegister.MILLING_INFO);
                 b.save(output, createLocation("milling", b));
+            });
+        }
+
+        public GeneratedRecipe mixing(UnaryOperator<TrailRecipeBuilder> builder) {
+            return register(output -> {
+                TrailRecipeBuilder b =
+                        builder.apply(TrailRecipeBuilder.create(SizedThingIngredient.EMPTY, result.get(), count));
+                b.setFolder("mixing");
+                b.setRecipeInfo(LucenticsRecipeTypesRegister.MIXING_INFO);
+                b.save(output, createLocation("mixing", b));
+            });
+        }
+
+        public GeneratedRecipe dyeing(UnaryOperator<DyeingBuilder> builder) {
+            return register(output -> {
+                DyeingBuilder b =
+                        builder.apply(DyeingBuilder.create(result.get()));
+                b.save(output, createLocation("dyeing"));
             });
         }
     }

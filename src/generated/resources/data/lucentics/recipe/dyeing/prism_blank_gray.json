@@ -1,0 +1,12 @@
+{
+  "type": "lucentics:dyeing",
+  "color": "gray",
+  "input": {
+    "item": "lucentics:prism_blank"
+  },
+  "output": {
+    "count": 1,
+    "id": "lucentics:prism_blank_gray"
+  },
+  "required_mb": 2000
+}

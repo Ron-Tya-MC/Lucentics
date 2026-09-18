@@ -4,6 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
+import io.github.rontyamc.lucentics.Lucentics;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,4 +52,34 @@ public final class MiscUtil {
         if (percentage >= 10.0) return Math.round(percentage);
         return ceilSignificantDigits(percentage, 2);
     }
+
+    public static void perSecondInfo(Level level, String format, Object... arguments) {
+        if (level.getGameTime()%20 == 0) Lucentics.LOGGER.info(format, arguments);
+    }
+
+    public static String toPascalCase(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+
+        String[] words = input.split("[_-]");
+        StringBuilder result = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            String word = words[i];
+            if (!word.isEmpty()) {
+                result.append(Character.toUpperCase(word.charAt(0)))
+                        .append(word.substring(1).toLowerCase());
+                if (i < words.length - 1) result.append(" ");
+            }
+        }
+        return result.toString();
+    }
+
+    public static final StreamCodec<RegistryFriendlyByteBuf, Vec3> VEC3_STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.DOUBLE, Vec3::x,
+            ByteBufCodecs.DOUBLE, Vec3::y,
+            ByteBufCodecs.DOUBLE, Vec3::z,
+            Vec3::new
+    );
 }

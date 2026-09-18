@@ -40,7 +40,7 @@ public class CrushingRecipeCategory extends AbstractRecipeCategory<CrushingRecip
         int left = recipe.getOutputs().size() >= 2 ? LEFT_SPACE - 10 : LEFT_SPACE;
 
         CommonParts.arrowNormal60.draw(guiGraphics, left + 30, 24);
-        ProbabilisticOutputSlots.drawRangeBadges(guiGraphics, recipeSlotsView, recipe.getOutputs(), left + 102, 25, 20, 4);
+        ProbabilisticOutputSlots.drawRangeBadges(guiGraphics, recipeSlotsView, recipe.getOutputs(), left + 102, 25, 20, Integer.MAX_VALUE);
     }
 
     @Override
@@ -58,7 +58,7 @@ public class CrushingRecipeCategory extends AbstractRecipeCategory<CrushingRecip
                 .setBackground(CommonParts.slot_framed, -1, -1)
                 .addIngredients(recipe.getArguments().tool());
 
-        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), left + 102, 25, 20, 4);
+        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), left + 102, 25, 20, Integer.MAX_VALUE);
     }
 
     @Override

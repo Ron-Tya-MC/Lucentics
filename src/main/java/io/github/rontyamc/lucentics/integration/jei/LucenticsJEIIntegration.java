@@ -1,13 +1,12 @@
 package io.github.rontyamc.lucentics.integration.jei;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.integration.jei.recipe_categories.CrushingRecipeCategory;
-import io.github.rontyamc.lucentics.integration.jei.recipe_categories.MillingRecipeCategory;
+import io.github.rontyamc.lucentics.integration.jei.recipe_categories.*;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
+import io.github.rontyamc.lucentics.recipes.dyeing.DyeingRecipeCollector;
+import io.github.rontyamc.lucentics.recipes.dyeing.DyeingRecipeEntry;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
-import io.github.rontyamc.lucentics.integration.jei.recipe_categories.EngravingRecipeCategory;
-import io.github.rontyamc.lucentics.integration.jei.recipe_categories.InjectingRecipeCategory;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import mezz.jei.api.IModPlugin;
@@ -38,6 +37,10 @@ public class LucenticsJEIIntegration implements IModPlugin {
             RecipeType.create(Lucentics.MOD_ID, "crushing", CrushingRecipe.class);
     public static final RecipeType<TrailRecipe> MILLING =
             RecipeType.create(Lucentics.MOD_ID, "milling", TrailRecipe.class);
+    public static final RecipeType<TrailRecipe> MIXING =
+            RecipeType.create(Lucentics.MOD_ID, "mixing", TrailRecipe.class);
+    public static final RecipeType<DyeingRecipeEntry> DYEING =
+            RecipeType.create(Lucentics.MOD_ID, "dyeing", DyeingRecipeEntry.class);
 
     @Override
     public ResourceLocation getPluginUid() {
@@ -53,6 +56,8 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCategories(new EngravingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new CrushingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new MillingRecipeCategory(guiHelper));
+        registration.addRecipeCategories(new MixingRecipeCategory(guiHelper));
+        registration.addRecipeCategories(new DyeingRecipeCategory(guiHelper));
     }
 
     @Override
@@ -64,6 +69,9 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registerStream(registration, level, LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), ENGRAVING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.CRUSHING_TYPE.get(), CRUSHING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.MILLING_TYPE.get(), MILLING);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.MIXING_TYPE.get(), MILLING);
+
+        registration.addRecipes(DYEING, DyeingRecipeCollector.collect(level.getRecipeManager(), level.registryAccess()));
     }
 
     @Override
@@ -75,6 +83,13 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.PRISM_RITUAL);
 
         registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.MILLING_TABLE);
+        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.EMITTER);
+        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.PRISM_RITUAL);
+
+        registration.addRecipeCatalysts(DYEING, LucenticsBlockRegister.PRISM_DYEING);
+        registration.addRecipeCatalysts(DYEING, LucenticsBlockRegister.MIXING_TABLE);
+
+        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.MIXING_TABLE);
         registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.EMITTER);
         registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.PRISM_RITUAL);
     }

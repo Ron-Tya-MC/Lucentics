@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "tag": "c:dyes"
+    },
+    "P": {
+      "item": "lucentics:prism_blank_blue"
+    }
+  },
+  "pattern": [
+    " D ",
+    "DPD",
+    " D "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_dyeing"
+  }
+}

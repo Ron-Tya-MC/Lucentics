@@ -23,7 +23,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRec
     public InjectingRecipeCategory(IGuiHelper guiHelper) {
         super(
                 LucenticsJEIIntegration.INJECTING,
-                Component.translatable("jei.lucentics.category.injector"),
+                Component.translatable("jei.lucentics.category.injecting"),
                 guiHelper.createDrawableItemStack(LucenticsBlockRegister.INJECTOR.asStack()),
                 WIDTH,
                 HEIGHT

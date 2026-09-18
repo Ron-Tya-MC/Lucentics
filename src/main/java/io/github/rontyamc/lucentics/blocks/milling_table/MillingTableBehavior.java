@@ -48,7 +48,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     private boolean hasOutputItem;
     private final Integer maxStackSize;
     private final Supplier<Integer> maxBufferSize;
-    public MillingTableIHandler iHandler;
+    private final MillingTableIHandler iHandler;
     private boolean blockMerge;
 
     public MillingTableBehavior(BaseBlockEntity be) {
@@ -123,6 +123,10 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
             list.addLast(stack == null ? ItemStack.EMPTY : stack);
         }
         return list;
+    }
+
+    public MillingTableIHandler getIHandler() {
+        return iHandler;
     }
 
     @Override
@@ -216,7 +220,6 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     @Override
     public void acceptFluid(FluidStack stack) {}
 
-
     public void dropContents(Level level, BlockPos pos) {
         Vec3 vec = getCenter(pos);
         List<ItemStack> contents = getContents();
@@ -280,6 +283,13 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
 
     protected void craft(ServerLevel level, TrailRecipe recipe, TrailRecipeInput input) {
         super.craft(level, recipe, input);
+
+        Optional<List<TrailRecipe.ConsumptionEntry>> catalysts = getCachedCatalysts();
+        if (catalysts.isPresent()) {
+            for (TrailRecipe.ConsumptionEntry entry : catalysts.get()) {
+                entry.device().catalyst();
+            }
+        }
     }
 
     @Override
@@ -300,7 +310,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
         }
         if (processingTime %2 == 0) {
             float p = Mth.lerp(randomSource.nextFloat(), 0.1f, 0.3f);
-            level.playSound(null, pos, SoundEvents.TUFF_BREAK, SoundSource.BLOCKS, 0.4f, p);
+            level.playSound(null, pos, SoundEvents.TUFF_HIT, SoundSource.BLOCKS, 0.4f, p);
         }
     }
 
@@ -308,7 +318,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     protected void onCraftCompleted(ServerLevel level, BlockPos pos, List<Beam> beams) {
         spawnCraftCompleteParticles(level);
 
-        if (randomSource.nextFloat() < 0.5f) level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 0.4f, 0.5f);
+        level.playSound(null, pos, SoundEvents.TUFF_BREAK, SoundSource.BLOCKS, 0.4f, 0.5f);
     }
 
     @Override

@@ -121,5 +121,46 @@ public class CrushingProvider {
                         .breakSound(SoundSpec.of(SoundEvents.GRASS_BREAK, SoundSource.BLOCKS))
                         .damagePerHit(1)
                         .requiredHits(1));
+
+        provider.generic()
+                .suffix("_with_copper_hammer")
+                .crushing(b -> b.input(Blocks.RAW_COPPER_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_COPPER).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.COPPER_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.COPPER_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(8));
+        provider.generic()
+                .suffix("_with_iron_hammer")
+                .crushing(b -> b.input(Blocks.RAW_COPPER_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_COPPER).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.COPPER_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.IRON_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(6));
+        provider.generic()
+                .suffix("_with_diamond_hammer")
+                .crushing(b -> b.input(Blocks.RAW_COPPER_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_COPPER).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.COPPER_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.DIAMOND_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(2));
+        provider.generic()
+                .suffix("_with_golden_hammer")
+                .crushing(b -> b.input(Blocks.RAW_COPPER_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_COPPER).count(UniformInt.of(7,9)))
+                        .output(OutputSpec.of(LucenticsItemRegister.COPPER_DUST).count(UniformInt.of(2,10)))
+                        .tool(LucenticsItemRegister.GOLDEN_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(40)
+                        .requiredHits(1));
     }
 }

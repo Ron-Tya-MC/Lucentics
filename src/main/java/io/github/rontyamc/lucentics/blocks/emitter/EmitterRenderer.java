@@ -2,7 +2,8 @@ package io.github.rontyamc.lucentics.blocks.emitter;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
-import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.behavior.ReceiveBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LightTexture;
@@ -90,9 +91,13 @@ public class EmitterRenderer implements BlockEntityRenderer<EmitterBlockEntity> 
             }
             default -> {}
         }
-        poseStack.translate(-0.5, 0.0, -0.5);
-        //Lucentics.LOGGER.info("{}", behavior.getEndpoint());
-        if (behavior.getEndpoint() == null) poseStack.translate(0, -0.4375, 0);
+        poseStack.translate(-0.5, -0.4375, -0.5);
+        if (behavior.getEndpoint() != null) {
+            Level level = blockEntity.getLevel();
+            if (level.getBlockEntity(behavior.getEndpoint().pos()) instanceof BaseBlockEntity base) {
+                if (base.findBehavior(b -> b instanceof ReceiveBehavior).isPresent()) poseStack.translate(0, 0.4375, 0);
+            }
+        }
 
         BeaconRenderer.renderBeaconBeam(poseStack, bufferSource, BEAM_TEXTURE,
                 partialTick, 1.0f, gameTime, 0, length + 1, argb, 0.1f, 0.13f);

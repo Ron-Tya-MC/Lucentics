@@ -80,6 +80,7 @@ public class InjectingBuilder implements RecipeBuilder, IdPathResolvable {
         return this;
     }
 
+    // {鉄×1: weight 3, 鉄×2: weight 1}のように同じアイテムを1つのグループに入れると、JEI上で正しく表示されなくなってしまう
     public InjectingBuilder outputGroup(OutputSpec... specs) {
         outputGroups.add(Arrays.stream(specs).map(OutputSpec::build).toList());
         return this;

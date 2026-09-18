@@ -46,8 +46,8 @@ public class MillingTableBlockEntity extends BaseBlockEntity {
     }
 
     public float getNextRotationTable() {
-        rotation_table += getSpeed() * 8;
-        if (rotation_table >= 360) rotation_table -= 360.0f;
+        rotation_table -= getSpeed() * 8;
+        if (rotation_table <= 0) rotation_table += 360.0f;
         return rotation_table;
     }
 

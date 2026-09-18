@@ -42,7 +42,7 @@ public class MixingTableBehavior extends TrailCraftingBehavior implements Cleara
     private final List<FluidSlot> buffer = new ArrayList<>();
     private boolean hasOutputItem;
     private final Supplier<Integer> maxBufferSize;
-    public MixingTableFHandler fHandler;
+    private final MixingTableFHandler fHandler;
     private boolean blockMerge;
 
     public MixingTableBehavior(BaseBlockEntity be) {
@@ -127,6 +127,10 @@ public class MixingTableBehavior extends TrailCraftingBehavior implements Cleara
             list.addLast(stack == null ? FluidStack.EMPTY : stack);
         }
         return list;
+    }
+
+    public MixingTableFHandler getFHandler() {
+        return fHandler;
     }
 
     @Override

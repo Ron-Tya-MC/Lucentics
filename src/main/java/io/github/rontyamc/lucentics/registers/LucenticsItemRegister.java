@@ -78,6 +78,12 @@ public class LucenticsItemRegister {
 
     public static final ItemEntry<Item> DAWNSTONE_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dawnstone_dust", Item::new)
             .register();
+    public static final ItemEntry<Item> COPPER_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "copper_dust", Item::new)
+            .register();
+    public static final ItemEntry<Item> IRON_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "iron_dust", Item::new)
+            .register();
+    public static final ItemEntry<Item> GOLD_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "gold_dust", Item::new)
+            .register();
 
     public static final ItemEntry<Item> COPPER_HAMMER = REGISTRATE
             .lucenticsItemBuilder(CategoryType.TOOLS, "copper_hammer", Item::new)

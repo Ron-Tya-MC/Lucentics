@@ -8,6 +8,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.material.Fluid;
 import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 
 public class OutputSpec {
     private final Either<ItemStack, FluidStack> stack;
@@ -29,7 +30,7 @@ public class OutputSpec {
     }
 
     public static OutputSpec of(Fluid fluid) {
-        return of(new FluidStack(fluid, 1));
+        return of(new FluidStack(fluid, FluidType.BUCKET_VOLUME));
     }
 
     public static OutputSpec of(FluidStack stack) {

@@ -5,6 +5,7 @@ import io.github.rontyamc.lucentics.blocks.IBlockEntities;
 import io.github.rontyamc.lucentics.common.SlotInteractions;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -85,7 +86,7 @@ public class MillingTableBlock extends BaseEntityBlock implements IBlockEntities
         if (!(level.getBlockEntity(pos) instanceof MillingTableBlockEntity be)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        if (level.isClientSide()) return ItemInteractionResult.SUCCESS;
+        if (!(level instanceof ServerLevel serverLevel)) return ItemInteractionResult.SUCCESS;
 
         MillingTableBehavior behavior = be.getMillingTableBehavior();
         ItemStack container = behavior.getContainer().asItemOrEmpty();
@@ -109,6 +110,7 @@ public class MillingTableBlock extends BaseEntityBlock implements IBlockEntities
             case EXTRACTED -> {
                 player.getInventory().placeItemBackInInventory(result.resultStack());
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 1f);
+                behavior.resetProcessingContinue(serverLevel);
                 handled = true;
             }
             case SWAPPED -> {
@@ -116,6 +118,7 @@ public class MillingTableBlock extends BaseEntityBlock implements IBlockEntities
                 else player.getInventory().placeItemBackInInventory(result.resultStack());
                 result.fallbackStack().ifPresent(fallback -> player.getInventory().placeItemBackInInventory(fallback));
                 level.playSound(null, pos, SoundEvents.ITEM_PICKUP, SoundSource.BLOCKS, 1f, 1.5f);
+                behavior.resetProcessingContinue(serverLevel);
                 handled = true;
             }
             case NONE -> {}

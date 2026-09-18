@@ -20,7 +20,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
 
     private ItemStack content = ItemStack.EMPTY;
     private final Integer maxStackSize;
-    public PedestalIHandler iHandler;
+    private final PedestalIHandler iHandler;
     private boolean blockMerge;
 
     public PedestalBehavior(BaseBlockEntity be) {
@@ -52,6 +52,10 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
 
     public ItemStack getContent() {
         return content;
+    }
+
+    public PedestalIHandler getIHandler() {
+        return iHandler;
     }
 
     @Override

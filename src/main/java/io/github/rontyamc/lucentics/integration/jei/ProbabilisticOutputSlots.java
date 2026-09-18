@@ -8,11 +8,14 @@ import mezz.jei.api.gui.drawable.IDrawableStatic;
 import mezz.jei.api.gui.ingredient.IRecipeSlotView;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
 import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +29,11 @@ public class ProbabilisticOutputSlots {
         int size = Math.min(groups.size(), maxSlots);
         for (int i = 0; i < size; i++) {
             List<WeightedOutput> group = groups.get(i);
-            List<ItemStack> displayStacks = collectDisplayStacks(group);
-            if (displayStacks.isEmpty()) continue;
+
+            List<ItemStack> displayItems = collectDisplayItems(group);
+            List<FluidStack> displayFluids = collectDisplayFluids(group);
+
+            if (displayItems.isEmpty() && displayFluids.isEmpty()) continue;
 
             int slotX = startX + (i % 2) * spacingX;
             int slotY = size <= 2 ? startY : startY - (i / 2) * spacingX;
@@ -41,18 +47,26 @@ public class ProbabilisticOutputSlots {
             builder.addOutputSlot(slotX, slotY)
                     .setSlotName(slotName(i))
                     .setBackground(background, -1, -1)
-                    .addItemStacks(displayStacks)
+                    .addItemStacks(displayItems)
+                    .addIngredients(NeoForgeTypes.FLUID_STACK, displayFluids)
                     .addRichTooltipCallback((view, tooltip) -> appendTooltip(view, tooltip, group, totalWeight));
         }
     }
 
-    private static List<ItemStack> collectDisplayStacks(List<WeightedOutput> group) {
+    private static List<ItemStack> collectDisplayItems(List<WeightedOutput> group) {
         List<ItemStack> stacks = new ArrayList<>();
         for (WeightedOutput w : group) {
             w.content().left().ifPresent(item -> {
-                int min = item.count().getMinValue();
-                int max = item.count().getMaxValue();
                 stacks.add(item.stack().copyWithCount(1));
+            });
+        }
+        return stacks;
+    }
+    private static List<FluidStack> collectDisplayFluids(List<WeightedOutput> group) {
+        List<FluidStack> stacks = new ArrayList<>();
+        for (WeightedOutput w : group) {
+            w.content().right().ifPresent(fluid -> {
+                stacks.add(fluid.stack().copyWithAmount(FluidType.BUCKET_VOLUME));
             });
         }
         return stacks;
@@ -69,10 +83,7 @@ public class ProbabilisticOutputSlots {
             Optional<IRecipeSlotView> slotView = recipeSlotsView.findSlotByName(slotName(i));
             if (slotView.isEmpty()) continue;
 
-            Optional<ItemStack> displayed = slotView.get().getDisplayedItemStack();
-            if (displayed.isEmpty()) continue;
-
-            String label = findMatchingRangeLabel(group, displayed.get());
+            String label = findMatchingRangeLabel(group, slotView.get());
             if (label == null) continue;
 
             int slotX = startX + (i % 2) * spacingX;
@@ -91,11 +102,12 @@ public class ProbabilisticOutputSlots {
         }
     }
 
-    private static String findMatchingRangeLabel(List<WeightedOutput> group, ItemStack displayed) {
-        WeightedOutput matchedOutput = findMatchingOutput(group, displayed);
+    private static String findMatchingRangeLabel(List<WeightedOutput> group, IRecipeSlotView view) {
+        WeightedOutput matchedOutput = findMatchingOutput(group, view);
         if (matchedOutput == null) return null;
 
         Optional<WeightedOutput.ItemOutput> item = matchedOutput.content().left();
+        if (item.isEmpty()) return null;
 
         int min = item.get().count().getMinValue();
         int max = item.get().count().getMaxValue();
@@ -103,13 +115,23 @@ public class ProbabilisticOutputSlots {
         return min == max ? String.valueOf(min) : min + "-" + max;
     }
 
-    private static WeightedOutput findMatchingOutput(List<WeightedOutput> group, ItemStack displayed) {
-        for (WeightedOutput w : group) {
-            Optional<WeightedOutput.ItemOutput> item = w.content().left();
-            if (item.isPresent() && ItemStack.isSameItem(item.get().stack(), displayed)) {
-                return w;
+    private static WeightedOutput findMatchingOutput(List<WeightedOutput> group, IRecipeSlotView view) {
+        Optional<ItemStack> item = view.getDisplayedItemStack();
+        if (item.isPresent()) {
+            for (WeightedOutput w : group) {
+                var output = w.content().left();
+                if (output.isPresent() && ItemStack.isSameItem(output.get().stack(), item.get())) return w;
             }
         }
+
+        Optional<FluidStack> fluid = view.getDisplayedIngredient(NeoForgeTypes.FLUID_STACK);
+        if (fluid.isPresent()) {
+            for (WeightedOutput w : group) {
+                var output = w.content().right();
+                if (output.isPresent() && FluidStack.isSameFluid(output.get().stack(), fluid.get())) return w;
+            }
+        }
+
         return null;
     }
 
@@ -118,25 +140,38 @@ public class ProbabilisticOutputSlots {
     }
 
     private static void appendTooltip(IRecipeSlotView view, ITooltipBuilder tooltip, List<WeightedOutput> group, int totalWeight) {
-        Optional<ItemStack> displayed = view.getDisplayedItemStack();
-        if (displayed.isEmpty()) return;
-
-        WeightedOutput matchedOutput = findMatchingOutput(group, displayed.get());
+        WeightedOutput matchedOutput = findMatchingOutput(group, view);
         if (matchedOutput == null) return;
 
-        matchedOutput.content().left().ifPresent(item -> {
+        matchedOutput.content().map(item -> {
             Component countLabel = item.count().getMinValue() != item.count().getMaxValue()
-                    ? Component.translatable("jei.lucentics.info.count", item.count().getMinValue() + "-" + item.count().getMaxValue())
+                    ? Component.translatable("jei.lucentics.info.count", item.count().getMinValue() + "-" + item.count().getMaxValue()).withColor(0xCCFFCC)
                     : Component.empty();
             Component weightLabel = group.size() > 1
-                    ? Component.translatable("jei.lucentics.info.weight", matchedOutput.weight(), MiscUtil.shapePercentage(100.0 * matchedOutput.weight() / totalWeight))
+                    ? Component.translatable("jei.lucentics.info.weight", matchedOutput.weight(), MiscUtil.shapePercentage(100.0 * matchedOutput.weight() / totalWeight)).withColor(0xCCCCFF)
                     : Component.empty();
             Component probabilityLabel = matchedOutput.probability() < 1.0f
-                    ? Component.translatable("jei.lucentics.info.probability", MiscUtil.shapePercentage(100.0 * matchedOutput.probability()))
+                    ? Component.translatable("jei.lucentics.info.probability", MiscUtil.shapePercentage(100.0 * matchedOutput.probability())).withColor(0xFFFFCC)
                     : Component.empty();
             tooltip.add(countLabel);
             tooltip.add(weightLabel);
             tooltip.add(probabilityLabel);
+            return null;
+        },
+        fluid -> {
+            Component countLabel = fluid.amount().getMinValue() != fluid.amount().getMaxValue()
+                    ? Component.translatable("jei.lucentics.info.count", fluid.amount().getMinValue() + "-" + fluid.amount().getMaxValue()).withColor(0xCCFFCC)
+                    : Component.empty();
+            Component weightLabel = group.size() > 1
+                    ? Component.translatable("jei.lucentics.info.weight", matchedOutput.weight(), MiscUtil.shapePercentage(100.0 * matchedOutput.weight() / totalWeight)).withColor(0xCCCCFF)
+                    : Component.empty();
+            Component probabilityLabel = matchedOutput.probability() < 1.0f
+                    ? Component.translatable("jei.lucentics.info.probability", MiscUtil.shapePercentage(100.0 * matchedOutput.probability())).withColor(0xFFFFCC)
+                    : Component.empty();
+            tooltip.add(countLabel);
+            tooltip.add(weightLabel);
+            tooltip.add(probabilityLabel);
+            return null;
         });
     }
 }

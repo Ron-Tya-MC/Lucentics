@@ -42,7 +42,8 @@ public class LucenticsTagRegister {
         INGOTS(TagLocation.COMMON),
         DUSK_BRICKS,
         LIGHT_COPPERS,
-        LENSES;
+        LENSES,
+        DYES(TagLocation.COMMON);
 
         public final TagKey<Item> tag;
 
@@ -63,7 +64,9 @@ public class LucenticsTagRegister {
         DUSK_BRICKS,
         LIGHT_COPPER_BLOCKS,
         PRISMS,
-        PEDESTALS;
+        PEDESTALS,
+        PRISM_RITUAL,
+        PEDESTAL_RITUAL;
 
         public final TagKey<Block> tag;
 

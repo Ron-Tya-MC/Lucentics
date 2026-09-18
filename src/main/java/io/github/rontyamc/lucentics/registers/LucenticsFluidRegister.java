@@ -6,13 +6,20 @@ import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.util.ModelUtil;
 import io.github.rontyamc.lucentics.fluids.TintedTranslucentFluidType;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsFTags;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.level.material.Fluid;
+import net.minecraft.world.level.material.Fluids;
 import net.neoforged.neoforge.fluids.BaseFlowingFluid;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 public class LucenticsFluidRegister {
     public static final LucenticsRegistrate REGISTRATE = Lucentics.registrate();
+
+    public static Map<Fluid, Colors> coloredFluids = new HashMap<>();
 
     public static final Map<Colors, FluidEntry<BaseFlowingFluid.Flowing>> DYE_LIQUIDS = registerDyeLiquids();
 
@@ -70,5 +77,59 @@ public class LucenticsFluidRegister {
     }
 
     public static void register() {
+    }
+
+    // 初期化
+    private static Map<Fluid, Colors> fluidColorMap() {
+        if (coloredFluids.isEmpty()) {
+            Map<Fluid, Colors> map = new HashMap<>();
+            DYE_LIQUIDS.forEach((color, entry) -> {
+                BaseFlowingFluid.Flowing flowing = entry.get();
+                map.put(flowing.getSource(), color);
+                map.put(flowing, color);
+            });
+            COLOQUIDS.forEach((color, entry) -> {
+                BaseFlowingFluid.Flowing flowing = entry.get();
+                map.put(flowing.getSource(), color);
+                map.put(flowing, color);
+            });
+            coloredFluids = map;
+        }
+        return coloredFluids;
+    }
+
+    /**
+     * 予め{@link LucenticsFluidRegister#registerFluidColor(Fluid fluid, Colors color)}等を用いてHashMapに登録した液体の色を取得する。
+     *
+     * @param fluid 色を取得したい液体
+     *
+     * @return その液体の色(存在すれば)
+     */
+    public static Optional<Colors> getColor(Fluid fluid) {
+
+        if (fluid == null || fluid == Fluids.EMPTY) return Optional.empty();
+        return Optional.ofNullable(fluidColorMap().get(fluid));
+    }
+
+    /**
+     * 色付き流体の、流体とその色をHashMapに登録する。
+     * {@link LucenticsFluidRegister#getColor(Fluid fluid)}を使うことで登録した色を得られる。
+     *
+     * @param fluid 登録したい色付き流体。
+     * @param color 登録したい流体の色。
+     */
+    public static void registerFluidColor(Fluid fluid, Colors color) {
+        if (fluid == null || fluid == Fluids.EMPTY || color == null) return;
+        fluidColorMap().put(fluid, color);
+    }
+
+    /**
+     * {@link LucenticsFluidRegister#registerFluidColor(Fluid fluid, Colors color)}のDyeColorで登録するオーバーロード。
+     *
+     * @param fluid 登録したい色付き流体。
+     * @param dyeColor 登録したい流体の色。
+     */
+    public static void registerFluidColor(Fluid fluid, DyeColor dyeColor) {
+        registerFluidColor(fluid, Colors.byDyeColor(dyeColor));
     }
 }

@@ -8,13 +8,13 @@ import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
 import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
+import io.github.rontyamc.lucentics.client.particle.FlowingGlowParticle;
 import io.github.rontyamc.lucentics.client.particle.GlowParticle;
 import io.github.rontyamc.lucentics.client.particle.SphereParticle;
 import io.github.rontyamc.lucentics.common.datagen.AddRawLang;
 import io.github.rontyamc.lucentics.network.LucenticsNetwork;
 import io.github.rontyamc.lucentics.registers.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.CreativeModeTab;
@@ -95,37 +95,37 @@ public class Lucentics {
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.INJECTOR.get(),
-                (be, side) -> be.getInjectorBehavior().iHandler
+                (be, side) -> be.getInjectorBehavior().getIHandler()
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.EMITTER.get(),
-                (be, side) -> be.getEmitterBehavior().iHandler
+                (be, side) -> be.getEmitterBehavior().getIHandler()
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(),
-                (be, side) -> be.getEngravingTableBehavior().iHandler
+                (be, side) -> be.getEngravingTableBehavior().getIHandler()
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(),
-                (be, side) -> be.getPedestalRitualBehavior().iHandler
+                (be, side) -> be.getPedestalRitualBehavior().getIHandler()
         );
         event.registerBlockEntity(
                 Capabilities.FluidHandler.BLOCK,
                 LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(),
-                (be, side) -> be.getTankLightCopperBehavior().fHandler
+                (be, side) -> be.getTankLightCopperBehavior().getFHandler()
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.MILLING_TABLE.get(),
-                (be, side) -> be.getMillingTableBehavior().iHandler
+                (be, side) -> be.getMillingTableBehavior().getIHandler()
         );
         event.registerBlockEntity(
                 Capabilities.FluidHandler.BLOCK,
                 LucenticsBlockEntityRegister.MIXING_TABLE.get(),
-                (be, side) -> be.getMixingTableBehavior().fHandler
+                (be, side) -> be.getMixingTableBehavior().getFHandler()
         );
     }
 
@@ -144,20 +144,12 @@ public class Lucentics {
         static void onClientSetup(FMLClientSetupEvent event) {
             event.enqueueWork(() -> {
                 for (var entry : LucenticsRenderTypeRegister.getBlocks()) {
-                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), toRenderType(entry.layer()));
+                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), entry.toRenderType());
                 }
                 for (var entry : LucenticsRenderTypeRegister.getFluids()) {
-                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), toRenderType(entry.layer()));
+                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), entry.toRenderType());
                 }
             });
-        }
-
-        private static RenderType toRenderType(LucenticsRenderTypeRegister.Layer layer) {
-            return switch (layer) {
-                case CUTOUT -> RenderType.cutout();
-                case CUTOUT_MIPPED -> RenderType.cutoutMipped();
-                case TRANSLUCENT -> RenderType.translucent();
-            };
         }
 
         @SubscribeEvent
@@ -175,6 +167,7 @@ public class Lucentics {
         static void registerParticleProviders(RegisterParticleProvidersEvent event) {
             event.registerSpriteSet(LucenticsParticleRegister.SPHERE.get(), SphereParticle.Provider::new);
             event.registerSpriteSet(LucenticsParticleRegister.GLOW.get(), GlowParticle.Provider::new);
+            event.registerSpriteSet(LucenticsParticleRegister.FLOWING_GLOW.get(), FlowingGlowParticle.Provider::new);
         }
     }
 }

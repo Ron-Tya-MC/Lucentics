@@ -56,16 +56,16 @@ public class LucenticsTabRegister {
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_BLOCKS, CategoryType.BLOCKS))
             .build());
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_MACHINES = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.MACHINES, () -> CreativeModeTab.builder()
-            .title(Component.translatable("itemGroup.lucentics.machines"))
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_FUNCTIONAL = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.FUNCTIONAL, () -> CreativeModeTab.builder()
+            .title(Component.translatable("itemGroup.lucentics.functional_blocks"))
             .withTabsBefore(CREATIVE_MODE_TAB_BLOCKS.getKey())
             .icon(LucenticsBlockRegister.INJECTOR::asStack)
-            .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_MACHINES, CategoryType.MACHINES))
+            .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_FUNCTIONAL, CategoryType.FUNCTIONAL))
             .build());
 
     public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_PRISMS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.PRISMS, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.prisms"))
-            .withTabsBefore(CREATIVE_MODE_TAB_MACHINES.getKey())
+            .withTabsBefore(CREATIVE_MODE_TAB_FUNCTIONAL.getKey())
             .icon(LucenticsBlockRegister.PRISM_RITUAL::asStack)
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_PRISMS, CategoryType.PRISMS))
             .build());
@@ -174,7 +174,7 @@ public class LucenticsTabRegister {
         public static final String NONE = "none";
         public static final String INGREDIENTS = "ingredients";
         public static final String BLOCKS = "blocks";
-        public static final String MACHINES = "machines";
+        public static final String FUNCTIONAL = "functional_blocks";
         public static final String PRISMS = "prisms";
         public static final String TOOLS = "tools";
 

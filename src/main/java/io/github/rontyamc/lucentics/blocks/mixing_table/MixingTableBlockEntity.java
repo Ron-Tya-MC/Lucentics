@@ -11,14 +11,12 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.neoforged.neoforge.fluids.FluidType;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 public class MixingTableBlockEntity extends BaseBlockEntity {
     MixingTableBehavior behavior;
-    MixingTableTankBehavior tankBehavior;
 
     public MixingTableBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
         super(type, pos, state);
@@ -27,13 +25,11 @@ public class MixingTableBlockEntity extends BaseBlockEntity {
     @Override
     public void attachBehavior(List<BlockEntityBehavior> behaviors) {
         behaviors.add(behavior = new MixingTableBehavior(this));
-        behaviors.add(tankBehavior = new MixingTableTankBehavior(this, 4 * FluidType.BUCKET_VOLUME));
     }
 
     public MixingTableBehavior getMixingTableBehavior() {
         return behavior;
     }
-    public MixingTableTankBehavior getTankBehavior() { return tankBehavior; }
 
     public void dropContents(Level level, BlockPos pos) {
         behavior.dropContents(level, pos);

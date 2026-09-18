@@ -19,7 +19,7 @@ public class TankBehavior extends BlockEntityBehavior implements INodeDevice, Cl
     public static final BehaviorType<TankBehavior> TYPE = new BehaviorType<>("tank");
 
     private final FluidSlot tank;
-    public TankFHandler fHandler;
+    private final TankFHandler fHandler;
 
     public TankBehavior(BaseBlockEntity be, int capacity) {
         super(be);
@@ -45,6 +45,10 @@ public class TankBehavior extends BlockEntityBehavior implements INodeDevice, Cl
 
     public FluidStack getContent() {
         return tank.getContent();
+    }
+
+    public TankFHandler getFHandler() {
+        return fHandler;
     }
 
     @Override

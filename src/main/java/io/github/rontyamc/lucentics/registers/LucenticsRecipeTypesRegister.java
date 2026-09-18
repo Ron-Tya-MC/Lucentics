@@ -6,6 +6,9 @@ import io.github.rontyamc.lucentics.common.recipe.RecipeInfo;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipeInput;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipeSerializer;
+import io.github.rontyamc.lucentics.recipes.dyeing.DyeingRecipe;
+import io.github.rontyamc.lucentics.recipes.dyeing.DyeingRecipeInput;
+import io.github.rontyamc.lucentics.recipes.dyeing.DyeingRecipeSerializer;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipeInput;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
@@ -59,9 +62,16 @@ public class LucenticsRecipeTypesRegister {
     public static final DeferredHolder<RecipeType<?>, RecipeType<CrushingRecipe>> CRUSHING_TYPE =
             TYPE.register("crushing", () -> RecipeType.simple(Lucentics.defaultLocation("crushing")));
     public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<CrushingRecipe>> CRUSHING_SERIALIZER =
-            SERIALIZER.register("crushing", () -> new CrushingRecipeSerializer<>(CrushingRecipe::new, LucenticsRecipeTypesRegister.CRUSHING_INFO));
+            SERIALIZER.register("crushing", () -> new CrushingRecipeSerializer(CrushingRecipe::new, LucenticsRecipeTypesRegister.CRUSHING_INFO));
     public static final RecipeInfo<CrushingRecipeInput, CrushingRecipe> CRUSHING_INFO =
             new RecipeInfo<>(Lucentics.defaultLocation("crushing"), CRUSHING_TYPE, CRUSHING_SERIALIZER);
+
+    public static final DeferredHolder<RecipeType<?>, RecipeType<DyeingRecipe>> DYEING_TYPE =
+            TYPE.register("dyeing", () -> RecipeType.simple(Lucentics.defaultLocation("dyeing")));
+    public static final DeferredHolder<RecipeSerializer<?>, RecipeSerializer<DyeingRecipe>> DYEING_SERIALIZER =
+            SERIALIZER.register("dyeing", () -> new DyeingRecipeSerializer(DyeingRecipe::new, LucenticsRecipeTypesRegister.DYEING_INFO));
+    public static final RecipeInfo<DyeingRecipeInput, DyeingRecipe> DYEING_INFO =
+            new RecipeInfo<>(Lucentics.defaultLocation("dyeing"), DYEING_TYPE, DYEING_SERIALIZER);
 
     public static void register(IEventBus bus) {
         SERIALIZER.register(bus);

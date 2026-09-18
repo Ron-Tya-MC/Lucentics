@@ -126,17 +126,18 @@ public class CrushingBuilder implements RecipeBuilder, IdPathResolvable {
         return this;
     }
 
+    // {鉄×1: weight 3, 鉄×2: weight 1}のように同じアイテムを1つのグループに入れると、JEI上で正しく表示されなくなってしまう
     public CrushingBuilder outputGroup(OutputSpec... specs) {
         outputGroups.add(Arrays.stream(specs).map(OutputSpec::build).toList());
         return this;
     }
 
-    public CrushingBuilder output(ItemLike item) {
-        return output(OutputSpec.of(item));
-    }
-
     public CrushingBuilder output(ItemLike item, int count) {
         return output(OutputSpec.of(item).amount(count));
+    }
+
+    public CrushingBuilder output(ItemLike item) {
+        return output(OutputSpec.of(item));
     }
 
     @Override

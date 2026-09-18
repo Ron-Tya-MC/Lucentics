@@ -2,7 +2,7 @@ package io.github.rontyamc.lucentics.common.behavior;
 
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.beam.Beam;
-import io.github.rontyamc.lucentics.common.beam.BeamNode;
+import io.github.rontyamc.lucentics.common.beam.node.BeamNode;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 
 import java.util.ArrayList;
