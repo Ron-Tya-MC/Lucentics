@@ -22,7 +22,7 @@ public class MixingRecipeCategory extends TrailRecipeCategory {
 
     @Override
     public void draw(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        drawArrowNormal(guiGraphics);
+        drawArrowNormal(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
     }
 

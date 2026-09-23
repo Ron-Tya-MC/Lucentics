@@ -23,7 +23,7 @@ public class EngravingRecipeCategory extends TrailRecipeCategory {
 
     @Override
     public void draw(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        drawArrowLight(guiGraphics);
+        drawArrowLight(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
     }
 

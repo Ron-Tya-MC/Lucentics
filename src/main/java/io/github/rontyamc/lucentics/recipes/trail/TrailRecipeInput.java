@@ -20,6 +20,11 @@ public record TrailRecipeInput(ThingStack mainInput, List<Beam> beams) implement
         return 1;
     }
 
+    @Override
+    public boolean isEmpty() {
+        return this.mainInput.isEmpty() && this.beams.isEmpty();
+    }
+
     public static TrailRecipeInput of(ThingStack ingredient, List<Beam> beams) {
         return new TrailRecipeInput(ingredient, beams);
     }

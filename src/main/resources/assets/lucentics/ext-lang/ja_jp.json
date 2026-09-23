@@ -8,9 +8,23 @@
   "$R:item.lucentics.;16_colors/_lens" : "%Rのレンズ",
 
   "item.lucentics.dawnstone_dust": "黎明石の粉",
+  "item.lucentics.dusk_brick_dust": "薄明石の粉",
   "item.lucentics.copper_dust": "銅の粉",
   "item.lucentics.iron_dust": "鉄の粉",
   "item.lucentics.gold_dust": "金の粉",
+  "item.lucentics.diamond_dust": "ダイヤモンドの粉",
+  "item.lucentics.obsidian_dust": "黒曜石の粉",
+
+  "item.lucentics.glass_sherd": "ガラスの欠片",
+  "item.lucentics.prism_ball": "プリズム球",
+  "item.lucentics.gold_wire": "金のワイヤー",
+  "item.lucentics.iron_plate": "鉄の板",
+  "item.lucentics.gold_plate": "金の板",
+  "item.lucentics.light_copper_ring": "光銅のリング",
+  "item.lucentics.mold_box": "箱の型",
+  "item.lucentics.mold_ring": "リングの型",
+  "item.lucentics.mold_ingot": "インゴットの型",
+  "item.lucentics.focus_ring": "集光環",
 
   "item.lucentics.copper_hammer": "銅のハンマー",
   "item.lucentics.iron_hammer": "鉄のハンマー",
@@ -19,6 +33,8 @@
 
   "$R:item.lucentics.;16_colors/_dye_liquid_bucket" : "%Rの染料液入りバケツ",
   "$R:item.lucentics.;16_colors/_coloquid_bucket" : "%Rの彩液入りバケツ",
+  "item.lucentics.clay_water_bucket": "粘土混合液入りバケツ",
+  "item.lucentics.patina_liquid_bucket": "緑青液入りバケツ",
 
 
   "block.lucentics.dusk_bricks": "薄明石レンガ",
@@ -29,6 +45,7 @@
 
   "block.lucentics.injector": "光注入器",
   "block.lucentics.emitter": "放射器",
+  "block.lucentics.toggled_emitter": "切替式放射器",
   "block.lucentics.engraving_table": "彩刻台",
   "block.lucentics.pedestal_ritual": "儀式の台座",
   "block.lucentics.milling_table": "粉挽台",
@@ -43,14 +60,19 @@
   "block.lucentics.prism_importing": "搬入のプリズム",
   "block.lucentics.prism_exporting": "搬出のプリズム",
   "block.lucentics.prism_io": "搬入出のプリズム",
+  "block.lucentics.prism_collecting": "集積のプリズム",
   "block.lucentics.prism_dyeing": "染色のプリズム",
 
   "$R:block.lucentics.;16_colors/_dye_liquid" : "%Rの染料液",
   "$R:block.lucentics.;16_colors/_coloquid" : "%Rの彩液",
+  "block.lucentics.clay_water" : "粘土混合液",
+  "block.lucentics.patina_liquid": "緑青液",
 
 
   "$R:fluid.lucentics.;16_colors/_dye_liquid" : "%Rの染料液",
   "$R:fluid.lucentics.;16_colors/_coloquid" : "%Rの彩液",
+  "fluid.lucentics.clay_water" : "粘土混合液",
+  "fluid.lucentics.patina_liquid": "緑青液",
 
 
   "itemGroup.lucentics.ingredients": "Lucentics: 材料",
@@ -91,6 +113,7 @@
   "jei.lucentics.category.crushing": "粉砕クラフト",
   "jei.lucentics.category.milling": "粉挽クラフト",
   "jei.lucentics.category.mixing": "調合クラフト",
+  "jei.lucentics.category.assembling": "組立クラフト",
   "jei.lucentics.category.dyeing": "染色クラフト",
 
   "jei.lucentics.info.daylight_condition": "日光レベル: %s",
@@ -101,6 +124,7 @@
   "jei.lucentics.info.required_hits": "%s回叩く",
   "jei.lucentics.info.damage_per_hits": "耐久力を%s消費",
   "jei.lucentics.info.count": "%s個排出",
+  "jei.lucentics.info.amount": "%s mB",
   "jei.lucentics.info.weight": "Weight: %s ( %s%%で排出 )",
   "jei.lucentics.info.probability": "%s%%で排出",
   "jei.lucentics.info.damage_item": "耐久力を%s消費",

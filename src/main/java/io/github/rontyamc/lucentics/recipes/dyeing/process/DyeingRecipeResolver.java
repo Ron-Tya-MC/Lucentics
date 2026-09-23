@@ -22,7 +22,7 @@ public class DyeingRecipeResolver {
 
     private DyeingRecipeResolver() {}
 
-    public record Result(ItemStack output, int liquidAmount) {}
+    public record Result(ItemStack output, int liquidAmount, int processingDuration) {}
 
     public static Optional<Result> resolve(Level level, ItemStack dyeable, Colors color) {
         if (dyeable.isEmpty() || color.getDyeColor() == null) return Optional.empty();
@@ -37,7 +37,7 @@ public class DyeingRecipeResolver {
         DyeingRecipeEntry entry = entryMap.get(color);
         if (entry == null) return Optional.empty();
 
-        return Optional.of(new Result(entry.result().copy(), entry.liquidAmount()));
+        return Optional.of(new Result(entry.result().copy(), entry.liquidAmount(), entry.processingDuration()));
     }
 
     private static Map<Item, Map<Colors, DyeingRecipeEntry>> build(RecipeManager manager, HolderLookup.Provider registries) {

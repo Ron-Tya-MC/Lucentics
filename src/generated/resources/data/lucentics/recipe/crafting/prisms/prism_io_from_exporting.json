@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "minecraft:hopper"
+    },
+    "P": {
+      "item": "lucentics:prism_exporting"
+    }
+  },
+  "pattern": [
+    "H",
+    "P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_io"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 2,
+    "item": "lucentics:iron_plate"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:mold_ingot"
+        }
+      }
+    }
+  ],
+  "processing_duration": 160,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 5,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammers"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "tag": "c:ingots"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

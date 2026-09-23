@@ -2,12 +2,10 @@ package io.github.rontyamc.lucentics.integration.jade;
 
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlock;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlock;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlockEntity;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlock;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
-import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlock;
-import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlockEntity;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlock;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlockEntity;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBlock;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.integration.jade.component_providers.EmitterComponentProvider;
 import io.github.rontyamc.lucentics.integration.jade.component_providers.EngravingTableComponentProvider;
 import io.github.rontyamc.lucentics.integration.jade.component_providers.InjectorComponentProvider;

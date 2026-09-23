@@ -9,11 +9,8 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LightLayer;
 
 public class MillingTableRenderer implements BlockEntityRenderer<MillingTableBlockEntity> {
     public MillingTableRenderer(BlockEntityRendererProvider.Context context) {}
@@ -46,11 +43,5 @@ public class MillingTableRenderer implements BlockEntityRenderer<MillingTableBlo
             itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, LightTexture.pack(15,15), OverlayTexture.NO_OVERLAY, poseStack, bufferSource, blockEntity.getLevel(), i);
             poseStack.popPose();
         }
-    }
-
-    private int getLightLevel(Level level, BlockPos pos) {
-        int blockLight = level.getBrightness(LightLayer.BLOCK, pos);
-        int skyLight = level.getBrightness(LightLayer.SKY, pos);
-        return LightTexture.pack(blockLight, skyLight);
     }
 }

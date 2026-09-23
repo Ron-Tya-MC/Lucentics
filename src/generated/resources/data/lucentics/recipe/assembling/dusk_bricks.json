@@ -1,0 +1,46 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "minecraft:bricks"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 2,
+        "item": {
+          "count": 1,
+          "id": "lucentics:dusk_bricks"
+        }
+      }
+    }
+  ],
+  "processing_duration": 150,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "amount": 1000,
+            "fluid": "lucentics:clay_water"
+          },
+          "required_type": {
+            "id": "lucentics:tank_light_copper"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:mold_box"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

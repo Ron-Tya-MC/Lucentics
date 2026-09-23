@@ -15,7 +15,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +24,7 @@ public class ProbabilisticOutputSlots {
     private ProbabilisticOutputSlots(IGuiHelper guiHelper) {}
 
     public static void addSlots(IRecipeLayoutBuilder builder, List<List<WeightedOutput>> groups,
-                                int startX, int startY, int spacingX, int maxSlots) {
+                                int startX, int startY, int spacingX, int spacingY, int maxSlots, int column) {
         int size = Math.min(groups.size(), maxSlots);
         for (int i = 0; i < size; i++) {
             List<WeightedOutput> group = groups.get(i);
@@ -35,8 +34,8 @@ public class ProbabilisticOutputSlots {
 
             if (displayItems.isEmpty() && displayFluids.isEmpty()) continue;
 
-            int slotX = startX + (i % 2) * spacingX;
-            int slotY = size <= 2 ? startY : startY - (i / 2) * spacingX;
+            int slotX = startX + (i % column) * spacingX;
+            int slotY = size <= column ? startY : startY + (i / column) * spacingY;
             int totalWeight = group.stream().mapToInt(WeightedOutput::weight).sum();
 
             IDrawableStatic background;
@@ -65,15 +64,13 @@ public class ProbabilisticOutputSlots {
     private static List<FluidStack> collectDisplayFluids(List<WeightedOutput> group) {
         List<FluidStack> stacks = new ArrayList<>();
         for (WeightedOutput w : group) {
-            w.content().right().ifPresent(fluid -> {
-                stacks.add(fluid.stack().copyWithAmount(FluidType.BUCKET_VOLUME));
-            });
+            w.content().right().ifPresent(fluid -> stacks.add(fluid.stack().copyWithAmount(fluid.amount().getMinValue())));
         }
         return stacks;
     }
 
     public static void drawRangeBadges(GuiGraphics guiGraphics, IRecipeSlotsView recipeSlotsView,
-                                       List<List<WeightedOutput>> groups, int startX, int startY, int spacingX, int maxSlots) {
+                                       List<List<WeightedOutput>> groups, int startX, int startY, int spacingX, int spacingY, int maxSlots, int column) {
         Font font = Minecraft.getInstance().font;
         int size = Math.min(groups.size(), maxSlots);
 
@@ -86,8 +83,8 @@ public class ProbabilisticOutputSlots {
             String label = findMatchingRangeLabel(group, slotView.get());
             if (label == null) continue;
 
-            int slotX = startX + (i % 2) * spacingX;
-            int slotY = size <= 2 ? startY : startY - (i / 2) * spacingX;
+            int slotX = startX + (i % column) * spacingX;
+            int slotY = size <= column ? startY : startY + (i / column) * spacingY;
             int textWidth = font.width(label);
             float scale = Math.clamp(15.0f / textWidth, 0.0f, 1.0f);
             float textX = (slotX + 0.75f) / scale;
@@ -153,24 +150,24 @@ public class ProbabilisticOutputSlots {
             Component probabilityLabel = matchedOutput.probability() < 1.0f
                     ? Component.translatable("jei.lucentics.info.probability", MiscUtil.shapePercentage(100.0 * matchedOutput.probability())).withColor(0xFFFFCC)
                     : Component.empty();
-            tooltip.add(countLabel);
-            tooltip.add(weightLabel);
-            tooltip.add(probabilityLabel);
+            if (!countLabel.equals(Component.empty())) tooltip.add(countLabel);
+            if (!weightLabel.equals(Component.empty())) tooltip.add(weightLabel);
+            if (!probabilityLabel.equals(Component.empty())) tooltip.add(probabilityLabel);
             return null;
         },
         fluid -> {
-            Component countLabel = fluid.amount().getMinValue() != fluid.amount().getMaxValue()
-                    ? Component.translatable("jei.lucentics.info.count", fluid.amount().getMinValue() + "-" + fluid.amount().getMaxValue()).withColor(0xCCFFCC)
-                    : Component.empty();
+            Component amountLabel = fluid.amount().getMinValue() != fluid.amount().getMaxValue()
+                    ? Component.translatable("jei.lucentics.info.amount", fluid.amount().getMinValue() + "-" + fluid.amount().getMaxValue()).withColor(0xCCFFCC)
+                    : Component.translatable("jei.lucentics.info.amount", fluid.amount().getMinValue()).withColor(0xAAAAAA);
             Component weightLabel = group.size() > 1
                     ? Component.translatable("jei.lucentics.info.weight", matchedOutput.weight(), MiscUtil.shapePercentage(100.0 * matchedOutput.weight() / totalWeight)).withColor(0xCCCCFF)
                     : Component.empty();
             Component probabilityLabel = matchedOutput.probability() < 1.0f
                     ? Component.translatable("jei.lucentics.info.probability", MiscUtil.shapePercentage(100.0 * matchedOutput.probability())).withColor(0xFFFFCC)
                     : Component.empty();
-            tooltip.add(countLabel);
-            tooltip.add(weightLabel);
-            tooltip.add(probabilityLabel);
+            if (!amountLabel.equals(Component.empty())) tooltip.add(amountLabel);
+            if (!weightLabel.equals(Component.empty())) tooltip.add(weightLabel);
+            if (!probabilityLabel.equals(Component.empty())) tooltip.add(probabilityLabel);
             return null;
         });
     }

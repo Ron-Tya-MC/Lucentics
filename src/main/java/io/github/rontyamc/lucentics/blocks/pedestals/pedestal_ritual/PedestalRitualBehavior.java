@@ -16,7 +16,7 @@ import net.minecraft.world.level.Level;
 public class PedestalRitualBehavior extends PedestalBehavior {
     public static final BehaviorType<PedestalRitualBehavior> TYPE = new BehaviorType<>("pedestal_ritual");
 
-    private final RandomSource randomSource = RandomSource.create();
+    private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     public PedestalRitualBehavior(BaseBlockEntity be) {
         super(be);
@@ -31,7 +31,7 @@ public class PedestalRitualBehavior extends PedestalBehavior {
 
         BlockPos pos = getPos();
 
-        float p = Mth.lerp(randomSource.nextFloat(), 0.5f, 1.0f);
+        float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.5f, 1.0f);
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 0.1f, p);
 
         int rgb = Colors.WHITE.getColorCode();
@@ -43,9 +43,9 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         double Sy = pos.getY() + 0.8;
         double Sz = pos.getZ() + 0.5;
 
-        double Tx = Sx + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tx = Sx + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
         double Ty = pos.getY() + 1.0;
-        double Tz = Sz + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tz = Sz + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
 
         double Vx = Tx - Sx;
         double Vy = Ty - Sy;
@@ -64,7 +64,7 @@ public class PedestalRitualBehavior extends PedestalBehavior {
 
         BlockPos pos = getPos();
 
-        float p = Mth.lerp(randomSource.nextFloat(), 0.5f, 1.0f);
+        float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.5f, 1.0f);
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.BLOCKS, 0.1f, p);
 
         if (hold&& getContent().isEmpty()) level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 1.0f);;
@@ -78,9 +78,9 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         double Sy = pos.getY() + 0.8;
         double Sz = pos.getZ() + 0.5;
 
-        double Tx = Sx + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tx = Sx + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
         double Ty = pos.getY() + 1.0;
-        double Tz = Sz + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tz = Sz + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
 
         double Vx = Tx - Sx;
         double Vy = Ty - Sy;
@@ -98,7 +98,7 @@ public class PedestalRitualBehavior extends PedestalBehavior {
 
         BlockPos pos = getPos();
 
-        float p = Mth.lerp(randomSource.nextFloat(), 0.5f, 1.0f);
+        float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.5f, 1.0f);
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 0.1f, p);
 
         int rgb = Colors.LIGHT_BLUE.getColorCode();
@@ -110,9 +110,9 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         double Sy = pos.getY() + 0.8;
         double Sz = pos.getZ() + 0.5;
 
-        double Tx = Sx + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tx = Sx + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
         double Ty = pos.getY() + 1.0;
-        double Tz = Sz + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tz = Sz + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
 
         double Vx = Tx - Sx;
         double Vy = Ty - Sy;

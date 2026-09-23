@@ -24,9 +24,9 @@ import java.util.ArrayList;
 public class EmitterBehavior extends EmitBehavior implements Clearable {
     public static final BehaviorType<EmitterBehavior> TYPE = new BehaviorType<>("emitter");
 
-    private ItemStack lensContainer;
-    private final Integer maxStackSize;
-    private final EmitterIHandler iHandler;
+    protected ItemStack lensContainer;
+    protected final Integer maxStackSize;
+    protected final EmitterIHandler iHandler;
 
     public EmitterBehavior(BaseBlockEntity be) {
         super(be);
@@ -78,10 +78,6 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
 
     @Override
     public void tick() {
-        Level level = getWorld();
-        if (!(level instanceof ServerLevel serverLevel)) return;
-        
-        if (!isPowered(serverLevel)) setStopBeam(true);
         super.tick();
     }
 
@@ -137,12 +133,21 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
         clearContent();
     }
 
-    private boolean isPowered(ServerLevel level) { return level.hasNeighborSignal(getPos()); }
+    @Override
+    public void whilePowered(Level level, BlockPos pos) {
+        if (stopBeam) setStopBeam(false);
+    }
+
+    @Override
+    public void whileUnPowered(Level level, BlockPos pos) {
+        if (!stopBeam) setStopBeam(true);
+    }
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         if (!getLensContainer().isEmpty()) nbt.put("lens", getLensContainer().save(registries, new CompoundTag()));
         nbt.putInt("beam_length", beamLength);
+        nbt.putBoolean("stop_beam", stopBeam);
         nbt.putString("color", color.getSerializedName());
 
         if (!trail.isEmpty()) {
@@ -162,6 +167,7 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
         lensContainer = nbt.contains("lens") ? ItemStack.parse(registries, nbt.getCompound("lens")).orElse(ItemStack.EMPTY) : ItemStack.EMPTY;
         beamLength = nbt.getInt("beam_length");
+        stopBeam = nbt.getBoolean("stop_beam");
         color = Colors.byName(nbt.getString("color")).orElse(Colors.SUNLIGHT);
 
         trail = nbt.contains("trail")

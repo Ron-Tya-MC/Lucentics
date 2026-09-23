@@ -1,0 +1,46 @@
+{
+  "type": "lucentics:milling",
+  "input": {
+    "count": 1,
+    "item": "minecraft:raw_gold"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:gold_dust"
+        }
+      }
+    },
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:gold_dust"
+        }
+      },
+      "probability": 0.3
+    }
+  ],
+  "processing_duration": 60,
+  "trail_inputs": [
+    {
+      "color": "red",
+      "inputs": [
+        {
+          "damage_item": 1,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammers"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -44,7 +44,9 @@ public class MillingTableBlock extends BaseEntityBlock implements IBlockEntities
 
     private static final VoxelShape SHAPE = Shapes.or(BASE, POLE, FRAME_TOP, FRAME_P1, FRAME_P2, FRAME_P3, FRAME_P4, TABLE);
 
-    public MillingTableBlock(Properties properties) {super(properties);}
+    public MillingTableBlock(Properties properties) {
+        super(properties);
+    }
 
     @Override
     public Class<MillingTableBlockEntity> getBlockEntityClass() {

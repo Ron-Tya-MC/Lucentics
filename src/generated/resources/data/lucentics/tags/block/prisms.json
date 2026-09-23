@@ -6,10 +6,10 @@
     "lucentics:prism_blank_green",
     "lucentics:prism_blank_yellow",
     "lucentics:prism_blank_magenta",
-    "lucentics:prism_blank_light_blue",
-    "lucentics:prism_blank_pink",
     "lucentics:prism_blank_cyan",
+    "lucentics:prism_blank_pink",
     "lucentics:prism_blank_lime",
+    "lucentics:prism_blank_light_blue",
     "lucentics:prism_blank_gray",
     "lucentics:prism_blank_light_gray",
     "lucentics:prism_blank_brown",
@@ -21,6 +21,7 @@
     "lucentics:prism_importing",
     "lucentics:prism_exporting",
     "lucentics:prism_io",
+    "lucentics:prism_collecting",
     "lucentics:prism_dyeing"
   ]
 }

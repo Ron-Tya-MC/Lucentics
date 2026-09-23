@@ -15,6 +15,12 @@ public interface PrismQualifier {
         return prism.getPrismBehavior() instanceof IExportable;
     };
 
+    PrismQualifier STOP_EXPLORE = (level, prismPos) -> {
+        var state = level.getBlockState(prismPos);
+        if (!(state.getBlock() instanceof IPrismBehavior prism)) return false;
+        return prism.getPrismBehavior() instanceof IStopExplore;
+    };
+
     PrismQualifier PRISM_RITUAL = (level, prismPos) ->
             level.getBlockState(prismPos).is(LucenticsTagRegister.LucenticsBTags.PRISM_RITUAL.tag);
 }

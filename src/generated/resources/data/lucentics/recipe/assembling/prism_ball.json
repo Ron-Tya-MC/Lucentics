@@ -1,0 +1,86 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 4,
+    "item": "lucentics:glass_sherd"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:prism_ball"
+        }
+      }
+    }
+  ],
+  "processing_duration": 200,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 2,
+            "item": "lucentics:glass_sherd"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone_dust"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone_dust"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone_dust"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone_dust"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 2,
+            "item": "lucentics:glass_sherd"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

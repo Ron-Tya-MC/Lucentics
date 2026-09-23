@@ -39,6 +39,8 @@ public class LucenticsJEIIntegration implements IModPlugin {
             RecipeType.create(Lucentics.MOD_ID, "milling", TrailRecipe.class);
     public static final RecipeType<TrailRecipe> MIXING =
             RecipeType.create(Lucentics.MOD_ID, "mixing", TrailRecipe.class);
+    public static final RecipeType<TrailRecipe> ASSEMBLING =
+            RecipeType.create(Lucentics.MOD_ID, "assembling", TrailRecipe.class);
     public static final RecipeType<DyeingRecipeEntry> DYEING =
             RecipeType.create(Lucentics.MOD_ID, "dyeing", DyeingRecipeEntry.class);
 
@@ -57,6 +59,7 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCategories(new CrushingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new MillingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new MixingRecipeCategory(guiHelper));
+        registration.addRecipeCategories(new AssemblingRecipeCategory(guiHelper));
         registration.addRecipeCategories(new DyeingRecipeCategory(guiHelper));
     }
 
@@ -69,7 +72,8 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registerStream(registration, level, LucenticsRecipeTypesRegister.ENGRAVING_TYPE.get(), ENGRAVING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.CRUSHING_TYPE.get(), CRUSHING);
         registerStream(registration, level, LucenticsRecipeTypesRegister.MILLING_TYPE.get(), MILLING);
-        registerStream(registration, level, LucenticsRecipeTypesRegister.MIXING_TYPE.get(), MILLING);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.MIXING_TYPE.get(), MIXING);
+        registerStream(registration, level, LucenticsRecipeTypesRegister.ASSEMBLING_TYPE.get(), ASSEMBLING);
 
         registration.addRecipes(DYEING, DyeingRecipeCollector.collect(level.getRecipeManager(), level.registryAccess()));
     }
@@ -86,12 +90,16 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.EMITTER);
         registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.PRISM_RITUAL);
 
+        registration.addRecipeCatalysts(MIXING, LucenticsBlockRegister.MIXING_TABLE);
+        registration.addRecipeCatalysts(MIXING, LucenticsBlockRegister.EMITTER);
+        registration.addRecipeCatalysts(MIXING, LucenticsBlockRegister.PRISM_RITUAL);
+
+        registration.addRecipeCatalysts(ASSEMBLING, LucenticsBlockRegister.ASSEMBLING_TABLE);
+        registration.addRecipeCatalysts(ASSEMBLING, LucenticsBlockRegister.EMITTER);
+        registration.addRecipeCatalysts(ASSEMBLING, LucenticsBlockRegister.PRISM_RITUAL);
+
         registration.addRecipeCatalysts(DYEING, LucenticsBlockRegister.PRISM_DYEING);
         registration.addRecipeCatalysts(DYEING, LucenticsBlockRegister.MIXING_TABLE);
-
-        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.MIXING_TABLE);
-        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.EMITTER);
-        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.PRISM_RITUAL);
     }
 
     private<I extends RecipeInput, T extends Recipe<I>> void registerStream(IRecipeRegistration registration, ClientLevel level, net.minecraft.world.item.crafting.RecipeType<T> typeMC, RecipeType<T> typeJEI) {

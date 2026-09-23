@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBlockEntity;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;

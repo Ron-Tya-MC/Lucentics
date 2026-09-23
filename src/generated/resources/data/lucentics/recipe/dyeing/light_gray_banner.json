@@ -1,0 +1,13 @@
+{
+  "type": "lucentics:dyeing",
+  "color": "light_gray",
+  "input": {
+    "tag": "minecraft:banners"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:light_gray_banner"
+  },
+  "processing_duration": 15,
+  "required_mb": 400
+}

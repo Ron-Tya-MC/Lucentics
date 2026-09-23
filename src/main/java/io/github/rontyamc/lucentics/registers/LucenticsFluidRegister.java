@@ -5,6 +5,7 @@ import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.util.ModelUtil;
 import io.github.rontyamc.lucentics.fluids.TintedTranslucentFluidType;
+import io.github.rontyamc.lucentics.registers.LucenticsTabRegister.CategoryType;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsFTags;
 import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.level.material.Fluid;
@@ -28,7 +29,7 @@ public class LucenticsFluidRegister {
         for (Colors color : Colors.values()) {
             if (color == Colors.SUNLIGHT) continue;
             String name = color.getName() + "_dye_liquid";
-            FluidEntry<BaseFlowingFluid.Flowing> entry = REGISTRATE.fluidItemRegister(LucenticsTabRegister.CategoryType.BLOCKS, name)
+            FluidEntry<BaseFlowingFluid.Flowing> entry = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, name)
                     .waterLike(name, TintedTranslucentFluidType.create(color.getColorCode(), 255, color.getColorCode(), () -> 0.1f))
                     .properties(p -> p.density(1000).viscosity(1000))
                     .source(BaseFlowingFluid.Source::new)
@@ -54,7 +55,7 @@ public class LucenticsFluidRegister {
         for (Colors color : Colors.values()) {
             if (color == Colors.SUNLIGHT) continue;
             String name = color.getName() + "_coloquid";
-            FluidEntry<BaseFlowingFluid.Flowing> entry = REGISTRATE.fluidItemRegister(LucenticsTabRegister.CategoryType.BLOCKS, name)
+            FluidEntry<BaseFlowingFluid.Flowing> entry = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, name)
                     .fluid(name, Lucentics.defaultLocation("block/coloquid_still"),
                             Lucentics.defaultLocation("block/coloquid_flow"),
                             TintedTranslucentFluidType.create(color.getColorCode(), 255, color.getColorCode(), () -> 0.1f))
@@ -75,6 +76,31 @@ public class LucenticsFluidRegister {
         }
         return map;
     }
+
+    public static final FluidEntry<BaseFlowingFluid.Flowing> CLAY_WATER = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, "clay_water")
+            .fluid("clay_water", Lucentics.defaultLocation("block/clay_water_still"),
+                    Lucentics.defaultLocation("block/clay_water_flow"))
+            .properties(p -> p.density(1800).viscosity(1200))
+            .fluidProperties(p -> p.tickRate(15))
+            .source(BaseFlowingFluid.Source::new)
+            .block()
+            .build()
+            .bucket()
+            .model(ModelUtil.generatedItemModel("buckets"))
+            .build()
+            .register();
+
+    public static final FluidEntry<BaseFlowingFluid.Flowing> PATINA_LIQUID = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, "patina_liquid")
+            .fluid("patina_liquid", Lucentics.defaultLocation("block/patina_liquid_still"),
+                    Lucentics.defaultLocation("block/patina_liquid_flow"))
+            .properties(p -> p.density(1500).viscosity(1000))
+            .source(BaseFlowingFluid.Source::new)
+            .block()
+            .build()
+            .bucket()
+            .model(ModelUtil.generatedItemModel("buckets"))
+            .build()
+            .register();
 
     public static void register() {
     }

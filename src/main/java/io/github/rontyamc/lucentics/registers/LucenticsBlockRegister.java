@@ -2,12 +2,14 @@ package io.github.rontyamc.lucentics.registers;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBlock;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBehavior;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlock;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBehavior;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableBlock;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBehavior;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlock;
+import io.github.rontyamc.lucentics.blocks.emitter.toggled_emitter.ToggledEmitterBlock;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBehavior;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlock;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBehavior;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBlock;
 import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBehavior;
 import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBlock;
 import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableBehavior;
@@ -15,6 +17,7 @@ import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableBlock;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlock;
 import io.github.rontyamc.lucentics.blocks.prism.PrismBlock;
+import io.github.rontyamc.lucentics.blocks.prism.prism_collecting.PrismCollectingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_dyeing.PrismDyeingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_exporting.PrismExportingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_importing.PrismImportingBlock;
@@ -36,6 +39,7 @@ import net.minecraft.world.level.block.Blocks;
 import java.util.EnumMap;
 import java.util.Map;
 
+@SuppressWarnings("Convert2MethodRef")
 public class LucenticsBlockRegister {
     public static final LucenticsRegistrate REGISTRATE = Lucentics.registrate();
 
@@ -91,7 +95,7 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
-    public static final BlockEntry<Block> LIGHT_BLUE_LIGHT_COPPER_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"light_blue_light_copper_block", Block::new)
+    public static final BlockEntry<Block> CYAN_LIGHT_COPPER_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"cyan_light_copper_block", Block::new)
             .initialProperties(() -> Blocks.COPPER_BLOCK)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.LIGHT_COPPER_BLOCKS.tag)
             .item()
@@ -107,6 +111,13 @@ public class LucenticsBlockRegister {
             .build()
             .register();
     public static final BlockEntry<EmitterBlock> EMITTER = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"emitter", EmitterBlock::new)
+            .initialProperties(() -> Blocks.BRICKS)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .blockstate(ModelUtil.horizontalDirectionalBlockState(""))
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<ToggledEmitterBlock> TOGGLED_EMITTER = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"toggled_emitter", ToggledEmitterBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate(ModelUtil.horizontalDirectionalBlockState(""))
@@ -134,7 +145,7 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
-    public static final BlockEntry<Block> ASSEMBLING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"assembling_table", Block::new)
+    public static final BlockEntry<AssemblingTableBlock> ASSEMBLING_TABLE = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"assembling_table", AssemblingTableBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate(ModelUtil.simpleBlockState(""))
@@ -142,7 +153,7 @@ public class LucenticsBlockRegister {
             .build()
             .register();
 
-    public static final BlockEntry<PedestalRitualBlock> PEDESTAL_RITUAL = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"pedestal_ritual", PedestalRitualBlock::new)
+    public static final BlockEntry<PedestalRitualBlock> PEDESTAL_RITUAL = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"pedestal_ritual", PedestalRitualBlock::new)
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PEDESTALS.tag, LucenticsBTags.PEDESTAL_RITUAL.tag)
             .blockstate(ModelUtil.simpleBlockState("pedestals"))
@@ -243,6 +254,15 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
+    public static final BlockEntry<PrismCollectingBlock> PRISM_COLLECTING = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_collecting", PrismCollectingBlock::new)
+            .initialProperties(() -> Blocks.GLASS)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_collecting", "prisms/prism_blank"))
+            .lang("Collecting Prism")
+            .item()
+            .build()
+            .register();
     public static final BlockEntry<PrismDyeingBlock> PRISM_DYEING = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_dyeing", PrismDyeingBlock::new)
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.noOcclusion())
@@ -275,6 +295,7 @@ public class LucenticsBlockRegister {
         LucenticsRenderTypeRegister.registerBlock(PRISM_IMPORTING, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_EXPORTING, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_IO, Layer.TRANSLUCENT);
+        LucenticsRenderTypeRegister.registerBlock(PRISM_COLLECTING, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_DYEING, Layer.TRANSLUCENT);
     }
 }

@@ -46,11 +46,10 @@ import java.util.Optional;
 
 public class PrismDyeingBehavior extends PrismBehavior implements IFlowingParticleScheduleTicker {
     public static final PrismDyeingBehavior INSTANCE = new PrismDyeingBehavior();
-    public static final int PROCESSING_DURATION = 15;
     public static final int PARTICLE_INTERVAL = 8;
     public static final int PARTICLE_LINGER = 8;
 
-    public static final RandomSource RANDOM = RandomSource.create();
+    public static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     protected PrismDyeingBehavior() {}
 
@@ -113,7 +112,7 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
                 && existing.itemId().equals(itemId)
                 && existing.color().equals(colorName);
 
-        int remaining = sameContext ? Math.max(existing.processingTime() - 1, 0) : PROCESSING_DURATION - 1;
+        int remaining = sameContext ? Math.max(existing.processingTime() - 1, 0) : recipe.get().processingDuration();
         whileCrafting(level, interactPos);
 
         if (remaining == 0) {
@@ -144,12 +143,12 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
     }
 
     private void whileCrafting(ServerLevel level, BlockPos pos) {
-        float p = Mth.lerp(RANDOM.nextFloat(), 1.2f, 1.5f);
+        float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 1.2f, 1.5f);
         level.playSound(null, pos, SoundEvents.BUBBLE_COLUMN_UPWARDS_AMBIENT, SoundSource.BLOCKS, 0.1f, p);
     }
 
     private void onCrafted(ServerLevel level, BlockPos interactPos, BlockPos prismPos, ItemExportingContext exportingContext, Colors beamColor) {
-        float p = Mth.lerp(RANDOM.nextFloat(), 1.7f, 2.0f);
+        float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 1.7f, 2.0f);
         level.playSound(null, interactPos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.1f, p);
 
         int rgb = Colors.BLUE.getColorCode();
@@ -161,9 +160,9 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
         double Sy = interactPos.getY() + 0.8;
         double Sz = interactPos.getZ() + 0.5;
 
-        double Tx = Sx + Mth.lerp(RANDOM.nextDouble(), -0.2, 0.2);
+        double Tx = Sx + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
         double Ty = interactPos.getY() + 1.0;
-        double Tz = Sz + Mth.lerp(RANDOM.nextDouble(), -0.2, 0.2);
+        double Tz = Sz + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
 
         double Vx = Tx - Sx;
         double Vy = Ty - Sy;
@@ -187,18 +186,17 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
             if (devicePos.isEmpty()) continue;
 
             BlockEntity blockEntity = level.getBlockEntity(devicePos.get());
-            if (!(blockEntity instanceof MixingTableBlockEntity)) continue;
+            if (!(blockEntity instanceof MixingTableBlockEntity mixing)) continue;
 
-            Optional<IFluidHandler> handler = TransferUtil.getFluidHandler(level, devicePos.get());
-            if (handler.isEmpty()) continue;
+            IFluidHandler handler = mixing.getMixingTableBehavior().getAdminFHandler();
 
-            for (int tank = 0; tank < handler.get().getTanks(); tank++) {
-                FluidStack content = handler.get().getFluidInTank(tank);
+            for (int tank = 0; tank < handler.getTanks(); tank++) {
+                FluidStack content = handler.getFluidInTank(tank);
                 if (content.isEmpty()) continue;
 
                 Optional<Colors> color = LucenticsFluidRegister.getColor(content.getFluid());
                 if (color.isPresent()) {
-                    return Optional.of(new ColorSupply(color.get(), handler.get(), tank, content.getAmount(), i));
+                    return Optional.of(new ColorSupply(color.get(), handler, tank, content.getAmount(), i));
                 }
             }
         }
@@ -212,10 +210,10 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
         if (NodeScheduleHelper.tick(chunk, prismPos, IFlowingParticleSchedulable.SCHEDULE_ID) >= 0) {
             FlowingGlowParticleOptions options = ScheduledFlowingParticleHelper.get(chunk, prismPos).options();
 
-            float d = RANDOM.nextFloat() * 0.3f - 0.15f;
+            float d = RANDOM_SOURCE.nextFloat() * 0.3f - 0.15f;
             FlowingGlowParticleOptions newOptions =
                     new FlowingGlowParticleOptions(options.waypoints(), options.red(), options.blue(), options.green(), options.duration(),
-                            RANDOM.nextFloat() * 0.3f + 0.15f, new Vec3(d, d, d));
+                            RANDOM_SOURCE.nextFloat() * 0.3f + 0.15f, new Vec3(d, d, d));
 
             BeamParticles.spawnFlowing(level, newOptions, prismPos);
         }

@@ -21,7 +21,7 @@ public class BeamParticles {
 
     public static final ResourceLocation FLOWING_COOLDOWN = Lucentics.defaultLocation("flowing_cooldown");
 
-    private static final RandomSource RANDOM = RandomSource.create();
+    private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     public static boolean canSpawnOnThisTick(ServerLevel level, BlockPos pos) {
         LevelChunk chunk = level.getChunkAt(pos);
@@ -36,7 +36,7 @@ public class BeamParticles {
     }
 
     public static void spawnFlowing(ServerLevel level, FlowingGlowParticleOptions options, BlockPos savePos, int cooldown) {
-        float d = RANDOM.nextFloat() * 0.2f - 0.1f;
+        float d = RANDOM_SOURCE.nextFloat() * 0.2f - 0.1f;
 
         level.sendParticles(options, options.waypoints().getFirst().x(), options.waypoints().getFirst().y(), options.waypoints().getFirst().z(),
                 PARTICLE_AMOUNT, d, d, d, 0);
@@ -48,7 +48,7 @@ public class BeamParticles {
     }
 
     public static void spawnFlowing(ServerLevel level, FlowingGlowParticleOptions options, BlockPos savePos) {
-        float d = RANDOM.nextFloat() * 0.2f - 0.1f;
+        float d = RANDOM_SOURCE.nextFloat() * 0.2f - 0.1f;
 
         level.sendParticles(options, options.waypoints().getFirst().x(), options.waypoints().getFirst().y(), options.waypoints().getFirst().z(),
                 PARTICLE_AMOUNT, d, d, d, 0);
@@ -70,11 +70,11 @@ public class BeamParticles {
         float g = ((rgb >> 8) & 0xFF) / 255f;
         float b = (rgb & 0xFF) / 255f;
 
-        return new FlowingGlowParticleOptions(waypoints, r, g, b, FLOWING_DURATION, RANDOM.nextFloat() * 0.3f + 0.05f, delta);
+        return new FlowingGlowParticleOptions(waypoints, r, g, b, FLOWING_DURATION, RANDOM_SOURCE.nextFloat() * 0.3f + 0.05f, delta);
     }
 
     public static FlowingGlowParticleOptions buildOptions(BlockPos containerFrom, BlockPos nodeFrom, BeamNode target, Colors color) {
-        float delta = RANDOM.nextFloat() * 0.2f - 0.1f;
+        float delta = RANDOM_SOURCE.nextFloat() * 0.2f - 0.1f;
 
         return buildOptions(containerFrom, nodeFrom, target, color, new Vec3(delta, delta, delta));
     }

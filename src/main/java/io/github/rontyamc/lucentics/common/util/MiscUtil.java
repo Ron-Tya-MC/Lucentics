@@ -5,10 +5,16 @@ import com.google.gson.JsonObject;
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
 import io.github.rontyamc.lucentics.Lucentics;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.phys.Vec3;
 
 import java.io.IOException;
@@ -82,4 +88,31 @@ public final class MiscUtil {
             ByteBufCodecs.DOUBLE, Vec3::z,
             Vec3::new
     );
+
+    public static <T> ResourceLocation getKeyOrThrow(T object) {
+        if (object instanceof ResourceLocation) {
+            return (ResourceLocation) object;
+        }
+
+        ResourceLocation key = null;
+
+        if (object instanceof Block block) {
+            key = BuiltInRegistries.BLOCK.getKey(block);
+        }
+        if (object instanceof Item item) {
+            key = BuiltInRegistries.ITEM.getKey(item);
+        }
+        if (object instanceof Fluid fluid) {
+            key = BuiltInRegistries.FLUID.getKey(fluid);
+        }
+        if (object instanceof RecipeSerializer<?> serializer) {
+            key = BuiltInRegistries.RECIPE_SERIALIZER.getKey(serializer);
+        }
+
+        if (key == null) {
+            throw new IllegalStateException("Unregistered object: " + object + " has no registry key!");
+        }
+
+        return key;
+    }
 }

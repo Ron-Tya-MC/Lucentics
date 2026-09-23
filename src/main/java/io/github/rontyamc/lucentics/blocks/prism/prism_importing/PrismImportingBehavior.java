@@ -20,7 +20,7 @@ public class PrismImportingBehavior extends PrismBehavior implements IFlowingPar
     public static final int PARTICLE_INTERVAL = 6;
     public static final int PARTICLE_LINGER = 6;
 
-    public static final RandomSource RANDOM = RandomSource.create();
+    public static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     protected PrismImportingBehavior() {}
 
@@ -44,10 +44,10 @@ public class PrismImportingBehavior extends PrismBehavior implements IFlowingPar
         if (tick % 2 == 1) {
             FlowingGlowParticleOptions options = ScheduledFlowingParticleHelper.get(chunk, prismPos).options();
 
-            float d = RANDOM.nextFloat() * 0.2f - 0.1f;
+            float d = RANDOM_SOURCE.nextFloat() * 0.2f - 0.1f;
             FlowingGlowParticleOptions newOptions =
                     new FlowingGlowParticleOptions(options.waypoints(), options.red(), options.blue(), options.green(), options.duration(),
-                            RANDOM.nextFloat() * 0.3f + 0.05f, new Vec3(d, d, d));
+                            RANDOM_SOURCE.nextFloat() * 0.3f + 0.05f, new Vec3(d, d, d));
 
             BeamParticles.spawnFlowing(level, newOptions, prismPos);
         }

@@ -2,7 +2,6 @@ package io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual;
 
 import com.mojang.serialization.MapCodec;
 import io.github.rontyamc.lucentics.blocks.IBlockEntities;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlock;
 import io.github.rontyamc.lucentics.common.SlotInteractions;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
 import net.minecraft.core.BlockPos;

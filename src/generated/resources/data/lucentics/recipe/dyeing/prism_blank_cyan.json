@@ -8,5 +8,6 @@
     "count": 1,
     "id": "lucentics:prism_blank_cyan"
   },
+  "processing_duration": 30,
   "required_mb": 2000
 }

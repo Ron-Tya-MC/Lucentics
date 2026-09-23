@@ -10,16 +10,17 @@ import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 
-public record DyeingRecipeArguments(Ingredient input, Colors color, int liquidAmount, ItemStack output) {
+public record DyeingRecipeArguments(Ingredient input, Colors color, int liquidAmount, ItemStack output, int processingDuration) {
     public DyeingRecipeArguments() {
-        this(Ingredient.EMPTY, Colors.SUNLIGHT, 0, ItemStack.EMPTY);
+        this(Ingredient.EMPTY, Colors.SUNLIGHT, 0, ItemStack.EMPTY, 0);
     }
 
     public static final MapCodec<DyeingRecipeArguments> CODEC = RecordCodecBuilder.mapCodec(ins -> ins.group(
             Ingredient.CODEC.fieldOf("input").forGetter(DyeingRecipeArguments::input),
             Colors.CODEC.fieldOf("color").forGetter(DyeingRecipeArguments::color),
             Codec.INT.fieldOf("required_mb").forGetter(DyeingRecipeArguments::liquidAmount),
-            ItemStack.CODEC.fieldOf("output").forGetter(DyeingRecipeArguments::output)
+            ItemStack.CODEC.fieldOf("output").forGetter(DyeingRecipeArguments::output),
+            Codec.INT.fieldOf("processing_duration").forGetter(DyeingRecipeArguments::processingDuration)
     ).apply(ins, DyeingRecipeArguments::new));
 
     public static final StreamCodec<RegistryFriendlyByteBuf, DyeingRecipeArguments> STREAM_CODEC = StreamCodec.composite(
@@ -27,6 +28,7 @@ public record DyeingRecipeArguments(Ingredient input, Colors color, int liquidAm
             Colors.STREAM_CODEC.cast(), DyeingRecipeArguments::color,
             ByteBufCodecs.VAR_INT, DyeingRecipeArguments::liquidAmount,
             ItemStack.STREAM_CODEC, DyeingRecipeArguments::output,
+            ByteBufCodecs.VAR_INT, DyeingRecipeArguments::processingDuration,
             DyeingRecipeArguments::new
     );
 }

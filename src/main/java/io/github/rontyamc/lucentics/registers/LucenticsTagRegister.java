@@ -11,6 +11,8 @@ import net.minecraft.world.level.material.Fluid;
 import java.util.Locale;
 
 public class LucenticsTagRegister {
+    public static final LucenticsRegistrate REGISTRATE = Lucentics.registrate();
+
     public enum TagLocation {
         LUCENTICS(Lucentics.MOD_ID),
         COMMON("c");
@@ -36,14 +38,27 @@ public class LucenticsTagRegister {
 
     public enum LucenticsITags {
         HAMMERS,
+        HAMMER_IRON_TIERS,
+        HAMMER_DIAMOND_TIERS,
         TOOLS(TagLocation.COMMON),
         MINING_TOOLS(TagLocation.COMMON, "tools/mining_tool"),
         ENCHANTABLES(TagLocation.COMMON),
         INGOTS(TagLocation.COMMON),
         DUSK_BRICKS,
         LIGHT_COPPERS,
+        GLIMMER_IRONS,
         LENSES,
-        DYES(TagLocation.COMMON);
+        DYES(TagLocation.COMMON),
+        PLATES(TagLocation.COMMON),
+        PLATES_IRON(TagLocation.COMMON, "plates/iron"),
+        PLATES_GOLD(TagLocation.COMMON, "plates/gold"),
+        DYED(TagLocation.COMMON),
+        DUSTS(TagLocation.COMMON),
+        DUSTS_COPPER(TagLocation.COMMON, "dusts/copper"),
+        DUSTS_IRON(TagLocation.COMMON, "dusts/iron"),
+        DUSTS_GOLD(TagLocation.COMMON, "dusts/gold"),
+        DUSTS_DIAMOND(TagLocation.COMMON, "dusts/diamond"),
+        DUSTS_OBSIDIAN(TagLocation.COMMON, "dusts/obsidian");
 
         public final TagKey<Item> tag;
 

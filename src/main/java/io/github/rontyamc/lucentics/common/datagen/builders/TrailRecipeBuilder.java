@@ -191,7 +191,6 @@ public class TrailRecipeBuilder implements RecipeBuilder, IdPathResolvable {
 
     public void setFolder(String folder) {
         this.folder = folder;
-        Lucentics.LOGGER.debug("set:{}", this.folder);
     }
 
     public void setRecipeInfo(IRecipeInfo recipeInfo) {

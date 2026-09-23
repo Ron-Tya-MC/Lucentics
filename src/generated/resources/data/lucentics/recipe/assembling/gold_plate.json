@@ -1,0 +1,36 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "minecraft:gold_ingot"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:gold_plate"
+        }
+      }
+    }
+  ],
+  "processing_duration": 50,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 1,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammers"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

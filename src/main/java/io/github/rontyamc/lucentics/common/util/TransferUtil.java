@@ -65,7 +65,7 @@ public final class TransferUtil {
         for (int tank = 0; tank < handler.getTanks(); tank++) {
             FluidStack stack = handler.getFluidInTank(tank);
             if (!stack.isEmpty()) {
-                FluidStack simulated = handler.drain(tank, IFluidHandler.FluidAction.SIMULATE);
+                FluidStack simulated = handler.drain(1, IFluidHandler.FluidAction.SIMULATE);
                 if (!simulated.isEmpty()) return FluidImportingContext.of(handler, tank, stack);
             }
         }

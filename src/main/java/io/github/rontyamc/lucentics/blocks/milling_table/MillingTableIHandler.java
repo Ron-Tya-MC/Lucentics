@@ -47,6 +47,6 @@ public class MillingTableIHandler implements IItemHandler {
     @Override
     public boolean isItemValid(int slot, ItemStack itemStack) {
         if (slot != 0) return false;
-        return behavior.getContainer().asItemOrEmpty().isEmpty() || ItemUtil.isSameItem(behavior.getContainer().asItemOrEmpty(), itemStack, false);
+        return behavior.getContainer().isEmpty() || ItemUtil.isSameItem(behavior.getContainer().asItemOrEmpty(), itemStack, false);
     }
 }

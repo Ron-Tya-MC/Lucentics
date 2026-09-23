@@ -1,0 +1,66 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "minecraft:gold_ingot"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:pedestal_ritual"
+        }
+      }
+    }
+  ],
+  "processing_duration": 60,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

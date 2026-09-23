@@ -1,0 +1,76 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "lucentics:prism_blank"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:prism_dyeing"
+        }
+      }
+    }
+  ],
+  "processing_duration": 400,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 4,
+            "item": "minecraft:blue_dye"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 4,
+            "item": "minecraft:lapis_lazuli"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "amount": 8000,
+            "fluid": "lucentics:blue_dye_liquid"
+          },
+          "required_type": {
+            "id": "lucentics:tank_light_copper"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:diamond_dust"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 4,
+            "tag": "c:dyes"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

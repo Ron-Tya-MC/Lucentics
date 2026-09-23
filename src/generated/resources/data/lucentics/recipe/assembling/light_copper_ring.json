@@ -1,0 +1,47 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "lucentics:light_copper"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 2,
+        "item": {
+          "count": 1,
+          "id": "lucentics:light_copper_ring"
+        }
+      }
+    }
+  ],
+  "processing_duration": 100,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 8,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammers"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:mold_ring"
+          },
+          "not_consume": true,
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

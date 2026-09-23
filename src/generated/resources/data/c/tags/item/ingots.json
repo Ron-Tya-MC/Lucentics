@@ -3,6 +3,10 @@
     "lucentics:light_copper",
     "lucentics:yellow_light_copper",
     "lucentics:magenta_light_copper",
-    "lucentics:light_blue_light_copper"
+    "lucentics:cyan_light_copper",
+    "lucentics:glimmer_iron",
+    "lucentics:pink_glimmer_iron",
+    "lucentics:lime_glimmer_iron",
+    "lucentics:light_blue_glimmer_iron"
   ]
 }

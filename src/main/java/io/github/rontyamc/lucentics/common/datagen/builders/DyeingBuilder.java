@@ -19,6 +19,7 @@ public class DyeingBuilder implements RecipeBuilder {
     int liquidAmount;
     Colors color;
     ItemStack output;
+    int processingDuration = 15;
     protected String suffix;
 
     public DyeingBuilder(Ingredient input, int liquidAmount, Colors color, ItemStack output) {
@@ -65,6 +66,11 @@ public class DyeingBuilder implements RecipeBuilder {
         return this;
     }
 
+    public DyeingBuilder duration(int duration) {
+        this.processingDuration = duration;
+        return this;
+    }
+
     @Override
     public DyeingBuilder unlockedBy(String criterionName, Criterion<?> criterion) {
         return this;
@@ -98,7 +104,8 @@ public class DyeingBuilder implements RecipeBuilder {
                 input,
                 color,
                 liquidAmount,
-                this.output
+                this.output,
+                processingDuration
         );
 
         DyeingRecipe recipe = new DyeingRecipe(LucenticsRecipeTypesRegister.DYEING_INFO, args);

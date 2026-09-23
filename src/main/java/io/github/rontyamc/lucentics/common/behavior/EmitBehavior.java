@@ -21,7 +21,7 @@ import java.util.List;
 
 public abstract class EmitBehavior extends BlockEntityBehavior {
     public static final BehaviorType<EmitBehavior> TYPE = new BehaviorType<>("emit");
-    private static final int MAX_DISTANCE = 8;
+    public static final int MAX_DISTANCE = 8;
 
     protected int beamLength = 0;
 
@@ -29,7 +29,7 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
     protected BeamNode endpoint = null;
     protected Colors color = Colors.SUNLIGHT;
 
-    private boolean stopBeam = true;
+    protected boolean stopBeam = true;
 
     public EmitBehavior(BaseBlockEntity be) {
         super(be);
@@ -60,7 +60,6 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
             if (!trail.isEmpty() || endpoint != null || beamLength != 0) {
                 clearBeam(serverLevel);
             }
-            stopBeam = false;
             return;
         }
 

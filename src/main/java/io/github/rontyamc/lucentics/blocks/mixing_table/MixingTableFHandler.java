@@ -6,9 +6,16 @@ import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 
 public class MixingTableFHandler implements IFluidHandler {
     private final MixingTableBehavior behavior;
+    private final boolean accessLockedContainer;
 
     public MixingTableFHandler(MixingTableBehavior behavior) {
         this.behavior = behavior;
+        this.accessLockedContainer = false;
+    }
+
+    public MixingTableFHandler(MixingTableBehavior behavior, boolean accessLockedContainer) {
+        this.behavior = behavior;
+        this.accessLockedContainer = accessLockedContainer;
     }
 
     @Override
@@ -23,13 +30,13 @@ public class MixingTableFHandler implements IFluidHandler {
 
     @Override
     public int getTankCapacity(int tank) {
-        return behavior.getCapacity();
+        return tank == 0 ? behavior.getCapacityContainer() : behavior.getCapacityBuffer();
     }
 
     @Override
     public boolean isFluidValid(int tank, FluidStack stack) {
-        if (tank != 0) return false;
-        return behavior.getContainer().isEmpty() || FluidUtil.isSameFluid(behavior.getContainer().asFluidOrEmpty(), stack, false);
+        if (tank == 0) return false;
+        return behavior.getBufferAt(tank - 1).isEmpty() || FluidUtil.isSameFluid(behavior.getBufferAt(tank - 1), stack, false);
     }
 
     @Override
@@ -39,11 +46,25 @@ public class MixingTableFHandler implements IFluidHandler {
 
     @Override
     public FluidStack drain(FluidStack resource, FluidAction action) {
-        return behavior.drain(resource, action);
+        FluidStack drained = FluidStack.EMPTY;
+        FluidStack draining = resource;
+
+        if (behavior.hasOutputItem() || accessLockedContainer) {
+            drained = FluidUtil.merge(drained, behavior.drain(draining, action)).merged();
+            if (drained.getAmount() >= resource.getAmount()) return drained;
+            else draining = draining.copyWithAmount(draining.getAmount() - drained.getAmount());
+        }
+        for (int i = 0; i < behavior.getBuffer().size(); i++) {
+            drained = FluidUtil.merge(drained, behavior.drainBufferAt(i, draining, action)).merged();
+            if (drained.getAmount() >= resource.getAmount()) return drained;
+            else draining = draining.copyWithAmount(draining.getAmount() - drained.getAmount());
+        }
+
+        return drained;
     }
 
     @Override
     public FluidStack drain(int maxDrain, FluidAction action) {
-        return behavior.drain(maxDrain, action);
+        return (behavior.hasOutputItem() || accessLockedContainer) ? behavior.drain(maxDrain, action) : behavior.drainBufferAt(0, maxDrain, action);
     }
 }

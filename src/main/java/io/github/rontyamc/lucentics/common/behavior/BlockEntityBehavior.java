@@ -41,6 +41,10 @@ public abstract class BlockEntityBehavior {
     }
 
     public void tick() {
+        Level level = getWorld();
+        if (isPowered(level)) whilePowered(level, getPos());
+        else whileUnPowered(level, getPos());
+
         if (lazyTickCounter-- <= 0) {
             lazyTickCounter = lazyTickRate;
             lazyTick();
@@ -49,6 +53,14 @@ public abstract class BlockEntityBehavior {
 
     protected void lazyTick() {
     }
+
+    protected boolean isPowered(Level level) {
+        return level.hasNeighborSignal(getPos());
+    }
+
+    protected void whilePowered(Level level, BlockPos pos) {}
+
+    protected void whileUnPowered(Level level, BlockPos pos) {}
 
     public abstract void dropContents(Level level, BlockPos pos);
 

@@ -16,19 +16,23 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.Vec3;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public final class ItemUtil {
     public static boolean isSameItem(ItemStack stackA, ItemStack stackB, boolean allowEmpty) {
         return allowEmpty ? stackA.is(stackB.getItem()) : !stackB.isEmpty() && stackA.is(stackB.getItem());
     }
 
-    public static void stackOrAppend(List<ItemStack> container, ItemStack addStack) {
+    public static List<ItemStack> stackOrAppend(List<ItemStack> container, ItemStack addStack) {
         ItemStack newStack = addStack.copy();
-        if (newStack.isEmpty()) return;
+        List<ItemStack> newContainer = deepCopy(container);
 
-        for (ItemStack containStack : container) {
+        if (newStack.isEmpty()) return newContainer;
+
+        for (ItemStack containStack : newContainer) {
             if (!isSameItem(containStack, newStack, false)) continue;
 
             int remainingSpace = containStack.getMaxStackSize() - containStack.getCount();
@@ -40,12 +44,24 @@ public final class ItemUtil {
         }
 
         if (!newStack.isEmpty()) {
-            container.add(newStack);
+            newContainer.add(newStack);
         }
+
+        return newContainer;
     }
 
-    public static ResourceLocation getId(Supplier<? extends ItemLike> output) {
-        return BuiltInRegistries.ITEM.getKey(output.get().asItem());
+    public static List<ItemStack> deepCopy(List<ItemStack> origin) {
+        return origin.stream().map(item -> item != null ? item.copy() : null).collect(Collectors.toCollection(ArrayList::new));
+    }
+
+    public static ResourceLocation getId(Supplier<? extends ItemLike> item) {
+        return BuiltInRegistries.ITEM.getKey(item.get().asItem());
+    }
+
+    public static Item byId(ResourceLocation id) {
+        return BuiltInRegistries.ITEM.stream()
+                .filter(item -> getId(() -> item).equals(id))
+                .findFirst().orElse(Items.AIR);
     }
 
     public static ItemStack hurtAndUpdate(int damage, ItemStack stack) {
@@ -96,5 +112,21 @@ public final class ItemUtil {
                         .filter(item -> !item.equals(Items.AIR))
                         .toList())
                 .orElse(List.of());
+    }
+
+    public record ItemMergeResult(ItemStack merged, ItemStack leftover) {
+        public static ItemMergeResult of(ItemStack merged, ItemStack leftover) {
+            return new ItemMergeResult(merged, leftover);
+        }
+    }
+
+    public static ItemMergeResult merge(ItemStack base, ItemStack add) {
+        if (add.isEmpty()) return ItemMergeResult.of(base.copy(), ItemStack.EMPTY);
+        if (!isSameItem(base, add, false)) return ItemMergeResult.of(base.copy(), add.copy());
+
+        int total = base.getCount() + add.getCount();
+        return total <= base.getMaxStackSize()
+                ? ItemMergeResult.of(base.copyWithCount(total), ItemStack.EMPTY)
+                : ItemMergeResult.of(base.copyWithCount(base.getMaxStackSize()), add.copyWithCount(total - base.getMaxStackSize()));
     }
 }

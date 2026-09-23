@@ -1,9 +1,10 @@
 package io.github.rontyamc.lucentics;
 
 import com.mojang.logging.LogUtils;
+import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.engraving_table.EngravingTableRenderer;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorRenderer;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableRenderer;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorRenderer;
 import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableRenderer;
 import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
@@ -11,7 +12,7 @@ import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
 import io.github.rontyamc.lucentics.client.particle.FlowingGlowParticle;
 import io.github.rontyamc.lucentics.client.particle.GlowParticle;
 import io.github.rontyamc.lucentics.client.particle.SphereParticle;
-import io.github.rontyamc.lucentics.common.datagen.AddRawLang;
+import io.github.rontyamc.lucentics.common.datagen.providers.AddRawLang;
 import io.github.rontyamc.lucentics.network.LucenticsNetwork;
 import io.github.rontyamc.lucentics.registers.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -104,6 +105,11 @@ public class Lucentics {
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.TOGGLED_EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(),
                 (be, side) -> be.getEngravingTableBehavior().getIHandler()
         );
@@ -126,6 +132,11 @@ public class Lucentics {
                 Capabilities.FluidHandler.BLOCK,
                 LucenticsBlockEntityRegister.MIXING_TABLE.get(),
                 (be, side) -> be.getMixingTableBehavior().getFHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ASSEMBLING_TABLE.get(),
+                (be, side) -> be.getAssemblingTableBehavior().getIHandler()
         );
     }
 
@@ -156,11 +167,13 @@ public class Lucentics {
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event){
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TOGGLED_EMITTER.get(), EmitterRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(), EngravingTableRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(), TankRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MILLING_TABLE.get(), MillingTableRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MIXING_TABLE.get(), MixingTableRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ASSEMBLING_TABLE.get(), AssemblingTableRenderer::new);
         }
 
         @SubscribeEvent

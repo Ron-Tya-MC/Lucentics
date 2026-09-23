@@ -44,16 +44,29 @@ public class LucenticsItemRegister {
             .register();
 
     public static final ItemEntry<Item> LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "light_copper", Item::new)
-            .tag(LucenticsITags.DUSK_BRICKS.tag,LucenticsITags.INGOTS.tag)
+            .tag(LucenticsITagSets.LIGHT_COPPER.tags())
             .register();
     public static final ItemEntry<Item> YELLOW_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "yellow_light_copper", Item::new)
-            .tag(LucenticsITags.DUSK_BRICKS.tag,LucenticsITags.INGOTS.tag)
+            .tag(LucenticsITagSets.LIGHT_COPPER.tags())
             .register();
     public static final ItemEntry<Item> MAGENTA_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "magenta_light_copper", Item::new)
-            .tag(LucenticsITags.DUSK_BRICKS.tag,LucenticsITags.INGOTS.tag)
+            .tag(LucenticsITagSets.LIGHT_COPPER.tags())
             .register();
-    public static final ItemEntry<Item> LIGHT_BLUE_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "light_blue_light_copper", Item::new)
-            .tag(LucenticsITags.DUSK_BRICKS.tag,LucenticsITags.INGOTS.tag)
+    public static final ItemEntry<Item> CYAN_LIGHT_COPPER = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "cyan_light_copper", Item::new)
+            .tag(LucenticsITagSets.LIGHT_COPPER.tags())
+            .register();
+
+    public static final ItemEntry<Item> GLIMMER_IRON = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "glimmer_iron", Item::new)
+            .tag(LucenticsITagSets.GLIMMER_IRON.tags())
+            .register();
+    public static final ItemEntry<Item> PINK_GLIMMER_IRON = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "pink_glimmer_iron", Item::new)
+            .tag(LucenticsITagSets.GLIMMER_IRON.tags())
+            .register();
+    public static final ItemEntry<Item> LIME_GLIMMER_IRON = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "lime_glimmer_iron", Item::new)
+            .tag(LucenticsITagSets.GLIMMER_IRON.tags())
+            .register();
+    public static final ItemEntry<Item> LIGHT_BLUE_GLIMMER_IRON = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "light_blue_glimmer_iron", Item::new)
+            .tag(LucenticsITagSets.GLIMMER_IRON.tags())
             .register();
 
     public static final ItemEntry<Item> LENS_FRAME = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "lens_frame", Item::new)
@@ -77,12 +90,25 @@ public class LucenticsItemRegister {
     }
 
     public static final ItemEntry<Item> DAWNSTONE_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dawnstone_dust", Item::new)
+            .tag(LucenticsITags.DUSTS.tag)
+            .register();
+    public static final ItemEntry<Item> DUSK_BRICK_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dusk_brick_dust", Item::new)
+            .tag(LucenticsITags.DUSTS.tag)
             .register();
     public static final ItemEntry<Item> COPPER_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "copper_dust", Item::new)
+            .tag(LucenticsITagSets.DUST_COPPER.tags())
             .register();
     public static final ItemEntry<Item> IRON_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "iron_dust", Item::new)
+            .tag(LucenticsITagSets.DUST_IRON.tags())
             .register();
     public static final ItemEntry<Item> GOLD_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "gold_dust", Item::new)
+            .tag(LucenticsITagSets.DUST_GOLD.tags())
+            .register();
+    public static final ItemEntry<Item> DIAMOND_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "diamond_dust", Item::new)
+            .tag(LucenticsITagSets.DUST_DIAMOND.tags())
+            .register();
+    public static final ItemEntry<Item> OBSIDIAN_DUST = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "obsidian_dust", Item::new)
+            .tag(LucenticsITagSets.DUST_OBSIDIAN.tags())
             .register();
 
     public static final ItemEntry<Item> COPPER_HAMMER = REGISTRATE
@@ -105,7 +131,7 @@ public class LucenticsItemRegister {
                                     Tool.Rule.minesAndDrops(BlockTags.MINEABLE_WITH_PICKAXE, 7.0f)
                             ),
                             1.0f, 1)))
-            .tag(ItemTagSet.merge(LucenticsITagSets.PICKAXE_LIKE, LucenticsITags.HAMMERS.tag))
+            .tag(ItemTagSet.merge(LucenticsITagSets.PICKAXE_LIKE, LucenticsITagSets.HAMMER_IRON.tags()))
             .register();
     public static final ItemEntry<Item> DIAMOND_HAMMER = REGISTRATE
             .lucenticsItemBuilder(CategoryType.TOOLS, "diamond_hammer", Item::new)
@@ -116,7 +142,7 @@ public class LucenticsItemRegister {
                                     Tool.Rule.minesAndDrops(BlockTags.MINEABLE_WITH_PICKAXE, 9.0f)
                             ),
                             1.0f, 1)))
-            .tag(ItemTagSet.merge(LucenticsITagSets.PICKAXE_LIKE, LucenticsITags.HAMMERS.tag))
+            .tag(ItemTagSet.merge(LucenticsITagSets.PICKAXE_LIKE, LucenticsITagSets.HAMMER_DIAMOND.tags()))
             .register();
     public static final ItemEntry<Item> GOLDEN_HAMMER = REGISTRATE
             .lucenticsItemBuilder(CategoryType.TOOLS, "golden_hammer", Item::new)
@@ -128,6 +154,36 @@ public class LucenticsItemRegister {
                             ),
                             1.0f, 1)))
             .tag(ItemTagSet.merge(LucenticsITagSets.PICKAXE_LIKE, LucenticsITags.HAMMERS.tag, ItemTags.PIGLIN_LOVED))
+            .register();
+
+    public static final ItemEntry<Item> GLASS_SHERD = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "glass_sherd", Item::new)
+            .register();
+
+    public static final ItemEntry<Item> PRISM_BALL = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "prism_ball", Item::new)
+            .register();
+
+    public static final ItemEntry<Item> GOLD_WIRE = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "gold_wire", Item::new)
+            .tag(ItemTags.PIGLIN_LOVED)
+            .register();
+
+    public static final ItemEntry<Item> IRON_PLATE = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "iron_plate", Item::new)
+            .tag(LucenticsITagSets.PLATE_IRON.tags())
+            .register();
+    public static final ItemEntry<Item> GOLD_PLATE = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "gold_plate", Item::new)
+            .tag(LucenticsITagSets.PLATE_GOLD.tags())
+            .register();
+
+    public static final ItemEntry<Item> LIGHT_COPPER_RING = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "light_copper_ring", Item::new)
+            .register();
+
+    public static final ItemEntry<Item> MOLD_BOX = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "mold_box", Item::new)
+            .register();
+    public static final ItemEntry<Item> MOLD_RING = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "mold_ring", Item::new)
+            .register();
+    public static final ItemEntry<Item> MOLD_INGOT = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "mold_ingot", Item::new)
+            .register();
+
+    public static final ItemEntry<Item> FOCUS_RING = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "focus_ring", Item::new)
             .register();
 
     public static void register() {

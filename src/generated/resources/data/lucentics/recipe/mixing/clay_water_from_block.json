@@ -1,0 +1,36 @@
+{
+  "type": "lucentics:mixing",
+  "input": {
+    "amount": 4000,
+    "fluid": "minecraft:water"
+  },
+  "outputs": [
+    {
+      "content": {
+        "amount": 2000,
+        "fluid": {
+          "amount": 1000,
+          "id": "lucentics:clay_water"
+        }
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "blue",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:clay"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

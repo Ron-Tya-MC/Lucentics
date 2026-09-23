@@ -2,9 +2,7 @@ package io.github.rontyamc.lucentics.blocks.emitter;
 
 import com.mojang.serialization.MapCodec;
 import io.github.rontyamc.lucentics.blocks.IBlockEntities;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
 import io.github.rontyamc.lucentics.common.SlotInteractions;
-import io.github.rontyamc.lucentics.items.LensItem;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -28,7 +26,6 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.neoforged.neoforge.items.ItemStackHandler;
 
 public class EmitterBlock extends HorizontalDirectionalBlock implements IBlockEntities<EmitterBlockEntity> {
     public static final MapCodec<EmitterBlock> CODEC = simpleCodec(EmitterBlock::new);

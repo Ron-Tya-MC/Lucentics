@@ -71,16 +71,21 @@ configurations {
 }
 
 dependencies {
-    compileOnly "curse.maven:jei-238222:7391682"
-    localRuntime "curse.maven:jei-238222:7391682"
+    implementation "curse.maven:jei-238222:7391682"
 
-    compileOnly "curse.maven:jade-324717:7545219"
-    localRuntime "curse.maven:jade-324717:7545219"
+    implementation "curse.maven:jade-324717:7545219"
 
     localRuntime "curse.maven:tooltips-reforged-1277444:7314753"
     localRuntime "curse.maven:jupiter-1072905:7738312"
 
     localRuntime "curse.maven:create-328085:7963363"
+
+    localRuntime "curse.maven:modern-industrialization-405388:8863289"
+    localRuntime "curse.maven:mekanism-268560:7904058"
+    localRuntime "curse.maven:ato-405593:7825464"
+    localRuntime "curse.maven:applied-energistics-2-223794:7027323"
+    localRuntime "curse.maven:guideme-1173950:8897145"
+    localRuntime "curse.maven:ae2-jei-integration-1074338:7727898"
 
     jarJar(api("com.tterrag.registrate:Registrate:$registrate_version"))
 }

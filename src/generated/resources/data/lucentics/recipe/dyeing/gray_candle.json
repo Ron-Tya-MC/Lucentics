@@ -1,0 +1,13 @@
+{
+  "type": "lucentics:dyeing",
+  "color": "gray",
+  "input": {
+    "tag": "minecraft:candles"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:gray_candle"
+  },
+  "processing_duration": 15,
+  "required_mb": 400
+}

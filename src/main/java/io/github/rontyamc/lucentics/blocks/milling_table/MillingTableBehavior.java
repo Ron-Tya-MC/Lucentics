@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.milling_table;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.ThingStack;
@@ -22,7 +23,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.Clearable;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
@@ -30,7 +30,6 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.network.PacketDistributor;
 
 import java.util.ArrayList;
@@ -41,10 +40,8 @@ import java.util.function.Supplier;
 public class MillingTableBehavior extends TrailCraftingBehavior implements Clearable {
     public static final BehaviorType<MillingTableBehavior> TYPE = new BehaviorType<>("milling_table");
 
-    private final RandomSource randomSource = RandomSource.create();
-
     private ItemStack container = ItemStack.EMPTY;
-    private final List<ItemStack> buffer = new ArrayList<>();
+    private List<ItemStack> buffer = new ArrayList<>();
     private boolean hasOutputItem;
     private final Integer maxStackSize;
     private final Supplier<Integer> maxBufferSize;
@@ -207,18 +204,24 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     }
 
     @Override
-    public void acceptItem(ItemStack stack) {
-        if (stack.isEmpty()) return;
-        ItemUtil.stackOrAppend(buffer, stack);
-        if (buffer.size() > maxBufferSize.get()) {
-            List<ItemStack> leftovers = new ArrayList<>(buffer.subList(maxBufferSize.get(), buffer.size()));
-            buffer.subList(maxBufferSize.get(), buffer.size()).clear();
-            ItemUtil.dropItem(getWorld(), getPos(), leftovers);
-        }
-    }
+    public ItemStack acceptItem(ItemStack stack, boolean simulate) {
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        Lucentics.LOGGER.info("accepting {}, {}", buffer, simulate);
 
-    @Override
-    public void acceptFluid(FluidStack stack) {}
+        List<ItemStack> newBuffer = ItemUtil.stackOrAppend(buffer, stack);
+        if (!simulate) buffer = newBuffer;
+
+        Lucentics.LOGGER.info("accepted {}, {}", buffer, simulate);
+        Lucentics.LOGGER.info(" ");
+
+        if (newBuffer.size() > maxBufferSize.get()) {
+            ItemStack leftover = newBuffer.getLast();
+            if (!simulate) buffer.removeLast();
+
+            return leftover;
+        }
+        return ItemStack.EMPTY;
+    }
 
     public void dropContents(Level level, BlockPos pos) {
         Vec3 vec = getCenter(pos);
@@ -233,13 +236,13 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     }
 
     private void spawnCraftingParticles(ServerLevel level, List<Beam> beams, BlockPos pos) {
-        double Sx = pos.getX() + Mth.lerp(randomSource.nextDouble(), 3.0f / 8, 5.0f / 8);
-        double Sy = pos.getY() + Mth.lerp(randomSource.nextDouble(), 3.0f / 8, 1.0);
-        double Sz = pos.getZ() + Mth.lerp(randomSource.nextDouble(), 3.0f / 8, 5.0f / 8);
+        double Sx = pos.getX() + Mth.lerp(RANDOM_SOURCE.nextDouble(), 3.0f / 8, 5.0f / 8);
+        double Sy = pos.getY() + Mth.lerp(RANDOM_SOURCE.nextDouble(), 3.0f / 8, 1.0);
+        double Sz = pos.getZ() + Mth.lerp(RANDOM_SOURCE.nextDouble(), 3.0f / 8, 5.0f / 8);
 
-        double Tx = Sx + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tx = Sx + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
         double Ty = pos.getY() + 1.2;
-        double Tz = Sz + Mth.lerp(randomSource.nextDouble(), -0.2, 0.2);
+        double Tz = Sz + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
 
         double Vx = Tx - Sx;
         double Vy = Ty - Sy;
@@ -281,15 +284,19 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
         return level.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.MILLING_TYPE.get(), input, level);
     }
 
-    protected void craft(ServerLevel level, TrailRecipe recipe, TrailRecipeInput input) {
-        super.craft(level, recipe, input);
+    protected boolean craft(ServerLevel level, RecipeHolder<TrailRecipe> recipeHolder, TrailRecipeInput input) {
+        boolean craftSucceeded = super.craft(level, recipeHolder, input);
 
-        Optional<List<TrailRecipe.ConsumptionEntry>> catalysts = getCachedCatalysts();
-        if (catalysts.isPresent()) {
-            for (TrailRecipe.ConsumptionEntry entry : catalysts.get()) {
-                entry.device().catalyst();
+        if (craftSucceeded) {
+            Optional<List<TrailRecipe.ConsumptionEntry>> catalysts = getCachedCatalysts();
+            if (catalysts.isPresent()) {
+                for (TrailRecipe.ConsumptionEntry entry : catalysts.get()) {
+                    entry.device().catalyst();
+                }
             }
         }
+
+        return craftSucceeded;
     }
 
     @Override
@@ -309,7 +316,7 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
             level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, container), Sx, Sy, Sz, 2, 0.3, 0.1, 0.3, 0.01);
         }
         if (processingTime %2 == 0) {
-            float p = Mth.lerp(randomSource.nextFloat(), 0.1f, 0.3f);
+            float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.1f, 0.3f);
             level.playSound(null, pos, SoundEvents.TUFF_HIT, SoundSource.BLOCKS, 0.4f, p);
         }
     }

@@ -2,7 +2,6 @@ package io.github.rontyamc.lucentics.blocks.mixing_table;
 
 import com.mojang.serialization.MapCodec;
 import io.github.rontyamc.lucentics.blocks.IBlockEntities;
-import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlockEntity;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockEntityRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
@@ -37,7 +36,9 @@ public class MixingTableBlock extends BaseEntityBlock implements IBlockEntities<
 
     private static final VoxelShape SHAPE = Shapes.or(BASE, BOTTOM, MIDDLE, TOP, COVER_BOTTOM, COVER_TOP);
 
-    public MixingTableBlock(Properties properties) {super(properties);}
+    public MixingTableBlock(Properties properties) {
+        super(properties);
+    }
 
     @Override
     public Class<MixingTableBlockEntity> getBlockEntityClass() {
@@ -76,11 +77,11 @@ public class MixingTableBlock extends BaseEntityBlock implements IBlockEntities<
 
     @Override
     protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand interactionHand, BlockHitResult hitResult) {
-        if (!(level.getBlockEntity(pos) instanceof TankLightCopperBlockEntity)) {
+        if (!(level.getBlockEntity(pos) instanceof MixingTableBlockEntity mixing)) {
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        var result = FluidUtil.interactWithFluidHandler(player, interactionHand, level, pos, hitResult.getDirection());
+        var result = FluidUtil.interactWithFluidHandler(player, interactionHand, mixing.getMixingTableBehavior().getAdminFHandler());
         if (result) {
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }
@@ -96,7 +97,7 @@ public class MixingTableBlock extends BaseEntityBlock implements IBlockEntities<
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide()) return null;
-        return IBlockEntities.createTickerHelper(type, LucenticsBlockEntityRegister.MILLING_TABLE.get(),
+        return IBlockEntities.createTickerHelper(type, LucenticsBlockEntityRegister.MIXING_TABLE.get(),
                 (l, pos, s, be) -> be.tick(l, pos, s));
     }
 }

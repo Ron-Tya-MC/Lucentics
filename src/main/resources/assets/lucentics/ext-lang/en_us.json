@@ -37,6 +37,7 @@
   "jei.lucentics.category.crushing": "Crushing",
   "jei.lucentics.category.milling": "Milling",
   "jei.lucentics.category.mixing": "Mixing",
+  "jei.lucentics.category.assembling": "Assembling",
   "jei.lucentics.category.dyeing": "Dyeing",
 
   "jei.lucentics.info.daylight_condition": "DayLight: %s",
@@ -47,6 +48,7 @@
   "jei.lucentics.info.required_hits": "Hit %s Times",
   "jei.lucentics.info.damage_per_hits": "%s Damage",
   "jei.lucentics.info.count": "%s drop",
+  "jei.lucentics.info.amount": "%s mB",
   "jei.lucentics.info.weight": "Weight: %s ( %s%% chance )",
   "jei.lucentics.info.probability": "%s%% chance",
   "jei.lucentics.info.damage_item": "%s Damage",

@@ -2,11 +2,8 @@ package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
-import io.github.rontyamc.lucentics.blocks.pedestals.PedestalBlockEntity;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.items.LensItem;
-import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +13,6 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
-import snownee.jade.api.ui.IElementHelper;
 
 public enum EmitterComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     INSTANCE;

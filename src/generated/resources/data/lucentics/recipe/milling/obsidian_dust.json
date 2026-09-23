@@ -1,0 +1,36 @@
+{
+  "type": "lucentics:milling",
+  "input": {
+    "count": 1,
+    "item": "minecraft:obsidian"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:obsidian_dust"
+        }
+      }
+    }
+  ],
+  "processing_duration": 160,
+  "trail_inputs": [
+    {
+      "color": "red",
+      "inputs": [
+        {
+          "damage_item": 1,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammer_diamond_tiers"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

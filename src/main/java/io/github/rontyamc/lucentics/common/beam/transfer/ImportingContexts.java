@@ -14,11 +14,11 @@ public class ImportingContexts {
         }
     }
 
-    public record FluidImportingContext(IFluidHandler handler, int slot, FluidStack fluidStack) {
+    public record FluidImportingContext(IFluidHandler handler, int tank, FluidStack fluidStack) {
         public final static FluidImportingContext EMPTY = new FluidImportingContext(null, -1, FluidStack.EMPTY);
 
-        public static FluidImportingContext of(IFluidHandler handler, int slot, FluidStack fluidStack) {
-            return new FluidImportingContext(handler, slot, fluidStack);
+        public static FluidImportingContext of(IFluidHandler handler, int tank, FluidStack fluidStack) {
+            return new FluidImportingContext(handler, tank, fluidStack);
         }
     }
 }

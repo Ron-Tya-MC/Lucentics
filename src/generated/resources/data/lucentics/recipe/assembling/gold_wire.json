@@ -1,0 +1,36 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "lucentics:gold_plate"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 6,
+        "item": {
+          "count": 1,
+          "id": "lucentics:gold_wire"
+        }
+      }
+    }
+  ],
+  "processing_duration": 80,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 3,
+          "input": {
+            "count": 1,
+            "item": "minecraft:shears"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -13,6 +13,7 @@ import java.util.Optional;
 
 public class DyeingRecipeConverter {
     public static final int BASE_MB_PER_DYE = 400;
+    public static final int BASE_PROCESSING_DURATION = 15;
 
     private DyeingRecipeConverter() {}
 
@@ -55,7 +56,7 @@ public class DyeingRecipeConverter {
         int liquidAmount = (BASE_MB_PER_DYE + notDyeCount - 1) / notDyeCount;
         int outputCount = Math.max(1, result.getCount() / notDyeCount);
 
-        return Optional.of(new DyeingRecipeEntry(dyeable, dyeColor, liquidAmount, result.copyWithCount(outputCount)));
+        return Optional.of(new DyeingRecipeEntry(dyeable, dyeColor, liquidAmount, result.copyWithCount(outputCount), BASE_PROCESSING_DURATION));
     }
 
     private static Optional<Colors> extractColor(Ingredient ingredient) {
@@ -73,6 +74,6 @@ public class DyeingRecipeConverter {
 
     public static DyeingRecipeEntry fromJson(DyeingRecipe recipe) {
         DyeingRecipeArguments args = recipe.getArguments();
-        return new DyeingRecipeEntry(args.input(), args.color(), args.liquidAmount(), args.output());
+        return new DyeingRecipeEntry(args.input(), args.color(), args.liquidAmount(), args.output(), args.processingDuration());
     }
 }

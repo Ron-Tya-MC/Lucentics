@@ -8,7 +8,7 @@ public class GlowParticle extends TextureSheetParticle {
     
     protected GlowParticle(ClientLevel level, double x, double y, double z,
                            double xd, double yd, double zd,
-                           float red, float green, float blue,
+                           float red, float green, float blue, float size,
                            SpriteSet sprites) {
         super(level, x, y, z, xd, yd, zd);
         this.xd = xd;
@@ -16,7 +16,7 @@ public class GlowParticle extends TextureSheetParticle {
         this.zd = zd;
         this.sprites = sprites;
         this.setColor(red, green, blue);
-        this.quadSize = random.nextFloat() * 0.1f + 0.05f;
+        this.quadSize = size;
         this.lifetime = 20;
         this.gravity = 0.0f;
         this.setSpriteFromAge(sprites);
@@ -41,7 +41,7 @@ public class GlowParticle extends TextureSheetParticle {
         public Particle createParticle(GlowParticleOptions options, ClientLevel level,
                                        double x, double y, double z,
                                        double xd, double yd, double zd) {
-            return new GlowParticle(level, x, y, z, xd, yd, zd, options.red(), options.green(), options.blue(), sprites);
+            return new GlowParticle(level, x, y, z, xd, yd, zd, options.red(), options.green(), options.blue(), options.size(), sprites);
         }
     }
 }

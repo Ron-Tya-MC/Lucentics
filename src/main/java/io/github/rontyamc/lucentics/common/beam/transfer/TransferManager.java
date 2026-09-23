@@ -169,8 +169,12 @@ public class TransferManager {
         List<ItemExportingInfo> infos = new ArrayList<>();
         ItemStack remaining = stack.copy();
 
+        boolean stopExplore = false;
+
         for (BeamNode node : nodesAhead) {
-            if (remaining.isEmpty()) break;
+            if (remaining.isEmpty() || stopExplore) break;
+
+            if (PrismQualifier.STOP_EXPLORE.test(level, node.pos())) stopExplore = true;
 
             Optional<BlockPos> targetPos = resolveDevicePos(node, level, PrismQualifier.EXPORT_TARGET, true);
             if (targetPos.isEmpty()) continue;
@@ -185,6 +189,7 @@ public class TransferManager {
 
             infos.add(new ItemExportingInfo(acceptor, remaining.copyWithCount(accepted), node));
             remaining = leftover;
+
         }
 
         return new ItemExportingContext(List.copyOf(infos), remaining);

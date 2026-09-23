@@ -11,6 +11,9 @@ import io.github.rontyamc.lucentics.registers.LucenticsFluidRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister;
 import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
 import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.placement.HorizontalAlignment;
+import mezz.jei.api.gui.placement.VerticalAlignment;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.neoforge.NeoForgeTypes;
 import mezz.jei.api.recipe.IFocusGroup;
@@ -22,7 +25,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
-import net.neoforged.neoforge.fluids.FluidType;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,13 +61,12 @@ public class DyeingRecipeCategory extends AbstractRecipeCategory<DyeingRecipeEnt
                 .setBackground(CommonParts.slot_normal, -1, -1)
                 .addIngredients(recipe.ingredient());
 
-        FluidStack fluid = new FluidStack(LucenticsFluidRegister.DYE_LIQUIDS.get(recipe.color()).get().getSource(), FluidType.BUCKET_VOLUME);
+        FluidStack fluid = new FluidStack(LucenticsFluidRegister.DYE_LIQUIDS.get(recipe.color()).get().getSource(), recipe.liquidAmount());
 
         builder.addInputSlot(52, 1)
                 .setBackground(CommonParts.slot_framed, -1, -1)
-                .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(fluid))
-                .addRichTooltipCallback((view, tooltip) ->
-                        tooltip.add(Component.literal(recipe.liquidAmount() + "mb").withColor(0xFF808080)));
+                .setFluidRenderer(1, false, 16, 16)
+                .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(fluid));
 
         builder.addOutputSlot(94, 1)
                 .setBackground(CommonParts.slot_normal, -1, -1)
@@ -89,5 +90,23 @@ public class DyeingRecipeCategory extends AbstractRecipeCategory<DyeingRecipeEnt
 
         builder.addSlot(RecipeIngredientRole.CATALYST, 52, 17)
                 .addItemStack(new ItemStack(LucenticsBlockRegister.MIXING_TABLE));
+    }
+
+    @Override
+    public void createRecipeExtras(IRecipeExtrasBuilder builder, DyeingRecipeEntry recipe, IFocusGroup focuses) {
+        addProcessingDuration(builder, recipe);
+    }
+
+    protected void addProcessingDuration(IRecipeExtrasBuilder builder, DyeingRecipeEntry recipe) {
+        int processingDuration = recipe.processingDuration();
+        if (processingDuration <= 0) {
+            processingDuration = 0;
+        }
+
+        Component text = Component.translatable("jei.lucentics.info.processing_duration", LucenticsJEIIntegration.makeSecond(processingDuration));
+        builder.addText(text, getWidth() / 2, 10)
+                .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM)
+                .setTextAlignment(HorizontalAlignment.RIGHT)
+                .setColor(0xFF808080);
     }
 }

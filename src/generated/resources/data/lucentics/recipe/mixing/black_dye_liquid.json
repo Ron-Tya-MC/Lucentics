@@ -25,6 +25,9 @@
           "input": {
             "count": 1,
             "tag": "c:dyes/black"
+          },
+          "required_type": {
+            "id": "lucentics:pedestal_ritual"
           }
         }
       ]

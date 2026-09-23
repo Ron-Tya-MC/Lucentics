@@ -1,0 +1,13 @@
+{
+  "type": "lucentics:dyeing",
+  "color": "purple",
+  "input": {
+    "tag": "minecraft:banners"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:purple_banner"
+  },
+  "processing_duration": 15,
+  "required_mb": 400
+}

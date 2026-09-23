@@ -47,6 +47,7 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
     private static final int NODE_AREA_WIDTH = 110;
     private static final int DEVICE_SLOT_OFFSET = 10;
     private static final int ITEM_SLOT_OFFSET = 0;
+    private static final int LEFT_SPACE = 30;
 
     private static final ResourceLocation ARROW_ALPHA_TEXTURE =
             Lucentics.defaultLocation("textures/gui/jei/engraving_arrow_alpha.png");
@@ -70,6 +71,8 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
 
     @Override
     public void draw(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
         List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
         int rowCount = Math.min(trails.size(), MAX_BEAMS);
 
@@ -91,34 +94,41 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
             guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("jei.lucentics.info.engraving.too_much_beam2"),
                     4, HEADER_HEIGHT + MAX_BEAMS * ROW_HEIGHT, 0x404040, false);
         }
+
+        ProbabilisticOutputSlots.drawRangeBadges(guiGraphics, recipeSlotsView, recipe.getOutputs(), left + 83, 5, 20, 20, Integer.MAX_VALUE, 3);
     }
 
-    public void drawArrowLight(GuiGraphics guiGraphics) {
-        CommonParts.arrowLight.draw(guiGraphics, WIDTH / 2 - 24 , 4);
+    public void drawArrowLight(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
+        CommonParts.arrowLight.draw(guiGraphics, left + 26 , 4);
     }
 
-    public void drawArrowNormal(GuiGraphics guiGraphics) {
-        CommonParts.arrowNormal48.draw(guiGraphics, WIDTH / 2 - 24 , 4);
+    public void drawArrowNormal(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
+        CommonParts.arrowNormal48.draw(guiGraphics, left + 26 , 4);
     }
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, TrailRecipe recipe, IFocusGroup focuses) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
         recipe.getMainInput().content().map(
-                item -> builder.addInputSlot(WIDTH / 2 - 50, 5)
+                item -> builder.addInputSlot(left, 5)
                         .setBackground(CommonParts.slot_normal, -1, -1)
-                        .addIngredients(item.ingredient()),
+                        .addItemStacks(List.of(item.getItems())),
                 fluid -> {
                     List<FluidStack> stacks = List.of(fluid.getFluids());
 
-                    return builder.addInputSlot(WIDTH / 2 - 50, 5)
+                    return builder.addInputSlot(left, 5)
                             .setBackground(CommonParts.slot_normal, -1, -1)
-                            .addIngredients(NeoForgeTypes.FLUID_STACK, stacks)
-                            .addRichTooltipCallback((view, tooltip) ->
-                                    tooltip.add(Component.literal(fluid.amount() + "mb").withColor(0xFF808080)));
+                            .setFluidRenderer(1, false, 16, 16)
+                            .addIngredients(NeoForgeTypes.FLUID_STACK, stacks);
                 }
         );
 
-        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), WIDTH / 2 + 33, 5, 20, Integer.MAX_VALUE);
+        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), left + 83, 5, 20, 20, Integer.MAX_VALUE, 3);
 
         List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
         int rowCount = Math.min(trails.size(), MAX_BEAMS);
@@ -162,9 +172,9 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
                 );
                 ordering.ingredient().asFluid().ifPresent(fluid ->
                         builder.addSlot(RecipeIngredientRole.CATALYST, x, y + ITEM_SLOT_OFFSET)
+                                .setFluidRenderer(1, false, 16, 16)
                                 .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(fluid.getFluids()))
                                 .addRichTooltipCallback((slotView, tooltip) -> {
-                                    tooltip.add(Component.literal(fluid.amount() + "mb").withColor(0xFFA0A0A0));
                                     if (ordering.notConsume()) tooltip.add(Component.translatable("jei.lucentics.info.not_consume"));
                                 })
                 );

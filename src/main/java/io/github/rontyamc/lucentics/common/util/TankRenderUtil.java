@@ -6,6 +6,7 @@ import io.github.rontyamc.lucentics.common.FluidSlot;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.Mth;
 import net.minecraft.world.inventory.InventoryMenu;
@@ -21,11 +22,12 @@ public final class TankRenderUtil {
     private static void vertex(VertexConsumer consumer, Matrix4f pose,
                                float x, float y, float z,
                                float r, float g, float b, float a,
-                               float u, float v, int light,
+                               float u, float v, int overlay, int light,
                                float nx, float ny, float nz) {
         consumer.addVertex(pose, x, y, z)
                 .setColor(r, g, b, a)
                 .setUv(u, v)
+                .setOverlay(overlay)
                 .setLight(light)
                 .setNormal(nx, ny, nz);
     }
@@ -37,11 +39,11 @@ public final class TankRenderUtil {
                              float x3, float y3, float z3,
                              float u0, float v0, float u1, float v1,
                              float nx, float ny, float nz,
-                             float r, float g, float b, float a, int light) {
-        vertex(consumer, pose, x0, y0, z0, r, g, b, a, u0, v1, light, nx, ny, nz);
-        vertex(consumer, pose, x1, y1, z1, r, g, b, a, u0, v0, light, nx, ny, nz);
-        vertex(consumer, pose, x2, y2, z2, r, g, b, a, u1, v0, light, nx, ny, nz);
-        vertex(consumer, pose, x3, y3, z3, r, g, b, a, u1, v1, light, nx, ny, nz);
+                             float r, float g, float b, float a, int overlay, int light) {
+        vertex(consumer, pose, x0, y0, z0, r, g, b, a, u0, v1, overlay, light, nx, ny, nz);
+        vertex(consumer, pose, x1, y1, z1, r, g, b, a, u0, v0, overlay, light, nx, ny, nz);
+        vertex(consumer, pose, x2, y2, z2, r, g, b, a, u1, v0, overlay, light, nx, ny, nz);
+        vertex(consumer, pose, x3, y3, z3, r, g, b, a, u1, v1, overlay, light, nx, ny, nz);
     }
 
     public static void render(FluidSlot slot, Bounds bounds,
@@ -65,8 +67,9 @@ public final class TankRenderUtil {
         float g = ((tint >> 8) & 0xFF) / 255f;
         float b = (tint & 0xFF) / 255f;
         float a = 1.0f;
+        int overlay = OverlayTexture.NO_OVERLAY;
 
-        VertexConsumer consumer = bufferSource.getBuffer(RenderType.translucent());
+        VertexConsumer consumer = bufferSource.getBuffer(RenderType.entityTranslucent(InventoryMenu.BLOCK_ATLAS));
         Matrix4f pose = poseStack.last().pose();
 
         float hu0 = sprite.getU(bounds.x0), hu1 = sprite.getU(bounds.x1);
@@ -76,18 +79,18 @@ public final class TankRenderUtil {
 
         // 上面
         quad(consumer, pose, bounds.x0, y1, bounds.z0, bounds.x0, y1, bounds.z1, bounds.x1, y1, bounds.z1, bounds.x1, y1, bounds.z0,
-                hu0, hv0, hu1, hv1, 0, 1, 0, r, g, b, a, packedLight);
+                hu0, hv0, hu1, hv1, 0, 1, 0, r, g, b, a, overlay, packedLight);
         // 北面
         quad(consumer, pose, bounds.x0, bounds.y0, bounds.z0, bounds.x0, y1, bounds.z0, bounds.x1, y1, bounds.z0, bounds.x1, bounds.y0, bounds.z0,
-                vu0, vv0, vu1, vv1, 0, 0, -1, r, g, b, a, packedLight);
+                vu0, vv0, vu1, vv1, 0, 0, -1, r, g, b, a, overlay, packedLight);
         // 南面
         quad(consumer, pose, bounds.x1, bounds.y0, bounds.z1, bounds.x1, y1, bounds.z1, bounds.x0, y1, bounds.z1, bounds.x0, bounds.y0, bounds.z1,
-                vu0, vv0, vu1, vv1, 0, 0, 1, r, g, b, a, packedLight);
+                vu0, vv0, vu1, vv1, 0, 0, 1, r, g, b, a, overlay, packedLight);
         // 西面
         quad(consumer, pose, bounds.x0, bounds.y0, bounds.z1, bounds.x0, y1, bounds.z1, bounds.x0, y1, bounds.z0, bounds.x0, bounds.y0, bounds.z0,
-                vu0, vv0, vu1, vv1, -1, 0, 0, r, g, b, a, packedLight);
+                vu0, vv0, vu1, vv1, -1, 0, 0, r, g, b, a, overlay, packedLight);
         // 東面
         quad(consumer, pose, bounds.x1, bounds.y0, bounds.z0, bounds.x1, y1, bounds.z0, bounds.x1, y1, bounds.z1, bounds.x1, bounds.y0, bounds.z1,
-                vu0, vv0, vu1, vv1, 1, 0, 0, r, g, b, a, packedLight);
+                vu0, vv0, vu1, vv1, 1, 0, 0, r, g, b, a, overlay, packedLight);
     }
 }

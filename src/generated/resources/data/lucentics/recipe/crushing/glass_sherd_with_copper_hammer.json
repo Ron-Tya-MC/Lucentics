@@ -1,0 +1,32 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.glass.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.glass.hit",
+    "source": "block"
+  },
+  "damage_per_hit": 2,
+  "input": "minecraft:glass",
+  "outputs": [
+    {
+      "content": {
+        "count": {
+          "type": "minecraft:uniform",
+          "max_inclusive": 3,
+          "min_inclusive": 2
+        },
+        "item": {
+          "count": 1,
+          "id": "lucentics:glass_sherd"
+        }
+      }
+    }
+  ],
+  "required_hit": 2,
+  "tool": {
+    "item": "lucentics:copper_hammer"
+  }
+}

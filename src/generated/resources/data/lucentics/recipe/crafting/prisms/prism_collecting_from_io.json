@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "P": {
+      "item": "lucentics:prism_io"
+    }
+  },
+  "pattern": [
+    "BPB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_collecting"
+  }
+}

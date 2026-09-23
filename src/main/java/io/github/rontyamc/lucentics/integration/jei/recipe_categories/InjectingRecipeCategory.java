@@ -43,7 +43,7 @@ public class InjectingRecipeCategory extends AbstractRecipeCategory<InjectingRec
                         .addIngredients(sized.ingredient())
         );
 
-        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), 93, 5, 20, 1);
+        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), 93, 5, 20, 20, 1, 1);
     }
 
     @Override
