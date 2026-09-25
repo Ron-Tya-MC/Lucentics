@@ -134,7 +134,7 @@ public class PedestalBehavior extends BlockEntityBehavior implements INodeDevice
     @Override
     public void damageItem(int damage) {
         if (getContent().isEmpty()) return;
-        content = ItemUtil.hurtAndUpdate(damage, content);
+        content = ItemUtil.damageAndUpdate(damage, content);
         blockEntity.updated();
     }
 

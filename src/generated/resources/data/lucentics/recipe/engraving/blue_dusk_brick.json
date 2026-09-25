@@ -1,5 +1,6 @@
 {
   "type": "lucentics:engraving",
+  "daylight_condition": 7,
   "input": {
     "count": 1,
     "item": "lucentics:dusk_brick"
@@ -27,9 +28,7 @@
             "item": "minecraft:blue_dye"
           },
           "not_consume": true,
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -38,9 +37,7 @@
             "item": "minecraft:blue_dye"
           },
           "not_consume": true,
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -49,9 +46,7 @@
             "item": "minecraft:blue_dye"
           },
           "not_consume": true,
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -60,9 +55,7 @@
             "item": "minecraft:blue_dye"
           },
           "not_consume": true,
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -71,9 +64,7 @@
             "item": "minecraft:blue_dye"
           },
           "not_consume": true,
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

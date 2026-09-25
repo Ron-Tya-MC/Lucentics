@@ -1,5 +1,6 @@
 {
   "type": "lucentics:assembling",
+  "daylight_condition": 7,
   "input": {
     "count": 1,
     "item": "minecraft:bricks"
@@ -26,9 +27,7 @@
             "amount": 1000,
             "fluid": "lucentics:clay_water"
           },
-          "required_type": {
-            "id": "lucentics:tank_light_copper"
-          }
+          "required_type": "lucentics:tank"
         },
         {
           "damage_item": 0,
@@ -36,9 +35,7 @@
             "count": 1,
             "item": "lucentics:mold_box"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

@@ -22,7 +22,7 @@ import net.minecraft.world.phys.Vec3;
 import java.util.ArrayList;
 
 public class EmitterBehavior extends EmitBehavior implements Clearable {
-    public static final BehaviorType<EmitterBehavior> TYPE = new BehaviorType<>("emitter");
+    public static final BehaviorType<EmitterBehavior> TYPE = new BehaviorType<>("emitter", EmitBehavior.TYPE);
 
     protected ItemStack lensContainer;
     protected final Integer maxStackSize;

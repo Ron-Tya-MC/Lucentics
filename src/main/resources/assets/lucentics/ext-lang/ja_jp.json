@@ -3,6 +3,8 @@
   "$R:item.lucentics.;tier2_colors/_dusk_brick" : "%Rの薄明石",
   "item.lucentics.light_copper": "光銅",
   "$R:item.lucentics.;tier3_colors/_light_copper" : "%Rの光銅",
+  "item.lucentics.glimmer_iron": "蛍鉄",
+  "$R:item.lucentics.;tier4_colors/_glimmer_iron" : "%Rの蛍鉄",
 
   "item.lucentics.lens_frame": "レンズフレーム",
   "$R:item.lucentics.;16_colors/_lens" : "%Rのレンズ",
@@ -16,6 +18,7 @@
   "item.lucentics.obsidian_dust": "黒曜石の粉",
 
   "item.lucentics.glass_sherd": "ガラスの欠片",
+  "item.lucentics.dawn_crystal": "黎明水晶",
   "item.lucentics.prism_ball": "プリズム球",
   "item.lucentics.gold_wire": "金のワイヤー",
   "item.lucentics.iron_plate": "鉄の板",
@@ -42,6 +45,8 @@
   "block.lucentics.dawnstone": "黎明石",
   "block.lucentics.light_copper_block": "光銅ブロック",
   "$R:block.lucentics.;tier3_colors/_light_copper_block" : "%Rの光銅ブロック",
+  "block.lucentics.glimmer_iron_block": "蛍鉄ブロック",
+  "$R:block.lucentics.;tier4_colors/_glimmer_iron_block" : "%Rの蛍鉄ブロック",
 
   "block.lucentics.injector": "光注入器",
   "block.lucentics.emitter": "放射器",
@@ -61,6 +66,11 @@
   "block.lucentics.prism_exporting": "搬出のプリズム",
   "block.lucentics.prism_io": "搬入出のプリズム",
   "block.lucentics.prism_collecting": "集積のプリズム",
+  "block.lucentics.prism_break": "破壊のプリズム",
+  "block.lucentics.prism_attack": "攻撃のプリズム",
+  "block.lucentics.prism_fluid_place": "液体設置のプリズム",
+  "block.lucentics.prism_fluid_drain": "液体回収のプリズム",
+  "block.lucentics.prism_place": "設置のプリズム",
   "block.lucentics.prism_dyeing": "染色のプリズム",
 
   "$R:block.lucentics.;16_colors/_dye_liquid" : "%Rの染料液",

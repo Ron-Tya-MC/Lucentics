@@ -26,9 +26,7 @@
             "count": 1,
             "item": "lucentics:gold_wire"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -36,9 +34,7 @@
             "count": 1,
             "item": "lucentics:gold_wire"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -46,9 +42,7 @@
             "count": 2,
             "item": "lucentics:light_copper_ring"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -56,9 +50,7 @@
             "count": 1,
             "item": "lucentics:gold_wire"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -66,9 +58,7 @@
             "count": 1,
             "item": "lucentics:gold_wire"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

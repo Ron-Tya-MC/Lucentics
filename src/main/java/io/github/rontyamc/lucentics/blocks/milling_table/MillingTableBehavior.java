@@ -38,7 +38,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class MillingTableBehavior extends TrailCraftingBehavior implements Clearable {
-    public static final BehaviorType<MillingTableBehavior> TYPE = new BehaviorType<>("milling_table");
+    public static final BehaviorType<MillingTableBehavior> TYPE = new BehaviorType<>("milling_table", TrailCraftingBehavior.TYPE);
 
     private ItemStack container = ItemStack.EMPTY;
     private List<ItemStack> buffer = new ArrayList<>();

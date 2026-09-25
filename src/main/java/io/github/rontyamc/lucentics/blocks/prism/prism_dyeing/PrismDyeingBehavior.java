@@ -32,7 +32,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.chunk.LevelChunk;
@@ -48,8 +47,6 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
     public static final PrismDyeingBehavior INSTANCE = new PrismDyeingBehavior();
     public static final int PARTICLE_INTERVAL = 8;
     public static final int PARTICLE_LINGER = 8;
-
-    public static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     protected PrismDyeingBehavior() {}
 
@@ -72,11 +69,12 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
             return;
         }
         ItemImportingContext importingContext = TransferUtil.firstImportable(inputHandler.get());
-        ItemStack dyeable = importingContext.itemStack();
-        if (dyeable.isEmpty()) {
+        if (importingContext.isEmpty()) {
             DyeingProgressHelper.clear(chunk, prismPos);
             return;
         }
+
+        ItemStack dyeable = importingContext.itemStack();
 
         Optional<ColorSupply> supply = findDyeSupply(level, context.nodesAhead());
         if (supply.isEmpty()) {
@@ -99,7 +97,7 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
                 TransferManager.planItemExport(level, recipe.get().output(),
                         context.nodesAhead().subList(supply.get().supplyIndex(), context.nodesAhead().size()));
 
-        if (!exportingContext.hasAnyExport()) {
+        if (!exportingContext.hasAnyExport() || !exportingContext.fallbacks().leftover().isEmpty()) {
             DyeingProgressHelper.clear(chunk, prismPos);
             return;
         }
@@ -134,9 +132,13 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
 
         exportingContext.commit();
 
-        if (!exportingContext.leftover().isEmpty()) {
+        if (!exportingContext.fallbacks().leftover().isEmpty()) {
             // 無いとは思うが
-            ItemUtil.dropItem(level, prismPos, exportingContext.leftover());
+            ItemUtil.dropItem(level, prismPos, exportingContext.fallbacks().leftover());
+        }
+        if (!exportingContext.fallbacks().leftover().isEmpty()) {
+            // 無いとは思うが
+            ItemUtil.dropItem(level, prismPos, exportingContext.fallbacks().leftover());
         }
 
         onCrafted(level, interactPos, prismPos, exportingContext, color);

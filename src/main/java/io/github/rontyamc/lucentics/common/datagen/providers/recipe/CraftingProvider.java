@@ -224,8 +224,8 @@ public class CraftingProvider {
                         .define('B', Blocks.IRON_BARS)
                         .pattern("BPB"));
 
-        provider.generic(LucenticsBlockRegister.PRISM_DYEING).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
-                .shaped(b -> b.define('P', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+        provider.generic(LucenticsBlockRegister.PRISM_DYEING).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.GREEN))
+                .shaped(b -> b.define('P', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.GREEN))
                         .define('D', LucenticsTagRegister.LucenticsITags.DYES.tag)
                         .pattern(" D ")
                         .pattern("DPD")

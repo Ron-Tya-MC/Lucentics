@@ -27,9 +27,7 @@
             "count": 1,
             "item": "minecraft:cod"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -37,9 +35,7 @@
             "count": 1,
             "item": "minecraft:salmon"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -47,9 +43,7 @@
             "count": 1,
             "item": "minecraft:kelp"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -57,9 +51,7 @@
             "count": 1,
             "item": "minecraft:water_bucket"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -67,9 +59,7 @@
             "count": 1,
             "tag": "minecraft:boats"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -77,9 +67,7 @@
             "count": 1,
             "item": "minecraft:ink_sac"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -87,9 +75,7 @@
             "count": 1,
             "item": "minecraft:blue_stained_glass"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

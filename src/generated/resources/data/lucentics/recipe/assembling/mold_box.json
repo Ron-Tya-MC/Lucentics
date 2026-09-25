@@ -26,9 +26,7 @@
             "count": 1,
             "tag": "lucentics:hammers"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -37,9 +35,7 @@
             "item": "lucentics:dawnstone"
           },
           "not_consume": true,
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

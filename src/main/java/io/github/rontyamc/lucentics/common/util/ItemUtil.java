@@ -64,7 +64,7 @@ public final class ItemUtil {
                 .findFirst().orElse(Items.AIR);
     }
 
-    public static ItemStack hurtAndUpdate(int damage, ItemStack stack) {
+    public static ItemStack damageAndUpdate(int damage, ItemStack stack) {
         int currentDamage = stack.getDamageValue();
         stack.setDamageValue(currentDamage + damage);
         return currentDamage + damage < stack.getMaxDamage() ? stack : ItemStack.EMPTY;

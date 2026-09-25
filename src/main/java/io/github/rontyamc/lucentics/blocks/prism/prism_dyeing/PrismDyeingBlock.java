@@ -21,7 +21,7 @@ public class PrismDyeingBlock extends PrismBlock implements IFlowingParticleSche
     public static final MapCodec<PrismDyeingBlock> CODEC = simpleCodec(PrismDyeingBlock::new);
 
     public PrismDyeingBlock(Properties properties) {
-        super(properties, Optional.of(Colors.BLUE));
+        super(properties, Optional.of(Colors.GREEN));
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public class InputSpec {
     private final SizedThingIngredient ingredient;
-    Optional<BehaviorType> requiredType = Optional.empty();
+    Optional<BehaviorType<?>> requiredType = Optional.empty();
     int damageItem = 0;
     boolean notConsume = false;
 

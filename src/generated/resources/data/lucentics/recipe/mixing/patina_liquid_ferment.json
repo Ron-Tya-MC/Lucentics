@@ -24,11 +24,9 @@
           "damage_item": 0,
           "input": {
             "count": 1,
-            "item": "lucentics:copper_dust"
+            "tag": "c:dusts/copper"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -36,9 +34,7 @@
             "count": 1,
             "item": "minecraft:spider_eye"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -46,9 +42,7 @@
             "count": 1,
             "item": "minecraft:sugar"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

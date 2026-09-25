@@ -9,7 +9,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 
 public class ToggledEmitterBehavior extends EmitterBehavior {
-    public static final BehaviorType<ToggledEmitterBehavior> TYPE = new BehaviorType<>("toggled_emitter");
+    public static final BehaviorType<ToggledEmitterBehavior> TYPE = new BehaviorType<>("toggled_emitter", EmitterBehavior.TYPE);
 
     protected boolean wasPowered = false;
 

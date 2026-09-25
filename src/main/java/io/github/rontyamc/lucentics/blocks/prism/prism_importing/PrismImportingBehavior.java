@@ -11,7 +11,6 @@ import io.github.rontyamc.lucentics.common.beam.particle.ScheduledFlowingParticl
 import io.github.rontyamc.lucentics.common.beam.transfer.TransferManager;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.chunk.LevelChunk;
 import net.minecraft.world.phys.Vec3;
 
@@ -19,8 +18,6 @@ public class PrismImportingBehavior extends PrismBehavior implements IFlowingPar
     public static final PrismImportingBehavior INSTANCE = new PrismImportingBehavior();
     public static final int PARTICLE_INTERVAL = 6;
     public static final int PARTICLE_LINGER = 6;
-
-    public static final RandomSource RANDOM_SOURCE = RandomSource.create();
 
     protected PrismImportingBehavior() {}
 

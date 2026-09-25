@@ -27,9 +27,7 @@
             "count": 1,
             "item": "minecraft:crafting_table"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -37,9 +35,7 @@
             "count": 1,
             "item": "minecraft:smithing_table"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -47,9 +43,7 @@
             "count": 1,
             "item": "minecraft:cartography_table"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -57,9 +51,7 @@
             "count": 1,
             "item": "minecraft:fletching_table"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -67,9 +59,7 @@
             "count": 1,
             "item": "minecraft:loom"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -77,9 +67,7 @@
             "count": 1,
             "item": "minecraft:crafter"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -87,9 +75,7 @@
             "count": 1,
             "item": "minecraft:green_stained_glass"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

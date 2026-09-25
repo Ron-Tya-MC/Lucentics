@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.common.datagen.builders;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.SoundSpec;
+import io.github.rontyamc.lucentics.common.dict.Warns;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipeArguments;
@@ -175,9 +176,7 @@ public class CrushingBuilder implements RecipeBuilder, IdPathResolvable {
                 if (path.isPresent()) return path.get();
             }
         }
-        Lucentics.LOGGER.warn(
-                "Failed to resolve ID path; falling back to \"unknown\". You MUST include a non-empty item/fluid output or specify a path using path(String path) to prevent recipe collisions."
-        );
+        Warns.FAILED_TO_RESOLVE_ID.cast();
         return "unknown";
     }
 

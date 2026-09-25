@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "lucentics:block/pink_glimmer_iron_block"
+  }
+}

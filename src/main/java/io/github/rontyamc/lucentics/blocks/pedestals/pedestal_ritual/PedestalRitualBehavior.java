@@ -14,7 +14,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.Level;
 
 public class PedestalRitualBehavior extends PedestalBehavior {
-    public static final BehaviorType<PedestalRitualBehavior> TYPE = new BehaviorType<>("pedestal_ritual");
+    public static final BehaviorType<PedestalRitualBehavior> TYPE = new BehaviorType<>("pedestal_ritual", PedestalBehavior.TYPE);
 
     private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 

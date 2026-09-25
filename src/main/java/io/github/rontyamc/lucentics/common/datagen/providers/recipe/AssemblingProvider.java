@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
-import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBehavior;
+import io.github.rontyamc.lucentics.blocks.tank.TankBehavior;
 import io.github.rontyamc.lucentics.common.datagen.builders.InputSpec;
 import io.github.rontyamc.lucentics.common.datagen.builders.TrailBuilder;
 import io.github.rontyamc.lucentics.common.dict.Colors;
@@ -38,7 +38,7 @@ public class AssemblingProvider {
 
         provider.generic(LucenticsItemRegister.PRISM_BALL)
                 .assembling(b -> b
-                        .input(LucenticsItemRegister.GLASS_SHERD, 4)
+                        .input(LucenticsItemRegister.DAWN_CRYSTAL, 2)
                         .trail(TrailBuilder.create(Colors.GREEN)
                                 .input(InputSpec.item(LucenticsItemRegister.GLASS_SHERD, 2).requiredType(PedestalRitualBehavior.TYPE))
                                 .input(InputSpec.item(LucenticsItemRegister.DAWNSTONE_DUST).requiredType(PedestalRitualBehavior.TYPE))
@@ -48,6 +48,7 @@ public class AssemblingProvider {
                                 .input(InputSpec.item(LucenticsItemRegister.GLASS_SHERD, 2).requiredType(PedestalRitualBehavior.TYPE))
                         )
                         .duration(200)
+                        .daylight(12)
                 );
 
         provider.generic()
@@ -120,6 +121,7 @@ public class AssemblingProvider {
                                 .input(InputSpec.item(LucenticsItemRegister.DAWNSTONE_DUST).requiredType(PedestalRitualBehavior.TYPE))
                         )
                         .duration(40)
+                        .daylight(8)
                 );
 
         provider.generic(LucenticsBlockRegister.PEDESTAL_RITUAL)
@@ -132,36 +134,39 @@ public class AssemblingProvider {
                                 .input(InputSpec.item(LucenticsBlockRegister.DAWNSTONE).requiredType(PedestalRitualBehavior.TYPE))
                         )
                         .duration(60)
+                        .daylight(8)
                 );
 
         provider.generic(LucenticsBlockRegister.DUSK_BRICKS, 2)
                 .assembling(b -> b
                         .input(Items.BRICKS)
                         .trail(TrailBuilder.create(Colors.SUNLIGHT)
-                                .input(InputSpec.fluid(LucenticsFluidRegister.CLAY_WATER.get().getSource(), 1000).requiredType(TankLightCopperBehavior.TYPE))
+                                .input(InputSpec.fluid(LucenticsFluidRegister.CLAY_WATER.get().getSource(), 1000).requiredType(TankBehavior.TYPE))
                                 .input(InputSpec.item(LucenticsItemRegister.MOLD_BOX).requiredType(PedestalRitualBehavior.TYPE))
                         )
                         .duration(150)
+                        .daylight(7)
                 );
         provider.generic(LucenticsItemRegister.DUSK_BRICK, 2)
                 .assembling(b -> b
                         .input(Items.BRICK)
                         .trail(TrailBuilder.create(Colors.SUNLIGHT)
-                                .input(InputSpec.fluid(LucenticsFluidRegister.CLAY_WATER.get().getSource(), 250).requiredType(TankLightCopperBehavior.TYPE))
+                                .input(InputSpec.fluid(LucenticsFluidRegister.CLAY_WATER.get().getSource(), 250).requiredType(TankBehavior.TYPE))
                                 .input(InputSpec.item(LucenticsItemRegister.MOLD_INGOT).requiredType(PedestalRitualBehavior.TYPE))
                         )
                         .duration(40)
+                        .daylight(7)
                 );
 
         provider.generic(LucenticsBlockRegister.PRISM_DYEING)
                 .assembling(b -> b.input(LucenticsBlockRegister.PRISM_BLANK)
                         .trail(TrailBuilder.create(Colors.GREEN)
-                                .input(InputSpec.item(Items.BLUE_DYE, 4).requiredType(PedestalRitualBehavior.TYPE))
                                 .input(InputSpec.item(Items.LAPIS_LAZULI, 4).requiredType(PedestalRitualBehavior.TYPE))
-                                .input(InputSpec.fluid(LucenticsFluidRegister.DYE_LIQUIDS.get(Colors.BLUE).get().getSource(), 8000).requiredType(TankLightCopperBehavior.TYPE))
-                                .input(InputSpec.item(LucenticsItemRegister.DIAMOND_DUST).requiredType(PedestalRitualBehavior.TYPE))
+                                .input(InputSpec.fluid(LucenticsFluidRegister.DYE_LIQUIDS.get(Colors.GREEN).get().getSource(), 8000).requiredType(TankBehavior.TYPE))
+                                .input(InputSpec.item(LucenticsITags.DUSTS_DIAMOND.tag).requiredType(PedestalRitualBehavior.TYPE))
                                 .input(InputSpec.item(LucenticsITags.DYES.tag, 4).requiredType(PedestalRitualBehavior.TYPE))
                         )
-                        .duration(400));
+                        .duration(400)
+                        .daylight(12));
     }
 }

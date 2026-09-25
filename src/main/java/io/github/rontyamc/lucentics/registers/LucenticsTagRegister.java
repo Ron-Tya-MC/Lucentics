@@ -15,7 +15,8 @@ public class LucenticsTagRegister {
 
     public enum TagLocation {
         LUCENTICS(Lucentics.MOD_ID),
-        COMMON("c");
+        COMMON("c"),
+        SUPPLEMENTARIES("supplementaries");
 
         public final String namespace;
 
@@ -58,7 +59,9 @@ public class LucenticsTagRegister {
         DUSTS_IRON(TagLocation.COMMON, "dusts/iron"),
         DUSTS_GOLD(TagLocation.COMMON, "dusts/gold"),
         DUSTS_DIAMOND(TagLocation.COMMON, "dusts/diamond"),
-        DUSTS_OBSIDIAN(TagLocation.COMMON, "dusts/obsidian");
+        DUSTS_OBSIDIAN(TagLocation.COMMON, "dusts/obsidian"),
+        THROWABLE_BRICKS(TagLocation.SUPPLEMENTARIES),
+        HOURGLASS_DUSTS(TagLocation.SUPPLEMENTARIES);
 
         public final TagKey<Item> tag;
 
@@ -78,6 +81,7 @@ public class LucenticsTagRegister {
     public enum LucenticsBTags {
         DUSK_BRICKS,
         LIGHT_COPPER_BLOCKS,
+        GLIMMER_IRON_BLOCKS,
         PRISMS,
         PEDESTALS,
         PRISM_RITUAL,

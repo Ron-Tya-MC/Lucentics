@@ -41,7 +41,7 @@ public class TrailRecipe extends BaseRecipe<TrailRecipeInput, RecipeArguments> {
     }
 
     private boolean orderingMatches(DeviceSlot device, RecipeArguments.OrderingInput ordering) {
-        if (ordering.requiredType().isPresent() && !ordering.requiredType().get().equals(device.type())) {
+        if (ordering.requiredType().isPresent() && !device.type().isKindOf(ordering.requiredType().get())) {
             return false;
         }
 

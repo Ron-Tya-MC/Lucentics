@@ -27,6 +27,8 @@ import java.util.Optional;
 import static io.github.rontyamc.lucentics.blocks.injector.InjectorBehavior.getDaylight;
 
 public abstract class TrailCraftingBehavior extends ReceiveBehavior implements OutputReceiver {
+    public static final BehaviorType<TrailCraftingBehavior> TYPE = new BehaviorType<>("trail_crafting", ReceiveBehavior.TYPE);
+
     protected int processingTime = -1;
     protected int processingTimeMax = -1;
     protected int processingContinue = 0;

@@ -9,6 +9,10 @@
     "lucentics:yellow_light_copper_block",
     "lucentics:magenta_light_copper_block",
     "lucentics:cyan_light_copper_block",
+    "lucentics:glimmer_iron_block",
+    "lucentics:pink_glimmer_iron_block",
+    "lucentics:lime_glimmer_iron_block",
+    "lucentics:light_blue_glimmer_iron_block",
     "lucentics:injector",
     "lucentics:emitter",
     "lucentics:toggled_emitter",
@@ -41,6 +45,9 @@
     "lucentics:prism_exporting",
     "lucentics:prism_io",
     "lucentics:prism_collecting",
-    "lucentics:prism_dyeing"
+    "lucentics:prism_break",
+    "lucentics:prism_attack",
+    "lucentics:prism_dyeing",
+    "lucentics:prism_place"
   ]
 }

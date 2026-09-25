@@ -1,6 +1,7 @@
 package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
 
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
@@ -30,6 +31,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRecipe> {
@@ -149,7 +151,15 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
                 int x = cellCenter - 8;
 
                 ordering.requiredType().ifPresent(type -> {
-                    List<ItemStack> deviceBlocks = BehaviorTypeBlockRegistry.getProviders(type);
+                    List<BehaviorType<?>> matches = new ArrayList<>();
+                    matches.add(type);
+                    matches.addAll(type.getAllChildren());
+
+                    List<ItemStack> deviceBlocks = new ArrayList<>();
+                    for (BehaviorType<?> behaviorType : matches) {
+                         deviceBlocks.addAll(BehaviorTypeBlockRegistry.getProviders(behaviorType));
+                    }
+
                     if (!deviceBlocks.isEmpty()) {
                         builder.addSlot(RecipeIngredientRole.CATALYST, x, y + DEVICE_SLOT_OFFSET)
                                 .addItemStacks(deviceBlocks);

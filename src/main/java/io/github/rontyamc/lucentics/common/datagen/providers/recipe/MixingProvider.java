@@ -5,7 +5,7 @@ import io.github.rontyamc.lucentics.common.datagen.builders.InputSpec;
 import io.github.rontyamc.lucentics.common.datagen.builders.TrailBuilder;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsFluidRegister;
-import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
+import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsITags;
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
@@ -52,7 +52,7 @@ public class MixingProvider {
                 .mixing(b -> b
                         .input(Fluids.WATER, 4000)
                         .trail(TrailBuilder.create(Colors.BLUE)
-                                .input(InputSpec.item(LucenticsItemRegister.COPPER_DUST).requiredType(PedestalRitualBehavior.TYPE))
+                                .input(InputSpec.item(LucenticsITags.DUSTS_COPPER.tag).requiredType(PedestalRitualBehavior.TYPE))
                                 .input(InputSpec.item(Items.FERMENTED_SPIDER_EYE).requiredType(PedestalRitualBehavior.TYPE))
                         )
                         .output(LucenticsFluidRegister.PATINA_LIQUID.get().getSource(), 4000)
@@ -62,7 +62,7 @@ public class MixingProvider {
                 .mixing(b -> b
                         .input(Fluids.WATER, 4000)
                         .trail(TrailBuilder.create(Colors.BLUE)
-                                .input(InputSpec.item(LucenticsItemRegister.COPPER_DUST).requiredType(PedestalRitualBehavior.TYPE))
+                                .input(InputSpec.item(LucenticsITags.DUSTS_COPPER.tag).requiredType(PedestalRitualBehavior.TYPE))
                                 .input(InputSpec.item(Items.SPIDER_EYE).requiredType(PedestalRitualBehavior.TYPE))
                                 .input(InputSpec.item(Items.SUGAR).requiredType(PedestalRitualBehavior.TYPE))
                         )

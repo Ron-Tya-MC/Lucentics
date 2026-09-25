@@ -1,8 +1,9 @@
 {
   "type": "lucentics:assembling",
+  "daylight_condition": 12,
   "input": {
-    "count": 4,
-    "item": "lucentics:glass_sherd"
+    "count": 2,
+    "item": "lucentics:dawn_crystal"
   },
   "outputs": [
     {
@@ -26,9 +27,7 @@
             "count": 2,
             "item": "lucentics:glass_sherd"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -36,9 +35,7 @@
             "count": 1,
             "item": "lucentics:dawnstone_dust"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -46,9 +43,7 @@
             "count": 1,
             "item": "lucentics:dawnstone_dust"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -56,9 +51,7 @@
             "count": 1,
             "item": "lucentics:dawnstone_dust"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -66,9 +59,7 @@
             "count": 1,
             "item": "lucentics:dawnstone_dust"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         },
         {
           "damage_item": 0,
@@ -76,9 +67,7 @@
             "count": 2,
             "item": "lucentics:glass_sherd"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

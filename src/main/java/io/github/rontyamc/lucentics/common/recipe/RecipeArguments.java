@@ -80,13 +80,13 @@ public record RecipeArguments(
 
     public record OrderingInput(
             SizedThingIngredient ingredient,
-            Optional<BehaviorType> requiredType,
+            Optional<BehaviorType<?>> requiredType,
             int damageItem,
             boolean notConsume
     ) {
         public static final MapCodec<OrderingInput> CODEC = RecordCodecBuilder.mapCodec(ins -> ins.group(
                 SizedThingIngredient.CODEC.fieldOf("input").forGetter(OrderingInput::ingredient),
-                BehaviorType.CODEC.codec().optionalFieldOf("required_type").forGetter(OrderingInput::requiredType),
+                BehaviorType.CODEC.optionalFieldOf("required_type").forGetter(OrderingInput::requiredType),
                 Codec.INT.fieldOf("damage_item").forGetter(OrderingInput::damageItem),
                 Codec.BOOL.optionalFieldOf("not_consume",false).forGetter(OrderingInput::notConsume)
         ).apply(ins, OrderingInput::new));

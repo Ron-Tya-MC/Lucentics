@@ -26,9 +26,7 @@
             "count": 1,
             "tag": "c:dyes/gray"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

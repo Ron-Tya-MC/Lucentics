@@ -26,9 +26,7 @@
             "count": 1,
             "item": "minecraft:clay_ball"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class AssemblingTableBehavior extends TrailCraftingBehavior implements Clearable {
-    public static final BehaviorType<AssemblingTableBehavior> TYPE = new BehaviorType<>("assembling_table");
+    public static final BehaviorType<AssemblingTableBehavior> TYPE = new BehaviorType<>("assembling_table", TrailCraftingBehavior.TYPE);
 
     private ItemStack container;
     private List<ItemStack> buffer = new ArrayList<>();

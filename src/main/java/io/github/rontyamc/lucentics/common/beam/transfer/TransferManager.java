@@ -8,19 +8,22 @@ import io.github.rontyamc.lucentics.common.beam.transfer.ExportingContexts.Fluid
 import io.github.rontyamc.lucentics.common.beam.transfer.ExportingContexts.ItemExportingContext;
 import io.github.rontyamc.lucentics.common.beam.transfer.ExportingContexts.ItemExportingContext.ItemExportingInfo;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.dict.Warns;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.common.util.ParticleUtil;
 import io.github.rontyamc.lucentics.common.util.TransferUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
 import net.neoforged.neoforge.items.IItemHandler;
-import net.neoforged.neoforge.items.ItemHandlerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * デバイスに関する操作やutilにするには少し複雑な操作を{@link TransferUtil}から切り出したクラス。
@@ -38,57 +41,6 @@ public class TransferManager {
 
     public static Optional<BlockPos> resolveDevicePos(BeamNode node, ServerLevel level, PrismQualifier qualifier) {
         return resolveDevicePos(node, level, qualifier, false);
-    }
-
-    public static int transferItems(IItemHandler source, IItemHandler target, int maxCount) {
-        int sourceSlot = -1;
-        ItemStack simulated = ItemStack.EMPTY;
-
-        for (int i = 0; i < source.getSlots(); i++) {
-            if (source.getStackInSlot(i).isEmpty()) {
-                continue;
-            }
-
-            simulated = source.extractItem(i, maxCount, true);
-            if (simulated.isEmpty()) continue;
-
-            sourceSlot = i;
-            break;
-        }
-        if (sourceSlot == -1) return 0;
-
-        ItemStack simulatedLeftover = ItemHandlerHelper.insertItemStacked(target, simulated, true);
-        int accepted = simulated.getCount() - simulatedLeftover.getCount();
-        if (accepted <= 0) return 0;
-
-        ItemStack extracted = source.extractItem(sourceSlot, accepted, false);
-        if (extracted.isEmpty()) return 0;
-
-        ItemStack extractedLeftover = ItemHandlerHelper.insertItemStacked(target, extracted, false);
-        int transferred = extracted.getCount() - extractedLeftover.getCount();
-        if (!extractedLeftover.isEmpty()) {
-            // simulateに応じて返り値を変えるやばいブロックが無い限りいらない
-            ItemHandlerHelper.insertItemStacked(source, extractedLeftover, false);
-        }
-        return transferred;
-    }
-
-    public static int transferFluids(IFluidHandler source, IFluidHandler target, int maxAmount) {
-        FluidStack simulatedDrain = source.drain(maxAmount, IFluidHandler.FluidAction.SIMULATE);
-        if (simulatedDrain.isEmpty()) return 0;
-
-        int simulatedFill = target.fill(simulatedDrain, IFluidHandler.FluidAction.SIMULATE);
-        if (simulatedFill <= 0) return 0;
-
-        FluidStack drained = source.drain(simulatedFill, IFluidHandler.FluidAction.EXECUTE);
-        if (drained.isEmpty()) return 0;
-
-        int filled = target.fill(drained, IFluidHandler.FluidAction.EXECUTE);
-        if (filled < drained.getAmount()) {
-            FluidStack leftover = drained.copyWithAmount(drained.getAmount() - filled);
-            source.fill(leftover, IFluidHandler.FluidAction.EXECUTE);
-        }
-        return filled;
     }
 
     public static boolean tryExport(ServerLevel level, BlockPos sourcePos, List<BeamNode> nodesAhead, TransferRate rate,
@@ -112,10 +64,6 @@ public class TransferManager {
         return transferredItem || transferredFluid;
     }
 
-    public static boolean tryExport(ServerLevel level, BlockPos sourcePos, List<BeamNode> nodesAhead, TransferRate rate) {
-        return tryExport(level, sourcePos, nodesAhead, rate, sourcePos, null, 0);
-    }
-
     private static boolean tryExportItems(ServerLevel level, IItemHandler source, List<BeamNode> nodesAhead, int maxAmount,
                                           BlockPos sourcePos, BlockPos sourceNodePos, Colors particleColor, int particleInterval) {
         int slot = TransferUtil.firstImportable(source).slot();
@@ -127,11 +75,33 @@ public class TransferManager {
         ItemExportingContext context = planItemExport(level, simulated, nodesAhead);
         if (!context.hasAnyExport()) return false;
 
-        int accepted = simulated.getCount() - context.leftover().getCount();
+        int accepted = simulated.getCount() - context.fallbacks().leftover().getCount();
         ItemStack extracted = source.extractItem(slot, accepted, false);
         if (extracted.isEmpty()) return false;
 
-        context.commit();
+        commitAndFallback(context, results -> {
+            for (int i = 0; i < results.size(); i++) {
+                IItemAcceptor.Result result = results.get(i);
+                ItemExportingInfo info = context.infos().get(i);
+
+                if (!result.leftover().isEmpty()) {
+                    BeamNode infoNode = context.infos().get(i).targetNode();
+
+                    Warns.UNEXPECTED_LEFTOVER_AFTER_COMMIT.cast(result.leftover(), infoNode.dimension(), infoNode.pos(), infoNode.blockId());
+                    TransferUtil.insertOrConsume(source, result.leftover(), leftover -> ItemUtil.dropItem(level, sourcePos, leftover));
+                }
+
+                for (ItemStack byproduct : result.byproducts()) {
+                    int targetIndex = nodesAhead.indexOf(info.targetNode());
+                    List<BeamNode> remainingNodes = targetIndex >= 0
+                            ? nodesAhead.subList(targetIndex + 1, nodesAhead.size())
+                            : List.of();
+
+                    ItemExportingContext byproductContext = planItemExport(level, byproduct, remainingNodes);
+                    commitAndFallback(byproductContext, level, sourcePos.above());
+                }
+            }
+        });
 
         if (particleColor != null && BeamParticles.canSpawnOnThisTick(level, sourceNodePos)) {
             for (ItemExportingInfo info : context.infos()) {
@@ -154,7 +124,7 @@ public class TransferManager {
         FluidStack drained = source.drain(accepted, IFluidHandler.FluidAction.EXECUTE);
         if (drained.isEmpty()) return false;
 
-        context.commit();
+        commitAndFallback(context);
 
         if (particleColor != null && BeamParticles.canSpawnOnThisTick(level, sourceNodePos)) {
             for (FluidExportingInfo info : context.infos()) {
@@ -165,34 +135,132 @@ public class TransferManager {
         return true;
     }
 
+    /**
+     * contextをcommit()し、その返り値をConsumerに従って処理する。
+     *
+     * @param context commit()したいItemExportingContext
+     * @param additionalFallbacksConsumer commit()の返り値に対して行いたい処理を記述したConsumer
+     */
+    public static void commitAndFallback(ItemExportingContext context, Consumer<List<IItemAcceptor.Result>> additionalFallbacksConsumer) {
+        List<IItemAcceptor.Result> result = context.commit();
+        additionalFallbacksConsumer.accept(result);
+    }
+
+    /**
+     * {@link TransferManager#commitAndFallback(ItemExportingContext context, Consumer additionalFallbacksConsumer)}の簡易版。
+     * context上最初のinfoに登録されたLevel, BlockPosを使い、
+     *   {@link TransferManager#commitAndFallback(ItemExportingContext context, Level level, BlockPos dropPos)}を実行する。
+     *
+     * @param context commit()したいItemExportingContext
+     */
+    public static void commitAndFallback(ItemExportingContext context) {
+        commitAndFallback(context, context.infos().getFirst().level(), context.infos().getFirst().targetNode().pos());
+    }
+
+    /**
+     * {@link TransferManager#commitAndFallback(ItemExportingContext context, Consumer additionalFallbacksConsumer)}の簡易版。
+     * context.commit()の返り値の中の余りアイテムを指定したlevel, BlockPosの場所に全てドロップさせる
+     *
+     * @param context commit()したいItemExportingContext
+     * @param level アイテムをドロップさせるLevel
+     * @param dropPos アイテムをドロップさせるBlockPos
+     */
+    public static void commitAndFallback(ItemExportingContext context, Level level, BlockPos dropPos) {
+        commitAndFallback(context, results -> {
+            for (int i = 0; i < results.size(); i++) {
+                IItemAcceptor.Result result = results.get(i);
+
+                if (!result.leftover().isEmpty()) {
+                    BeamNode infoNode = context.infos().get(i).targetNode();
+
+                    Warns.UNEXPECTED_LEFTOVER_AFTER_COMMIT.cast(result.leftover(), infoNode.dimension(), infoNode.pos(), infoNode.blockId());
+                    ItemUtil.dropItem(level, dropPos, result.leftover());
+                }
+
+                if (!result.byproducts().isEmpty()) {
+                    ItemUtil.dropItem(level, dropPos, result.byproducts());
+                }
+            }
+        });
+    }
+
+    /**
+     * contextをcommit()し、その返り値をConsumerに従って処理する。
+     *
+     * @param context commit()したいFluidExportingContext
+     * @param additionalFallbacksConsumer commit()の返り値に対して行いたい処理を記述したConsumer
+     */
+    public static void commitAndFallback(FluidExportingContext context, Consumer<List<FluidStack>> additionalFallbacksConsumer) {
+        List<FluidStack> result = context.commit();
+        additionalFallbacksConsumer.accept(result);
+    }
+
+    /**
+     * {@link TransferManager#commitAndFallback(FluidExportingContext context, Consumer additionalFallbacksConsumer)}の簡易版。
+     * context.commit()で生じた予期せぬ余りを、警告を発行して消し飛ばす。
+     *
+     * @param context commit()したいFluidExportingContext
+     */
+    public static void commitAndFallback(FluidExportingContext context) {
+        commitAndFallback(context, results -> {
+            for (int i = 0; i < results.size(); i++) {
+                FluidStack result = results.get(i);
+
+                if (!result.isEmpty()) {
+                    BeamNode infoNode = context.infos().get(i).targetNode();
+
+                    Warns.UNEXPECTED_LEFTOVER_AFTER_COMMIT.cast(result, infoNode.dimension(), infoNode.pos(), infoNode.blockId());
+                }
+            }
+        });
+    }
+
+    /**
+     * ※plan時点でのfallbackStacksは必ずしも正しくない。
+     * 水を排出した後の空バケツなど、実際に動作させないと生まれない副産物もあるため、実際の実行時と齟齬が生じうる。
+     * 必ず返り値のItemExportingContextを{@link ItemExportingContext#commit()}する際に返り値を確認すること。
+     * {@link TransferManager#commitAndFallback(ItemExportingContext context, Consumer additionalFallbacksConsumer)}を使うことで、
+     *   contextをcommitした上でその返り値であるList<IItemAcceptor.Result>に対する処理を指定できる。
+      */
     public static ItemExportingContext planItemExport(ServerLevel level, ItemStack stack, List<BeamNode> nodesAhead) {
         List<ItemExportingInfo> infos = new ArrayList<>();
         ItemStack remaining = stack.copy();
 
         boolean stopExplore = false;
+        List<ItemStack> fallbackStacks = new ArrayList<>();
 
         for (BeamNode node : nodesAhead) {
             if (remaining.isEmpty() || stopExplore) break;
 
             if (PrismQualifier.STOP_EXPLORE.test(level, node.pos())) stopExplore = true;
 
-            Optional<BlockPos> targetPos = resolveDevicePos(node, level, PrismQualifier.EXPORT_TARGET, true);
-            if (targetPos.isEmpty()) continue;
+            IItemAcceptor acceptor;
 
-            Optional<IItemHandler> target = TransferUtil.getItemHandler(level, targetPos.get());
-            if (target.isEmpty()) continue;
+            if (PrismQualifier.ITEM_ACCEPTOR.test(level, node.pos())) {
+                acceptor = IItemAcceptor.get(level, node.pos()).get();
+            }
+            else {
+                Optional<BlockPos> targetPos = resolveDevicePos(node, level, PrismQualifier.EXPORT_TARGET, true);
+                if (targetPos.isEmpty()) continue;
 
-            IItemAcceptor acceptor = IItemAcceptor.of(target.get());
-            ItemStack leftover = acceptor.insert(remaining, true);
+                Optional<IItemHandler> target = TransferUtil.getItemHandler(level, targetPos.get());
+                if (target.isEmpty()) continue;
+
+                acceptor = IItemAcceptor.ofHandler(target.get());
+            }
+
+            IItemAcceptor.Result result = acceptor.acceptItems(level, node.pos(), remaining, true);
+            ItemStack leftover = result.leftover();
+            fallbackStacks.addAll(result.byproducts());
+
             int accepted = remaining.getCount() - leftover.getCount();
             if (accepted <= 0) continue;
 
-            infos.add(new ItemExportingInfo(acceptor, remaining.copyWithCount(accepted), node));
-            remaining = leftover;
-
+            infos.add(new ItemExportingInfo(acceptor, remaining.copyWithCount(accepted), node, level));
+            remaining = leftover.copy();
         }
 
-        return new ItemExportingContext(List.copyOf(infos), remaining);
+        return new ItemExportingContext(List.copyOf(infos), new IItemAcceptor.Result(remaining, fallbackStacks));
     }
 
     public static FluidExportingContext planFluidExport(ServerLevel level, FluidStack stack, List<BeamNode> nodesAhead) {
@@ -205,14 +273,22 @@ public class TransferManager {
             Optional<BlockPos> targetPos = resolveDevicePos(node, level, PrismQualifier.EXPORT_TARGET, true);
             if (targetPos.isEmpty()) continue;
 
-            Optional<IFluidHandler> target = TransferUtil.getFluidHandler(level, targetPos.get());
-            if (target.isEmpty()) continue;
+            IFluidAcceptor acceptor;
 
-            IFluidAcceptor acceptor = IFluidAcceptor.of(target.get());
-            int accepted = acceptor.fill(remaining, true);
+            if (PrismQualifier.FLUID_ACCEPTOR.test(level, node.pos())) {
+                acceptor = IFluidAcceptor.get(level, node.pos()).get();
+            }
+            else {
+                Optional<IFluidHandler> target = TransferUtil.getFluidHandler(level, targetPos.get());
+                if (target.isEmpty()) continue;
+
+                acceptor = IFluidAcceptor.ofHandler(target.get());
+            }
+
+            int accepted = acceptor.acceptFluids(level, node.pos(), remaining, true);
             if (accepted <= 0) continue;
 
-            infos.add(new FluidExportingInfo(acceptor, remaining.copyWithAmount(accepted), node));
+            infos.add(new FluidExportingInfo(acceptor, remaining.copyWithAmount(accepted), node, level));
             remaining = remaining.copyWithAmount(remaining.getAmount() - accepted);
         }
 

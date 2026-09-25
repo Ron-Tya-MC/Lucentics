@@ -22,12 +22,14 @@ public class MixingRecipeCategory extends TrailRecipeCategory {
 
     @Override
     public void draw(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
-        drawArrowNormal(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
+        if (recipe.getDayLightCondition() > 0) drawArrowLight(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
+        else drawArrowNormal(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
         super.draw(recipe, recipeSlotsView, guiGraphics, mouseX, mouseY);
     }
 
     @Override
     public void createRecipeExtras(IRecipeExtrasBuilder builder, TrailRecipe recipe, IFocusGroup focuses) {
         addProcessingDuration(builder, recipe);
+        if (recipe.getDayLightCondition() > 0) addDaylightCondition(builder, recipe);
     }
 }

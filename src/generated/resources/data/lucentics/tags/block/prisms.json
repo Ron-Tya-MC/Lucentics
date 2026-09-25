@@ -22,6 +22,9 @@
     "lucentics:prism_exporting",
     "lucentics:prism_io",
     "lucentics:prism_collecting",
-    "lucentics:prism_dyeing"
+    "lucentics:prism_break",
+    "lucentics:prism_attack",
+    "lucentics:prism_dyeing",
+    "lucentics:prism_place"
   ]
 }

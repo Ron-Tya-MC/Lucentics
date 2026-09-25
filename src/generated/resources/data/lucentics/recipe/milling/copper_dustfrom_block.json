@@ -30,9 +30,7 @@
             "count": 1,
             "tag": "lucentics:hammers"
           },
-          "required_type": {
-            "id": "lucentics:pedestal_ritual"
-          }
+          "required_type": "lucentics:pedestal_ritual"
         }
       ]
     }

@@ -19,7 +19,7 @@ public class DyeingProvider {
             provider.generic(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(color))
                     .dyeing(b -> b.input(Ingredient.of(LucenticsBlockRegister.PRISM_BLANK))
                             .color(color)
-                            .liquidAmount(2000)
+                            .liquidAmount(500)
                             .duration(30));
         }
 

@@ -35,7 +35,7 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 public class MixingTableBehavior extends TrailCraftingBehavior implements Clearable {
-    public static final BehaviorType<MixingTableBehavior> TYPE = new BehaviorType<>("mixing_table");
+    public static final BehaviorType<MixingTableBehavior> TYPE = new BehaviorType<>("mixing_table", TrailCraftingBehavior.TYPE);
 
     public static final int CAPACITY_CONTAINER = 8 * FluidType.BUCKET_VOLUME;
     public static final int CAPACITY_BUFFER = 4 * FluidType.BUCKET_VOLUME;

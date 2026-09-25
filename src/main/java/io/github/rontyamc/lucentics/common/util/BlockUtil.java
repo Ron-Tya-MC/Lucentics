@@ -1,13 +1,18 @@
 package io.github.rontyamc.lucentics.common.util;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
 
 import java.util.List;
 
@@ -38,5 +43,19 @@ public final class BlockUtil {
                         .toList()
                 )
                 .orElse(List.of());
+    }
+
+    public static boolean canPlaceBlock(BlockItem blockItem, BlockPlaceContext context) {
+        if (!context.canPlace()) return false;
+
+        BlockState state = blockItem.getBlock().getStateForPlacement(context);
+        Level level = context.getLevel();
+        BlockPos blockPos = context.getClickedPos();
+
+        if (state == null) return false;
+        if (!state.canSurvive(level, blockPos)) return false;
+        if (!level.isUnobstructed(state, blockPos, CollisionContext.empty())) return false;
+
+        return true;
     }
 }

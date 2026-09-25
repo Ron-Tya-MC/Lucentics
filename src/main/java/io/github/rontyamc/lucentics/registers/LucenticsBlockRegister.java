@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.registers;
 
 import com.tterrag.registrate.util.entry.BlockEntry;
 import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBehavior;
 import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBlock;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBehavior;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlock;
@@ -17,13 +18,17 @@ import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableBlock;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlock;
 import io.github.rontyamc.lucentics.blocks.prism.PrismBlock;
+import io.github.rontyamc.lucentics.blocks.prism.prism_attack.PrismAttackBlock;
+import io.github.rontyamc.lucentics.blocks.prism.prism_break.PrismBreakBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_collecting.PrismCollectingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_dyeing.PrismDyeingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_exporting.PrismExportingBlock;
+import io.github.rontyamc.lucentics.blocks.prism.prism_fluid_place.PrismFluidPlaceBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_importing.PrismImportingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_io.PrismIOBlock;
+import io.github.rontyamc.lucentics.blocks.prism.prism_place.PrismPlaceBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_ritual.PrismRitualBlock;
-import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBehavior;
+import io.github.rontyamc.lucentics.blocks.tank.TankBehavior;
 import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlock;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
 import io.github.rontyamc.lucentics.common.dict.Colors;
@@ -98,6 +103,30 @@ public class LucenticsBlockRegister {
     public static final BlockEntry<Block> CYAN_LIGHT_COPPER_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"cyan_light_copper_block", Block::new)
             .initialProperties(() -> Blocks.COPPER_BLOCK)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.LIGHT_COPPER_BLOCKS.tag)
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<Block> GLIMMER_IRON_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"glimmer_iron_block", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.GLIMMER_IRON_BLOCKS.tag)
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<Block> PINK_GLIMMER_IRON_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"pink_glimmer_iron_block", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.GLIMMER_IRON_BLOCKS.tag)
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<Block> LIME_GLIMMER_IRON_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"lime_glimmer_iron_block", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.GLIMMER_IRON_BLOCKS.tag)
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<Block> LIGHT_BLUE_GLIMMER_IRON_BLOCK = REGISTRATE.lucenticsBlockBuilder(CategoryType.BLOCKS,"light_blue_glimmer_iron_block", Block::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.GLIMMER_IRON_BLOCKS.tag)
             .item()
             .build()
             .register();
@@ -263,11 +292,56 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
+    public static final BlockEntry<PrismBreakBlock> PRISM_BREAK = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_break", PrismBreakBlock::new)
+            .initialProperties(() -> Blocks.GLASS)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_break", "prisms/prism_blank_red"))
+            .lang("Destruction Prism")
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<PrismAttackBlock> PRISM_ATTACK = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_attack", PrismAttackBlock::new)
+            .initialProperties(() -> Blocks.GLASS)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_attack", "prisms/prism_blank_red"))
+            .lang("Attack Prism")
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<PrismFluidPlaceBlock> PRISM_FLUID_PLACE = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_fluid_place", PrismFluidPlaceBlock::new)
+            .initialProperties(() -> Blocks.GLASS)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_fluid_place", "prisms/prism_blank_blue"))
+            .lang("Fluid Placing Prism")
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<PrismFluidDrainBlock> PRISM_FLUID_DRAIN = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_fluid_drain", PrismFluidDrainBlock::new)
+            .initialProperties(() -> Blocks.GLASS)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_fluid_drain", "prisms/prism_blank_blue"))
+            .lang("Draining Prism")
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<PrismPlaceBlock> PRISM_PLACE = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_place", PrismPlaceBlock::new)
+            .initialProperties(() -> Blocks.GLASS)
+            .properties(p -> p.noOcclusion())
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_place", "prisms/prism_blank_green"))
+            .lang("Construction Prism")
+            .item()
+            .build()
+            .register();
     public static final BlockEntry<PrismDyeingBlock> PRISM_DYEING = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_dyeing", PrismDyeingBlock::new)
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
-            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_dyeing", "prisms/prism_blank_blue"))
+            .blockstate(ModelUtil.cubeColumnBlockState("prisms/prism_dyeing", "prisms/prism_blank_green"))
             .lang("Dyeing Prism")
             .item()
             .build()
@@ -281,10 +355,11 @@ public class LucenticsBlockRegister {
         BehaviorTypeBlockRegistry.register(EMITTER::asStack,EmitterBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(ENGRAVING_TABLE::asStack, EngravingTableBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(PEDESTAL_RITUAL::asStack, PedestalRitualBehavior.TYPE);
-        BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER::asStack, TankLightCopperBehavior.TYPE);
-        BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER_BOLD::asStack, TankLightCopperBehavior.TYPE);
+        BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER::asStack, TankBehavior.TYPE);
+        BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER_BOLD::asStack, TankBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(MILLING_TABLE::asStack, MillingTableBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(MIXING_TABLE::asStack, MixingTableBehavior.TYPE);
+        BehaviorTypeBlockRegistry.register(ASSEMBLING_TABLE::asStack, AssemblingTableBehavior.TYPE);
 
         LucenticsRenderTypeRegister.registerBlock(PRISM_BLANK, Layer.TRANSLUCENT);
         for (Colors color : Colors.values()) {
@@ -296,6 +371,9 @@ public class LucenticsBlockRegister {
         LucenticsRenderTypeRegister.registerBlock(PRISM_EXPORTING, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_IO, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_COLLECTING, Layer.TRANSLUCENT);
+        LucenticsRenderTypeRegister.registerBlock(PRISM_BREAK, Layer.TRANSLUCENT);
+        LucenticsRenderTypeRegister.registerBlock(PRISM_ATTACK, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_DYEING, Layer.TRANSLUCENT);
+        LucenticsRenderTypeRegister.registerBlock(PRISM_PLACE, Layer.TRANSLUCENT);
     }
 }

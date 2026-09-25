@@ -12,6 +12,10 @@ public class ImportingContexts {
         public static ItemImportingContext of(IItemHandler handler, int slot, ItemStack itemStack) {
             return new ItemImportingContext(handler, slot, itemStack);
         }
+
+        public boolean isEmpty() {
+            return this.handler == null || this.slot == -1 || this.itemStack.isEmpty();
+        }
     }
 
     public record FluidImportingContext(IFluidHandler handler, int tank, FluidStack fluidStack) {
@@ -19,6 +23,10 @@ public class ImportingContexts {
 
         public static FluidImportingContext of(IFluidHandler handler, int tank, FluidStack fluidStack) {
             return new FluidImportingContext(handler, tank, fluidStack);
+        }
+
+        public boolean isEmpty() {
+            return this.handler == null || this.tank == -1 || this.fluidStack.isEmpty();
         }
     }
 }

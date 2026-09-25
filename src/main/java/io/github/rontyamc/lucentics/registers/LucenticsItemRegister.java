@@ -158,6 +158,8 @@ public class LucenticsItemRegister {
 
     public static final ItemEntry<Item> GLASS_SHERD = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "glass_sherd", Item::new)
             .register();
+    public static final ItemEntry<Item> DAWN_CRYSTAL = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dawn_crystal", Item::new)
+            .register();
 
     public static final ItemEntry<Item> PRISM_BALL = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "prism_ball", Item::new)
             .register();

@@ -41,14 +41,16 @@ public final class LucenticsITagSets {
     public static final ItemTagSet PLATE_GOLD =
             new ItemTagSet(LucenticsITags.PLATES.tag, LucenticsITags.PLATES_GOLD.tag, ItemTags.PIGLIN_LOVED);
 
+    public static final ItemTagSet DUST =
+            new ItemTagSet(LucenticsITags.DUSTS.tag, LucenticsITags.HOURGLASS_DUSTS.tag);
     public static final ItemTagSet DUST_COPPER =
-            new ItemTagSet(LucenticsITags.DUSTS.tag, LucenticsITags.DUSTS_COPPER.tag);
+            new ItemTagSet(DUST, LucenticsITags.DUSTS_COPPER.tag);
     public static final ItemTagSet DUST_IRON =
-            new ItemTagSet(LucenticsITags.DUSTS.tag, LucenticsITags.DUSTS_IRON.tag);
+            new ItemTagSet(DUST, LucenticsITags.DUSTS_IRON.tag);
     public static final ItemTagSet DUST_GOLD =
-            new ItemTagSet(LucenticsITags.DUSTS.tag, LucenticsITags.DUSTS_GOLD.tag);
+            new ItemTagSet(DUST, LucenticsITags.DUSTS_GOLD.tag);
     public static final ItemTagSet DUST_DIAMOND =
-            new ItemTagSet(LucenticsITags.DUSTS.tag, LucenticsITags.DUSTS_DIAMOND.tag);
+            new ItemTagSet(DUST, LucenticsITags.DUSTS_DIAMOND.tag);
     public static final ItemTagSet DUST_OBSIDIAN =
-            new ItemTagSet(LucenticsITags.DUSTS.tag, LucenticsITags.DUSTS_OBSIDIAN.tag);
+            new ItemTagSet(DUST, LucenticsITags.DUSTS_OBSIDIAN.tag);
 }
