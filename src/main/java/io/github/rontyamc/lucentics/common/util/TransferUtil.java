@@ -1,11 +1,13 @@
 package io.github.rontyamc.lucentics.common.util;
 
+import io.github.rontyamc.lucentics.common.beam.transfer.ExportingContexts.ItemExportingContext;
 import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts.FluidImportingContext;
 import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts.ItemImportingContext;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -46,11 +48,19 @@ public final class TransferUtil {
     public static void insertOrConsume(IItemHandler handler, ItemStack stack, Consumer<ItemStack> leftoverConsumer) {
         ItemStack simulated = ItemHandlerHelper.insertItemStacked(handler, stack, true);
         int accepted = stack.getCount() - simulated.getCount();
-        if (accepted <= 0) leftoverConsumer.accept(stack.copy());
+        if (accepted <= 0) {
+            leftoverConsumer.accept(stack.copy());
+            return;
+        }
 
         ItemStack rejected = ItemHandlerHelper.insertItemStacked(handler, stack.copyWithCount(accepted), false);
         ItemStack leftover = rejected.copyWithCount(rejected.getCount() + simulated.getCount());
         leftoverConsumer.accept(leftover.copy());
+    }
+
+    public static void dropLeftoverAndMark(ItemExportingContext context, Level level, BlockPos pos) {
+        ItemUtil.dropItem(level, pos, context.fallbacks().leftover());
+        context.markProcessed();
     }
 
     // 流体
@@ -86,7 +96,10 @@ public final class TransferUtil {
 
     public static void insertOrConsume(IFluidHandler handler, FluidStack stack, Consumer<FluidStack> leftoverConsumer) {
         int simulated = handler.fill(stack, IFluidHandler.FluidAction.SIMULATE);
-        if (simulated <= 0) leftoverConsumer.accept(stack.copy());
+        if (simulated <= 0) {
+            leftoverConsumer.accept(stack.copy());
+            return;
+        }
 
         int accepted = handler.fill(stack.copyWithAmount(simulated), IFluidHandler.FluidAction.EXECUTE);
         FluidStack leftover = stack.copyWithAmount(stack.getAmount() - accepted);

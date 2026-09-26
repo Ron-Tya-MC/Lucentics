@@ -319,7 +319,7 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
-    public static final BlockEntry<PrismFluidDrainBlock> PRISM_FLUID_DRAIN = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_fluid_drain", PrismFluidDrainBlock::new)
+    public static final BlockEntry<PrismAttackBlock> PRISM_FLUID_DRAIN = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_fluid_drain", PrismAttackBlock::new)
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)
@@ -373,6 +373,8 @@ public class LucenticsBlockRegister {
         LucenticsRenderTypeRegister.registerBlock(PRISM_COLLECTING, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_BREAK, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_ATTACK, Layer.TRANSLUCENT);
+        LucenticsRenderTypeRegister.registerBlock(PRISM_FLUID_PLACE, Layer.TRANSLUCENT);
+        LucenticsRenderTypeRegister.registerBlock(PRISM_FLUID_DRAIN, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_DYEING, Layer.TRANSLUCENT);
         LucenticsRenderTypeRegister.registerBlock(PRISM_PLACE, Layer.TRANSLUCENT);
     }

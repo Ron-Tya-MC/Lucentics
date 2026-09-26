@@ -1,7 +1,7 @@
 {
   "parent": "minecraft:block/cube_column",
   "textures": {
-    "end": "lucentics:block/prisms/prism_blank_blue",
+    "end": "lucentics:block/prisms/prism_blank_green",
     "side": "lucentics:block/prisms/prism_dyeing"
   }
 }

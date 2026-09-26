@@ -65,6 +65,8 @@
   "block.lucentics.prism_collecting": "Collecting Prism",
   "block.lucentics.prism_dyeing": "Dyeing Prism",
   "block.lucentics.prism_exporting": "Exporting Prism",
+  "block.lucentics.prism_fluid_drain": "Draining Prism",
+  "block.lucentics.prism_fluid_place": "Fluid Placing Prism",
   "block.lucentics.prism_importing": "Importing Prism",
   "block.lucentics.prism_io": "IO Prism",
   "block.lucentics.prism_place": "Construction Prism",

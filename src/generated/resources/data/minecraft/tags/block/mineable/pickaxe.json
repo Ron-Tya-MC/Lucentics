@@ -47,7 +47,9 @@
     "lucentics:prism_collecting",
     "lucentics:prism_break",
     "lucentics:prism_attack",
-    "lucentics:prism_dyeing",
-    "lucentics:prism_place"
+    "lucentics:prism_fluid_place",
+    "lucentics:prism_fluid_drain",
+    "lucentics:prism_place",
+    "lucentics:prism_dyeing"
   ]
 }

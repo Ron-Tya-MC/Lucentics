@@ -25,14 +25,6 @@
           "damage_item": 0,
           "input": {
             "count": 4,
-            "item": "minecraft:blue_dye"
-          },
-          "required_type": "lucentics:pedestal_ritual"
-        },
-        {
-          "damage_item": 0,
-          "input": {
-            "count": 4,
             "item": "minecraft:lapis_lazuli"
           },
           "required_type": "lucentics:pedestal_ritual"
@@ -41,7 +33,7 @@
           "damage_item": 0,
           "input": {
             "amount": 8000,
-            "fluid": "lucentics:blue_dye_liquid"
+            "fluid": "lucentics:green_dye_liquid"
           },
           "required_type": "lucentics:tank"
         },

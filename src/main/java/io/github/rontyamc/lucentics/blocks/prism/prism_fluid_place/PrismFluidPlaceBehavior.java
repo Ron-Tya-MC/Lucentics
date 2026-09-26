@@ -2,7 +2,9 @@ package io.github.rontyamc.lucentics.blocks.prism.prism_fluid_place;
 
 import io.github.rontyamc.lucentics.blocks.prism.PrismBehavior;
 import io.github.rontyamc.lucentics.common.beam.node.NodeActivationContext;
-import io.github.rontyamc.lucentics.common.beam.transfer.*;
+import io.github.rontyamc.lucentics.common.beam.transfer.IFluidAcceptor;
+import io.github.rontyamc.lucentics.common.beam.transfer.IItemAcceptor;
+import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts;
 import io.github.rontyamc.lucentics.common.util.TransferUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -73,7 +75,7 @@ public class PrismFluidPlaceBehavior extends PrismBehavior implements IItemAccep
             }
         }
         else {
-            boolean canPlace = state.canBeReplaced(fluid);
+            boolean canPlace = canPlace(level, interactPos, fluid);
             if (!canPlace) return 0;
 
             if (simulate) {
@@ -81,9 +83,22 @@ public class PrismFluidPlaceBehavior extends PrismBehavior implements IItemAccep
             }
             else {
                 level.destroyBlock(interactPos, true);
-                return level.setBlockAndUpdate(interactPos, fluid.defaultFluidState().createLegacyBlock())
-                        ? FluidType.BUCKET_VOLUME : 0;
+                BlockState fluidBlockState = fluid.defaultFluidState().createLegacyBlock();
+                boolean success = level.setBlock(interactPos, fluidBlockState, 3);
+                if (success) {
+                    level.updateNeighborsAt(interactPos, fluidBlockState.getBlock());
+                    level.scheduleTick(interactPos, fluid, fluid.getTickDelay(level));
+                }
+                return success ? FluidType.BUCKET_VOLUME : 0;
             }
         }
+    }
+
+    private boolean canPlace(ServerLevel level, BlockPos pos, Fluid fluid) {
+        BlockState state = level.getBlockState(pos);
+        if (level.isOutsideBuildHeight(pos)) return false;
+        if (level.isDebug()) return false;
+        if (!state.canBeReplaced(fluid)) return false;
+        return (state.getFluidState().isEmpty() || !state.getFluidState().isSource());
     }
 }

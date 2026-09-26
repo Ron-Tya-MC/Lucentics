@@ -44,7 +44,7 @@ public class PrismBreakBehavior extends PrismBehavior implements IFlowingParticl
             ExportingContexts.ItemExportingContext export = TransferManager.planItemExport(level, drop, context.nodesAhead());
 
             export.commit();
-            ItemUtil.dropItem(level, interactPos, export.fallbacks());
+            ItemUtil.dropItem(level, interactPos, export.fallbacks().leftover());
 
             if (BeamParticles.canSpawnOnThisTick(level, prismPos)) {
                 for (ExportingContexts.ItemExportingContext.ItemExportingInfo info : export.infos()) {
