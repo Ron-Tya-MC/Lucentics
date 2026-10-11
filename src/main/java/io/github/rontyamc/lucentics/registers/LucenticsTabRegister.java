@@ -43,34 +43,34 @@ public class LucenticsTabRegister {
     public static final DeferredRegister<CreativeModeTab> CREATIVE_MODE_TAB_REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Lucentics.MOD_ID);
     public static final Map<String, String> ITEM_CATEGORY = new HashMap<>();
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_INGREDIENTS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.INGREDIENTS, () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_INGREDIENTS = CREATIVE_MODE_TAB_REGISTER.register(CategoryType.INGREDIENTS, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.ingredients"))
             .icon(LucenticsItemRegister.DUSK_BRICK::asStack)
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_INGREDIENTS, CategoryType.INGREDIENTS))
             .build());
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_BLOCKS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.BLOCKS, () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_BLOCKS = CREATIVE_MODE_TAB_REGISTER.register(CategoryType.BLOCKS, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.blocks"))
             .withTabsBefore(CREATIVE_MODE_TAB_INGREDIENTS.getKey())
             .icon(LucenticsBlockRegister.DUSK_BRICKS::asStack)
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_BLOCKS, CategoryType.BLOCKS))
             .build());
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_FUNCTIONAL = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.FUNCTIONAL, () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_FUNCTIONAL = CREATIVE_MODE_TAB_REGISTER.register(CategoryType.FUNCTIONAL, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.functional_blocks"))
             .withTabsBefore(CREATIVE_MODE_TAB_BLOCKS.getKey())
             .icon(LucenticsBlockRegister.INJECTOR::asStack)
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_FUNCTIONAL, CategoryType.FUNCTIONAL))
             .build());
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_PRISMS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.PRISMS, () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_PRISMS = CREATIVE_MODE_TAB_REGISTER.register(CategoryType.PRISMS, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.prisms"))
             .withTabsBefore(CREATIVE_MODE_TAB_FUNCTIONAL.getKey())
             .icon(LucenticsBlockRegister.PRISM_RITUAL::asStack)
             .displayItems(new RegistrateDisplayItemsGenerator(LucenticsTabRegister.CREATIVE_MODE_TAB_PRISMS, CategoryType.PRISMS))
             .build());
 
-    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_TOOLS = CREATIVE_MODE_TAB_REGISTER.register("lucentics_" + CategoryType.TOOLS, () -> CreativeModeTab.builder()
+    public static final DeferredHolder<CreativeModeTab, CreativeModeTab> CREATIVE_MODE_TAB_TOOLS = CREATIVE_MODE_TAB_REGISTER.register(CategoryType.TOOLS, () -> CreativeModeTab.builder()
             .title(Component.translatable("itemGroup.lucentics.tools"))
             .withTabsBefore(CREATIVE_MODE_TAB_PRISMS.getKey())
             .icon(LucenticsItemRegister.COPPER_HAMMER::asStack)

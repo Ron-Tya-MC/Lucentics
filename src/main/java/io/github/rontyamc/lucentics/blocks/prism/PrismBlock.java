@@ -13,7 +13,7 @@ public class PrismBlock extends Block implements IPrismBehavior {
      * ここで指定した色の光でのみ動作する。
      * {@link Optional#empty()}は光の色に制限なしという意味を持つ。
       */
-    private Optional<Colors> requiredColor;
+    private final Optional<Colors> requiredColor;
 
     public PrismBlock(Properties properties, Optional<Colors> requiredColor) {
         super(properties);
@@ -26,14 +26,6 @@ public class PrismBlock extends Block implements IPrismBehavior {
 
     public Optional<Colors> getRequiredColor() {
         return requiredColor;
-    }
-
-    public void setRequiredColor(Colors requiredColor) {
-        this.requiredColor = Optional.of(requiredColor);
-    }
-
-    public void clearRequiredColor() {
-        this.requiredColor = Optional.empty();
     }
 
     @Override

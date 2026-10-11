@@ -58,9 +58,13 @@ public final class ItemUtil {
         return BuiltInRegistries.ITEM.getKey(item.get().asItem());
     }
 
+    public static ResourceLocation getId(ItemLike item) {
+        return BuiltInRegistries.ITEM.getKey(item.asItem());
+    }
+
     public static Item byId(ResourceLocation id) {
         return BuiltInRegistries.ITEM.stream()
-                .filter(item -> getId(() -> item).equals(id))
+                .filter(item -> getId(item).equals(id))
                 .findFirst().orElse(Items.AIR);
     }
 

@@ -63,9 +63,7 @@ public final class TankRenderUtil {
                 .apply(extensions.getStillTexture(fluidStack));
 
         int tint = extensions.getTintColor(fluidStack);
-        float r = ((tint >> 16) & 0xFF) / 255f;
-        float g = ((tint >> 8) & 0xFF) / 255f;
-        float b = (tint & 0xFF) / 255f;
+        Float[] rgb = MiscUtil.separateRGB(tint);
         float a = 1.0f;
         int overlay = OverlayTexture.NO_OVERLAY;
 
@@ -79,18 +77,18 @@ public final class TankRenderUtil {
 
         // 上面
         quad(consumer, pose, bounds.x0, y1, bounds.z0, bounds.x0, y1, bounds.z1, bounds.x1, y1, bounds.z1, bounds.x1, y1, bounds.z0,
-                hu0, hv0, hu1, hv1, 0, 1, 0, r, g, b, a, overlay, packedLight);
+                hu0, hv0, hu1, hv1, 0, 1, 0, rgb[0], rgb[1], rgb[2], a, overlay, packedLight);
         // 北面
         quad(consumer, pose, bounds.x0, bounds.y0, bounds.z0, bounds.x0, y1, bounds.z0, bounds.x1, y1, bounds.z0, bounds.x1, bounds.y0, bounds.z0,
-                vu0, vv0, vu1, vv1, 0, 0, -1, r, g, b, a, overlay, packedLight);
+                vu0, vv0, vu1, vv1, 0, 0, -1, rgb[0], rgb[1], rgb[2], a, overlay, packedLight);
         // 南面
         quad(consumer, pose, bounds.x1, bounds.y0, bounds.z1, bounds.x1, y1, bounds.z1, bounds.x0, y1, bounds.z1, bounds.x0, bounds.y0, bounds.z1,
-                vu0, vv0, vu1, vv1, 0, 0, 1, r, g, b, a, overlay, packedLight);
+                vu0, vv0, vu1, vv1, 0, 0, 1, rgb[0], rgb[1], rgb[2], a, overlay, packedLight);
         // 西面
         quad(consumer, pose, bounds.x0, bounds.y0, bounds.z1, bounds.x0, y1, bounds.z1, bounds.x0, y1, bounds.z0, bounds.x0, bounds.y0, bounds.z0,
-                vu0, vv0, vu1, vv1, -1, 0, 0, r, g, b, a, overlay, packedLight);
+                vu0, vv0, vu1, vv1, -1, 0, 0, rgb[0], rgb[1], rgb[2], a, overlay, packedLight);
         // 東面
         quad(consumer, pose, bounds.x1, bounds.y0, bounds.z0, bounds.x1, y1, bounds.z0, bounds.x1, y1, bounds.z1, bounds.x1, bounds.y0, bounds.z1,
-                vu0, vv0, vu1, vv1, 1, 0, 0, r, g, b, a, overlay, packedLight);
+                vu0, vv0, vu1, vv1, 1, 0, 0, rgb[0], rgb[1], rgb[2], a, overlay, packedLight);
     }
 }

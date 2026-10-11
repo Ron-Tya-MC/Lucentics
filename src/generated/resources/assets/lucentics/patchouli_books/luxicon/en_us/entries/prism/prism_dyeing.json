@@ -1,0 +1,29 @@
+{
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_dyeing",
+  "name": "patchouli.lucentics.entry.prism.prism_dyeing.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.prism_dyeing.text.intro"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor2",
+      "text": "patchouli.lucentics.entry.prism.prism_dyeing.text.intro2",
+      "title": "patchouli.lucentics.entry.prism.prism_dyeing.title.intro2"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor3",
+      "text": "patchouli.lucentics.entry.prism.prism_dyeing.text.intro3"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor4",
+      "recipe": "lucentics:crafting/prisms/prism_dyeing"
+    }
+  ],
+  "sortnum": 12
+}

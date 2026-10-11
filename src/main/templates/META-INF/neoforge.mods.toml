@@ -3,21 +3,20 @@ loaderVersion="${loader_version_range}"
 license="${mod_license}"
 
 [[mods]]
-modId="${mod_id}"
+modId="lucentics"
 version="${mod_version}"
 displayName="${mod_name}"
-description='''
-ここにテキストを挿入
-'''
+description='''Make the world more lucent.'''
+authors = "Ron-Tya-MC"
 
-[[dependencies.${mod_id}]]
+[[dependencies.lucentics]]
     modId="neoforge"
     type="required"
     versionRange="[${neo_version},)"
     ordering="NONE"
     side="BOTH"
 
-[[dependencies.${mod_id}]]
+[[dependencies.lucentics]]
     modId="minecraft"
     type="required"
     versionRange="${minecraft_version_range}"

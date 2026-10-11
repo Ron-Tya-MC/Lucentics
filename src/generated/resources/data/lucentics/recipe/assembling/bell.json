@@ -1,0 +1,71 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 1,
+    "item": "lucentics:gold_plate"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "minecraft:bell"
+        }
+      }
+    }
+  ],
+  "processing_duration": 200,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:gold_plate"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:gold_plate"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 2,
+            "item": "minecraft:stick"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    },
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:string"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 2,
+            "item": "minecraft:gold_nugget"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

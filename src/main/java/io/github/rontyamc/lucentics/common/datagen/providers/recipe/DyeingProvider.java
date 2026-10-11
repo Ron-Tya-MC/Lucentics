@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
@@ -11,7 +12,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 public class DyeingProvider {
     public DyeingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         for (Colors color : Colors.values()) {

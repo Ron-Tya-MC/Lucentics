@@ -18,6 +18,7 @@ import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts.ItemI
 import io.github.rontyamc.lucentics.common.beam.transfer.TransferManager;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.common.util.ParticleUtil;
 import io.github.rontyamc.lucentics.common.util.TransferUtil;
 import io.github.rontyamc.lucentics.recipes.dyeing.process.DyeingProgressEntry;
@@ -136,10 +137,6 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
             // 無いとは思うが
             ItemUtil.dropItem(level, prismPos, exportingContext.fallbacks().leftover());
         }
-        if (!exportingContext.fallbacks().leftover().isEmpty()) {
-            // 無いとは思うが
-            ItemUtil.dropItem(level, prismPos, exportingContext.fallbacks().leftover());
-        }
 
         onCrafted(level, interactPos, prismPos, exportingContext, color);
     }
@@ -153,10 +150,8 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
         float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 1.7f, 2.0f);
         level.playSound(null, interactPos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.1f, p);
 
-        int rgb = Colors.BLUE.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = Colors.GREEN.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
         double Sx = interactPos.getX() + 0.5;
         double Sy = interactPos.getY() + 0.8;
@@ -170,7 +165,7 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
+        level.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
 
         if (BeamParticles.canSpawnOnThisTick(level, prismPos)) {
             for (ItemExportingInfo info : exportingContext.infos()) {

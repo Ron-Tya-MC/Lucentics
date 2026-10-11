@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
@@ -11,7 +12,7 @@ import net.minecraft.world.level.block.Blocks;
 public class CraftingProvider {
     public CraftingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.enterFolder("buildings");
 
         provider.generic(LucenticsBlockRegister.DUSK_BRICKS).unlockedBy(LucenticsItemRegister.DUSK_BRICK)
@@ -52,6 +53,27 @@ public class CraftingProvider {
                         .pattern("LLL")
                         .pattern("LLL"));
 
+        provider.generic(LucenticsBlockRegister.GLIMMER_IRON_BLOCK).unlockedBy(LucenticsItemRegister.GLIMMER_IRON)
+                .shaped(b -> b.define('G', LucenticsItemRegister.GLIMMER_IRON.get())
+                        .pattern("GGG")
+                        .pattern("GGG")
+                        .pattern("GGG"));
+        provider.generic(LucenticsBlockRegister.LIME_GLIMMER_IRON_BLOCK).unlockedBy(LucenticsItemRegister.LIME_GLIMMER_IRON)
+                .shaped(b -> b.define('G', LucenticsItemRegister.LIME_GLIMMER_IRON.get())
+                        .pattern("GGG")
+                        .pattern("GGG")
+                        .pattern("GGG"));
+        provider.generic(LucenticsBlockRegister.PINK_GLIMMER_IRON_BLOCK).unlockedBy(LucenticsItemRegister.PINK_GLIMMER_IRON)
+                .shaped(b -> b.define('G', LucenticsItemRegister.PINK_GLIMMER_IRON.get())
+                        .pattern("GGG")
+                        .pattern("GGG")
+                        .pattern("GGG"));
+        provider.generic(LucenticsBlockRegister.LIGHT_BLUE_GLIMMER_IRON_BLOCK).unlockedBy(LucenticsItemRegister.LIGHT_BLUE_GLIMMER_IRON)
+                .shaped(b -> b.define('G', LucenticsItemRegister.LIGHT_BLUE_GLIMMER_IRON.get())
+                        .pattern("GGG")
+                        .pattern("GGG")
+                        .pattern("GGG"));
+
         provider.generic(() -> Blocks.GLASS).unlockedBy(LucenticsItemRegister.GLASS_SHERD)
                 .shaped(b -> b.define('S', LucenticsItemRegister.GLASS_SHERD.get())
                         .pattern("SS")
@@ -74,10 +96,40 @@ public class CraftingProvider {
                         .define('G', Items.GOLD_INGOT)
                         .define('R', Items.REDSTONE)
                         .pattern("DDD")
-                        .pattern("DGD")
-                        .pattern("DRD"));
+                        .pattern("R G")
+                        .pattern("DDD"));
+        provider.generic(LucenticsBlockRegister.TOGGLED_EMITTER).unlockedBy(LucenticsBlockRegister.DUSK_BRICKS)
+                .shaped(b -> b.define('D', LucenticsBlockRegister.DUSK_BRICKS)
+                        .define('G', Items.GOLD_INGOT)
+                        .define('R', Items.REDSTONE)
+                        .define('T', Items.REDSTONE_TORCH)
+                        .pattern("DDD")
+                        .pattern("RTG")
+                        .pattern("DDD"));
         provider.generic(LucenticsBlockRegister.TOGGLED_EMITTER).unlockedBy(LucenticsBlockRegister.EMITTER)
+                .suffix("_from_emitter")
                 .shapeless(b -> b.requires(LucenticsBlockRegister.EMITTER)
+                        .requires(Blocks.REDSTONE_TORCH));
+
+        provider.generic(LucenticsBlockRegister.ADVANCED_EMITTER).unlockedBy(LucenticsItemRegister.GLIMMER_IRON)
+                .shaped(b -> b.define('G', LucenticsItemRegister.GLIMMER_IRON)
+                        .define('P', LucenticsItemRegister.IRON_PLATE)
+                        .define('F', LucenticsItemRegister.FOCUS_RING)
+                        .define('E', LucenticsBlockRegister.EMITTER)
+                        .pattern("GPG")
+                        .pattern("PEF")
+                        .pattern("GPG"));
+        provider.generic(LucenticsBlockRegister.ADVANCED_TOGGLED_EMITTER).unlockedBy(LucenticsItemRegister.GLIMMER_IRON)
+                .shaped(b -> b.define('G', LucenticsItemRegister.GLIMMER_IRON)
+                        .define('P', LucenticsItemRegister.IRON_PLATE)
+                        .define('F', LucenticsItemRegister.FOCUS_RING)
+                        .define('E', LucenticsBlockRegister.TOGGLED_EMITTER)
+                        .pattern("GPG")
+                        .pattern("PEF")
+                        .pattern("GPG"));
+        provider.generic(LucenticsBlockRegister.ADVANCED_TOGGLED_EMITTER).unlockedBy(LucenticsBlockRegister.ADVANCED_EMITTER)
+                .suffix("_from_advanced")
+                .shapeless(b -> b.requires(LucenticsBlockRegister.ADVANCED_EMITTER)
                         .requires(Blocks.REDSTONE_TORCH));
 
         provider.generic(LucenticsBlockRegister.ENGRAVING_TABLE).unlockedBy(() -> Items.DIAMOND)
@@ -223,6 +275,36 @@ public class CraftingProvider {
                 .shaped(b -> b.define('P', LucenticsBlockRegister.PRISM_IO.get())
                         .define('B', Blocks.IRON_BARS)
                         .pattern("BPB"));
+
+        provider.generic(LucenticsBlockRegister.PRISM_BREAK).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.RED))
+                .shaped(b -> b.define('R', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.RED))
+                        .define('P', Items.STONE_PICKAXE)
+                        .define('A', Items.STONE_AXE)
+                        .define('S', Items.STONE_SHOVEL)
+                        .pattern(" P ")
+                        .pattern("ARS"));
+
+        provider.generic(LucenticsBlockRegister.PRISM_ATTACK).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.RED))
+                .shaped(b -> b.define('R', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.RED))
+                        .define('S', Items.STONE_SWORD)
+                        .pattern(" S ")
+                        .pattern("SRS"));
+
+        provider.generic(LucenticsBlockRegister.PRISM_FLUID_PLACE).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+                .shapeless(b -> b.requires(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+                        .requires(Items.WATER_BUCKET));
+
+        provider.generic(LucenticsBlockRegister.PRISM_FLUID_DRAIN).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+                .shapeless(b -> b.requires(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.BLUE))
+                        .requires(Items.BUCKET));
+
+        provider.generic(LucenticsBlockRegister.PRISM_PLACE).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.GREEN))
+                .shaped(b -> b.define('P', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.GREEN))
+                        .define('D', Blocks.DISPENSER)
+                        .define('C', Blocks.COBBLESTONE)
+                        .pattern(" D ")
+                        .pattern("CPC")
+                        .pattern(" C "));
 
         provider.generic(LucenticsBlockRegister.PRISM_DYEING).unlockedBy(LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.GREEN))
                 .shaped(b -> b.define('P', LucenticsBlockRegister.COLORED_PRISM_BLANK.get(Colors.GREEN))

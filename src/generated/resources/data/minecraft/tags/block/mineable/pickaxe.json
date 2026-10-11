@@ -16,6 +16,8 @@
     "lucentics:injector",
     "lucentics:emitter",
     "lucentics:toggled_emitter",
+    "lucentics:advanced_emitter",
+    "lucentics:advanced_toggled_emitter",
     "lucentics:engraving_table",
     "lucentics:milling_table",
     "lucentics:mixing_table",

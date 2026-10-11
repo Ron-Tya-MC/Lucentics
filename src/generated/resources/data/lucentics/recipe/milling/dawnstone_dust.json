@@ -13,6 +13,16 @@
           "id": "lucentics:dawnstone_dust"
         }
       }
+    },
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:dawnstone_dust"
+        }
+      },
+      "probability": 0.3
     }
   ],
   "processing_duration": 20,

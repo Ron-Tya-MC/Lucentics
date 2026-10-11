@@ -115,4 +115,11 @@ public final class MiscUtil {
 
         return key;
     }
+
+    public static Float[] separateRGB(int rgbInt) {
+        float r = ((rgbInt >> 16) & 0xFF) / 255f;
+        float g = ((rgbInt >> 8) & 0xFF) / 255f;
+        float b = (rgbInt & 0xFF) / 255f;
+        return new Float[]{r, g, b};
+    }
 }

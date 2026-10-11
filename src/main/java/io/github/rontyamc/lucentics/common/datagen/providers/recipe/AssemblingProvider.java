@@ -2,8 +2,9 @@ package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
 import io.github.rontyamc.lucentics.blocks.tank.TankBehavior;
-import io.github.rontyamc.lucentics.common.datagen.builders.InputSpec;
-import io.github.rontyamc.lucentics.common.datagen.builders.TrailBuilder;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.InputSpec;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.TrailBuilder;
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsFluidRegister;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 public class AssemblingProvider {
     public AssemblingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         provider.generic(LucenticsItemRegister.IRON_PLATE)
@@ -168,5 +169,18 @@ public class AssemblingProvider {
                         )
                         .duration(400)
                         .daylight(12));
+
+        provider.generic(() -> Items.BELL)
+                .assembling(b -> b.input(LucenticsItemRegister.GOLD_PLATE)
+                        .trail(TrailBuilder.create(Colors.GREEN)
+                                .input(InputSpec.item(LucenticsItemRegister.GOLD_PLATE).requiredType(PedestalRitualBehavior.TYPE))
+                                .input(InputSpec.item(LucenticsItemRegister.GOLD_PLATE).requiredType(PedestalRitualBehavior.TYPE))
+                                .input(InputSpec.item(Items.STICK, 2).requiredType(PedestalRitualBehavior.TYPE))
+                        )
+                        .trail(TrailBuilder.create(Colors.GREEN)
+                                .input(InputSpec.item(Items.STRING).requiredType(PedestalRitualBehavior.TYPE))
+                                .input(InputSpec.item(Items.GOLD_NUGGET, 2).requiredType(PedestalRitualBehavior.TYPE))
+                        )
+                        .duration(200));
     }
 }

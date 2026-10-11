@@ -81,7 +81,8 @@ public class ExportingContexts {
     public static class FluidExportingContext {
         public record FluidExportingInfo(IFluidAcceptor acceptor, FluidStack stack, BeamNode targetNode, ServerLevel level) {
             public FluidStack commit() {
-                return stack.copyWithAmount(acceptor.acceptFluids(level, targetNode.pos(), stack, false));
+                int accepted = acceptor.acceptFluids(level, targetNode.pos(), stack, false);
+                return stack.copyWithAmount(stack.getAmount() - accepted);
             }
         }
 

@@ -8,8 +8,8 @@ import net.minecraft.network.chat.Component;
 import snownee.jade.api.*;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum InjectorComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
-    INSTANCE;
+public class InjectorComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+    public static final InjectorComponentProvider INSTANCE = new InjectorComponentProvider();
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {

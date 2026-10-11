@@ -37,7 +37,7 @@ public class ToggledEmitterBlock extends EmitterBlock {
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
         if (level.isClientSide()) return null;
-        return IBlockEntities.createTickerHelper(type, LucenticsBlockEntityRegister.TOGGLED_EMITTER.get(), (l, pos, s, be) -> be.tick());
+        return IBlockEntities.createTickerHelper(type, LucenticsBlockEntityRegister.ADVANCED_TOGGLED_EMITTER.get(), (l, pos, s, be) -> be.tick());
     }
 
     @Override

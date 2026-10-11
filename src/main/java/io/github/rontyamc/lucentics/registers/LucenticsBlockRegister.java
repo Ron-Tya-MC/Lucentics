@@ -6,6 +6,8 @@ import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBehav
 import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBlock;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBehavior;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlock;
+import io.github.rontyamc.lucentics.blocks.emitter.advanced_emitter.AdvancedEmitterBlock;
+import io.github.rontyamc.lucentics.blocks.emitter.advanced_toggled_emitter.AdvancedToggledEmitterBlock;
 import io.github.rontyamc.lucentics.blocks.emitter.toggled_emitter.ToggledEmitterBlock;
 import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBehavior;
 import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlock;
@@ -23,6 +25,7 @@ import io.github.rontyamc.lucentics.blocks.prism.prism_break.PrismBreakBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_collecting.PrismCollectingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_dyeing.PrismDyeingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_exporting.PrismExportingBlock;
+import io.github.rontyamc.lucentics.blocks.prism.prism_fluid_drain.PrismFluidDrainBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_fluid_place.PrismFluidPlaceBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_importing.PrismImportingBlock;
 import io.github.rontyamc.lucentics.blocks.prism.prism_io.PrismIOBlock;
@@ -148,6 +151,20 @@ public class LucenticsBlockRegister {
             .register();
     public static final BlockEntry<ToggledEmitterBlock> TOGGLED_EMITTER = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"toggled_emitter", ToggledEmitterBlock::new)
             .initialProperties(() -> Blocks.BRICKS)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .blockstate(ModelUtil.horizontalDirectionalBlockState(""))
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<AdvancedEmitterBlock> ADVANCED_EMITTER = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"advanced_emitter", AdvancedEmitterBlock::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
+            .tag(BlockTags.MINEABLE_WITH_PICKAXE)
+            .blockstate(ModelUtil.horizontalDirectionalBlockState(""))
+            .item()
+            .build()
+            .register();
+    public static final BlockEntry<AdvancedToggledEmitterBlock> ADVANCED_TOGGLED_EMITTER = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"advanced_toggled_emitter", AdvancedToggledEmitterBlock::new)
+            .initialProperties(() -> Blocks.IRON_BLOCK)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate(ModelUtil.horizontalDirectionalBlockState(""))
             .item()
@@ -319,7 +336,7 @@ public class LucenticsBlockRegister {
             .item()
             .build()
             .register();
-    public static final BlockEntry<PrismAttackBlock> PRISM_FLUID_DRAIN = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_fluid_drain", PrismAttackBlock::new)
+    public static final BlockEntry<PrismFluidDrainBlock> PRISM_FLUID_DRAIN = REGISTRATE.lucenticsBlockBuilder(CategoryType.PRISMS, "prism_fluid_drain", PrismFluidDrainBlock::new)
             .initialProperties(() -> Blocks.GLASS)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PRISMS.tag)

@@ -83,23 +83,27 @@ public class LucenticsJEIIntegration implements IModPlugin {
         registration.addRecipeCatalysts(INJECTING, LucenticsBlockRegister.INJECTOR);
 
         registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.ENGRAVING_TABLE);
-        registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.EMITTER);
-        registration.addRecipeCatalysts(ENGRAVING, LucenticsBlockRegister.PRISM_RITUAL);
+        registerTrailCommons(registration, ENGRAVING);
 
         registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.MILLING_TABLE);
-        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.EMITTER);
-        registration.addRecipeCatalysts(MILLING, LucenticsBlockRegister.PRISM_RITUAL);
+        registerTrailCommons(registration, MILLING);
 
         registration.addRecipeCatalysts(MIXING, LucenticsBlockRegister.MIXING_TABLE);
-        registration.addRecipeCatalysts(MIXING, LucenticsBlockRegister.EMITTER);
-        registration.addRecipeCatalysts(MIXING, LucenticsBlockRegister.PRISM_RITUAL);
+        registerTrailCommons(registration, MIXING);
 
         registration.addRecipeCatalysts(ASSEMBLING, LucenticsBlockRegister.ASSEMBLING_TABLE);
-        registration.addRecipeCatalysts(ASSEMBLING, LucenticsBlockRegister.EMITTER);
-        registration.addRecipeCatalysts(ASSEMBLING, LucenticsBlockRegister.PRISM_RITUAL);
+        registerTrailCommons(registration, ASSEMBLING);
 
         registration.addRecipeCatalysts(DYEING, LucenticsBlockRegister.PRISM_DYEING);
         registration.addRecipeCatalysts(DYEING, LucenticsBlockRegister.MIXING_TABLE);
+    }
+
+    private void registerTrailCommons(IRecipeCatalystRegistration registration, RecipeType<TrailRecipe> recipeType) {
+        registration.addRecipeCatalysts(recipeType, LucenticsBlockRegister.EMITTER);
+        registration.addRecipeCatalysts(recipeType, LucenticsBlockRegister.TOGGLED_EMITTER);
+        registration.addRecipeCatalysts(recipeType, LucenticsBlockRegister.ADVANCED_EMITTER);
+        registration.addRecipeCatalysts(recipeType, LucenticsBlockRegister.ADVANCED_TOGGLED_EMITTER);
+        registration.addRecipeCatalysts(recipeType, LucenticsBlockRegister.PRISM_RITUAL);
     }
 
     private<I extends RecipeInput, T extends Recipe<I>> void registerStream(IRecipeRegistration registration, ClientLevel level, net.minecraft.world.item.crafting.RecipeType<T> typeMC, RecipeType<T> typeJEI) {

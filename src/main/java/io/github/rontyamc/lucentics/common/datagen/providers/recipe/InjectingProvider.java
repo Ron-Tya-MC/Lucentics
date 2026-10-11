@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import net.minecraft.data.recipes.RecipeOutput;
@@ -9,7 +10,7 @@ public class InjectingProvider {
 
     public InjectingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         provider.generic(LucenticsItemRegister.DUSK_BRICK)

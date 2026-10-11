@@ -1,0 +1,20 @@
+{
+  "category": "lucentics:material_and_tool",
+  "icon": "lucentics:dawnstone",
+  "name": "patchouli.lucentics.entry.material_and_tool.stones.name",
+  "pages": [
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor1",
+      "item": "lucentics:dusk_brick",
+      "text": "patchouli.lucentics.entry.material_and_tool.stones.text.dusk_brick"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor2",
+      "item": "lucentics:dawnstone",
+      "text": "patchouli.lucentics.entry.material_and_tool.stones.text.dawnstone"
+    }
+  ],
+  "sortnum": 1
+}

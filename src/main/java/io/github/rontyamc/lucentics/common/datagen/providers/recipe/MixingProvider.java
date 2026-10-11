@@ -1,8 +1,9 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
-import io.github.rontyamc.lucentics.common.datagen.builders.InputSpec;
-import io.github.rontyamc.lucentics.common.datagen.builders.TrailBuilder;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.InputSpec;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.TrailBuilder;
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsFluidRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsITags;
@@ -15,7 +16,7 @@ import net.neoforged.neoforge.fluids.FluidType;
 public class MixingProvider {
     public MixingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         for (Colors color : Colors.get16Colors()) {

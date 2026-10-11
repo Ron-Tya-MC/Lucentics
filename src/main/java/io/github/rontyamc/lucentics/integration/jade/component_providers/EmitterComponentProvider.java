@@ -14,8 +14,8 @@ import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
 
-public enum EmitterComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
-    INSTANCE;
+public class EmitterComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+    public static final EmitterComponentProvider INSTANCE = new EmitterComponentProvider();
 
     @Override
     public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {

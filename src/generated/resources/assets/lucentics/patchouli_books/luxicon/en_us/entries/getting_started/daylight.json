@@ -1,0 +1,13 @@
+{
+  "category": "lucentics:getting_started",
+  "icon": "minecraft:daylight_detector",
+  "name": "patchouli.lucentics.entry.getting_started.daylight.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.getting_started.daylight.text.intro"
+    }
+  ],
+  "sortnum": 5
+}

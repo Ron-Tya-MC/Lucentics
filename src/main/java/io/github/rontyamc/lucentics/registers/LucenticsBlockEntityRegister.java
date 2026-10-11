@@ -4,6 +4,8 @@ import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBlockEntity;
 import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.emitter.advanced_emitter.AdvancedEmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.emitter.advanced_toggled_emitter.AdvancedToggledEmitterBlockEntity;
 import io.github.rontyamc.lucentics.blocks.emitter.toggled_emitter.ToggledEmitterBlockEntity;
 import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlockEntity;
 import io.github.rontyamc.lucentics.blocks.injector.InjectorBlockEntity;
@@ -23,6 +25,12 @@ public class LucenticsBlockEntityRegister {
             .register();
     public static final BlockEntityEntry<ToggledEmitterBlockEntity> TOGGLED_EMITTER = REGISTRATE.blockEntity("toggled_emitter", ToggledEmitterBlockEntity::new)
             .validBlock(LucenticsBlockRegister.TOGGLED_EMITTER)
+            .register();
+    public static final BlockEntityEntry<AdvancedEmitterBlockEntity> ADVANCED_EMITTER = REGISTRATE.blockEntity("advanced_emitter", AdvancedEmitterBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.ADVANCED_EMITTER)
+            .register();
+    public static final BlockEntityEntry<AdvancedToggledEmitterBlockEntity> ADVANCED_TOGGLED_EMITTER = REGISTRATE.blockEntity("advanced_toggled_emitter", AdvancedToggledEmitterBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.ADVANCED_TOGGLED_EMITTER)
             .register();
     public static final BlockEntityEntry<EngravingTableBlockEntity> ENGRAVING_TABLE = REGISTRATE.blockEntity("engraving_table", EngravingTableBlockEntity::new)
             .validBlock(LucenticsBlockRegister.ENGRAVING_TABLE)

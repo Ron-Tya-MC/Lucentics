@@ -1,0 +1,18 @@
+{
+  "category": "lucentics:getting_started",
+  "icon": "lucentics:dusk_brick",
+  "name": "patchouli.lucentics.entry.getting_started.welcome.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.getting_started.welcome.text.intro"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor2",
+      "text": "patchouli.lucentics.entry.getting_started.welcome.text.intro2"
+    }
+  ],
+  "sortnum": 1
+}

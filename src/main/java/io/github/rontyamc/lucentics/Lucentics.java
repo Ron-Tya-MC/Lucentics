@@ -110,6 +110,16 @@ public class Lucentics {
         );
         event.registerBlockEntity(
                 Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ADVANCED_EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ADVANCED_TOGGLED_EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
                 LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(),
                 (be, side) -> be.getEngravingTableBehavior().getIHandler()
         );
@@ -168,6 +178,8 @@ public class Lucentics {
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TOGGLED_EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ADVANCED_EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ADVANCED_TOGGLED_EMITTER.get(), EmitterRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(), EngravingTableRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
             event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(), TankRenderer::new);

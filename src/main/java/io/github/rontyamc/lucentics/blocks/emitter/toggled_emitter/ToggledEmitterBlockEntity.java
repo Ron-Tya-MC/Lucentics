@@ -24,7 +24,6 @@ public class ToggledEmitterBlockEntity extends EmitterBlockEntity {
         super.attachBehavior(behaviors);
     }
 
-    @Override
     public ToggledEmitterBehavior getEmitterBehavior() {
         return behavior;
     }

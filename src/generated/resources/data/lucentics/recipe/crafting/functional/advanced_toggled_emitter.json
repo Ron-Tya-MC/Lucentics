@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "lucentics:toggled_emitter"
+    },
+    "F": {
+      "item": "lucentics:focus_ring"
+    },
+    "G": {
+      "item": "lucentics:glimmer_iron"
+    },
+    "P": {
+      "item": "lucentics:iron_plate"
+    }
+  },
+  "pattern": [
+    "GPG",
+    "PEF",
+    "GPG"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:advanced_toggled_emitter"
+  }
+}

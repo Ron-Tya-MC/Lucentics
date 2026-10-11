@@ -51,6 +51,8 @@
   "block.lucentics.injector": "光注入器",
   "block.lucentics.emitter": "放射器",
   "block.lucentics.toggled_emitter": "切替式放射器",
+  "block.lucentics.advanced_emitter": "発展型放射器",
+  "block.lucentics.advanced_toggled_emitter": "発展型切替式放射器",
   "block.lucentics.engraving_table": "彩刻台",
   "block.lucentics.pedestal_ritual": "儀式の台座",
   "block.lucentics.milling_table": "粉挽台",
@@ -100,7 +102,7 @@
   "term.lucentics.colors.magenta": "赤紫色",
   "term.lucentics.colors.light_blue": "空色",
   "term.lucentics.colors.pink": "桃色",
-  "term.lucentics.colors.cyan": "水色",
+  "term.lucentics.colors.cyan": "青緑色",
   "term.lucentics.colors.lime": "黄緑色",
   "term.lucentics.colors.gray": "灰色",
   "term.lucentics.colors.light_gray": "薄灰色",
@@ -128,8 +130,6 @@
 
   "jei.lucentics.info.daylight_condition": "日光レベル: %s",
   "jei.lucentics.info.processing_duration": "%s秒",
-  "jei.lucentics.info.engraving.too_much_beam": "これ以上ビームを表示できません！",
-  "jei.lucentics.info.engraving.too_much_beam2": "詳しいレシピは説明書を確認してください。",
   "jei.lucentics.info.not_consume": "消費しない",
   "jei.lucentics.info.required_hits": "%s回叩く",
   "jei.lucentics.info.damage_per_hits": "耐久力を%s消費",
@@ -138,5 +138,136 @@
   "jei.lucentics.info.weight": "Weight: %s ( %s%%で排出 )",
   "jei.lucentics.info.probability": "%s%%で排出",
   "jei.lucentics.info.damage_item": "耐久力を%s消費",
-  "jei.lucentics.info.missing_catalyst": "存在しない儀式ブロック"
+  "jei.lucentics.info.missing_catalyst": "存在しない儀式ブロック",
+
+
+  "patchouli.lucentics.name": "光辞苑",
+  "patchouli.lucentics.landing_text": "光と触れ合う全ての人のための入門書。",
+
+  "patchouli.lucentics.common.relations": "関連項目",
+
+  "patchouli.lucentics.category.getting_started.name": "はじめに",
+  "patchouli.lucentics.category.getting_started.description": "光工魔学の最初の一歩。",
+
+  "patchouli.lucentics.entry.getting_started.welcome.name": "ようこそ",
+  "patchouli.lucentics.entry.getting_started.welcome.text.intro": "改めまして、この光あふれる世界へようこそ。$(br2)この世界の光は色々な形となって現れ、それぞれが特別なチカラを持っています。$(br)しかしながら、私たちはそのチカラのほとんどを自由に使えません。この光のもつチカラを扱うための学問こそが、本書の主題である光工魔学です。",
+  "patchouli.lucentics.entry.getting_started.welcome.text.intro2": "本書は、最初から全ての項目を読めるわけではありません。$(br)あなたの進捗に応じて、必要な時に必要な情報が読めるようになっています。$(br2)本書の小さな紙面では、複雑な儀式に必要な素材の数や並べ方を詳しく記すことができません。幸い、必要な素材と手順を映し出してくれる道具が$(l:https://www.curseforge.com/minecraft/mc-mods/jei)いくつか$(/l)$(l:https://www.curseforge.com/minecraft/mc-mods/emi)作られて$(/l)$(l:https://www.curseforge.com/minecraft/mc-mods/roughly-enough-items)います$(/l)。お好きなものを選び、その導きに従って儀式を進めてください。",
+
+  "patchouli.lucentics.entry.getting_started.injector.name": "光注入器",
+  "patchouli.lucentics.entry.getting_started.injector.text.intro": "太陽光は最も身近でありながら、大きなチカラを持つ光です。そのままではただ地面を暖かく照らしてくれるだけですが、適切な装置を用いることでそのチカラを引き出すことができます。$(br)その中でも最も初歩的で、最初に扱うのに適した装置がこの『光注入器』です。",
+  "patchouli.lucentics.entry.getting_started.injector.text.injector": "光注入器は、上部に備えたレンズで太陽の光を集め、台座に置かれたアイテムへと注ぎ込みます。光と親和性のある一部の素材は、光を注ぐことでより親和性の高い素材へと変質するのです。まずは身近な素材で試して、変化の様子を観察してみてください。",
+  "patchouli.lucentics.entry.getting_started.injector.text.injector2": "こうして生まれた素材は、光工魔学のあらゆる場面で必要になります。本当に、あらゆる場面です。$(br)あらかじめ光注入器は複数台用意し、両手いっぱいほどの素材を作っておくことをおすすめします。",
+  "patchouli.lucentics.entry.getting_started.injector.text.injector3": "注入には十分な太陽光が欠かせません。",
+
+  "patchouli.lucentics.entry.getting_started.emitter.name": "放射器",
+  "patchouli.lucentics.entry.getting_started.emitter.text.intro": "光は本来、四方八方へと広がっていくものです。この性質は広範囲を照らすには有用ですが、分散した光を扱うのは困難です。$(br)『放射器』は内部で光を集めて一本の帯にし、正面のスリットから撃ち出します。こうすることで、多くの装置に光のチカラを供給することができます。",
+  "patchouli.lucentics.entry.getting_started.emitter.text.emitter": "放射器のスリットはレッドストーン信号を受けているときのみ開きます。$(br)また、光は不透明なものに遮られ、届く距離に限界があります。",
+  "patchouli.lucentics.entry.getting_started.emitter.text.emitter2": "$(br)放射器から放たれた光は前から後へ流れるような性質を持ちます。放射器に近い方が前、遠い方が後です。$(br)この概念は$(l:lucentics:prism/what_are_prisms#anchor1)プリズム$()を扱ううえで重要になってきます。",
+
+  "patchouli.lucentics.entry.getting_started.prism.name": "プリズム",
+  "patchouli.lucentics.entry.getting_started.prism.text.intro": "ガラスに黎明石の粉を作用させることで、半透明で水晶質の不思議な立方体を作成できます。$(br)これらはその見た目から『プリズム』と呼ばれていますが、光を屈折させ曲げる同名の物体とは全く異なる性質を持ちます。$(br)詳しい解説は『プリズム』の章をご確認ください。",
+
+  "patchouli.lucentics.entry.getting_started.daylight.name": "日光レベル",
+  "patchouli.lucentics.entry.getting_started.daylight.text.intro": "光工魔学では太陽光の量を0-15のレベルで表します。$(br)この値は日照センサーで計測できる値と同じです。",
+
+
+  "patchouli.lucentics.category.devices.name": "装置",
+  "patchouli.lucentics.category.devices.description": "光を扱うための装置。",
+
+  "patchouli.lucentics.entry.devices.engraving_table.name": "彩刻台",
+  "patchouli.lucentics.entry.devices.engraving_table.text.intro": "光は適切に扱えば物に刻みを付ける刃にもなります。光を用いた儀式で素材に新たな性質を刻み込む装置が、この『彩刻台』です。$(br)彩刻台の上に加工したいアイテムを置き、彩刻台の横面に光を当てることで儀式が始まります。$(br)儀式を行うには光の本数、色、その道筋にある素材の数と順序が重要になります。",
+  "patchouli.lucentics.entry.devices.engraving_table.text.intro2": "光路上に$(l:lucentics:prism/prism_ritual#anchor1)儀式のプリズム$()を置き、その上に指定されたブロックを置きます。すると、彩刻台とプリズムの真上のブロックが接続され、クラフトに必要な素材を供給することができます。$(br)何に、何をどのように刻むかによって、要求される素材の種類や数、光の色も変わります。光はどの方角から当てても構いませんが、光路上の素材の順序は儀式で指定されたとおりに合わせる必要があります。",
+  "patchouli.lucentics.entry.devices.engraving_table.text.engraving": "$(br)彩刻の儀式にはかなりのエネルギーを要するため、適切な量の太陽光も当てる必要があります。",
+
+  "patchouli.lucentics.entry.devices.milling_table.name": "粉挽台",
+  "patchouli.lucentics.entry.devices.milling_table.text.intro": "一般的に粉挽きの際に用いる石臼は、上下に分かれたパーツが回転して材料を粉にするものです。$(br)しかし、この『粉挽台』は一味違います。粉挽台は逆に材料を回転させ、それに赤の光のチカラを当てて粉にする装置です。$(br)この装置も#engraving:彩刻台$()と同じく光を当てて作動させます。",
+  "patchouli.lucentics.entry.devices.milling_table.text.misc": "$(#aaaaaa) - 粉々の塵々にしてやる",
+
+  "patchouli.lucentics.entry.devices.mixing_table.name": "調合台",
+  "patchouli.lucentics.entry.devices.mixing_table.text.intro": "水は実に様々なものと混ざり合い、変化します。$(br)『調合台』は液体に材料を溶かし込み、あるいは液体同士を混ぜ合わせて新たな液体を作り出す装置です。$(br)この装置も#engraving:彩刻台$()と同じく光を当てて作動させます。$(br)この装置は他の装置と比べて成果物を置いておけるスペースが狭くなっています。液体は重たいのです...",
+  "patchouli.lucentics.entry.devices.mixing_table.text.misc": "$(#aaaaaa) - たくさんは荷物を持てない僕だから",
+
+  "patchouli.lucentics.entry.devices.assembling_table.name": "組立台",
+  "patchouli.lucentics.entry.devices.assembling_table.text.intro": "あなたは手先が器用なので、機械類でさえも素手で組み立ててしまうでしょう。$(br)しかし小さな部品となるとまた話は別なので、『組立台』に任せてみましょう。組立台は与えられた材料を加工してまた別の材料にする装置です。$(br)この装置も#engraving:彩刻台$()と同じく光を当てて作動させます。",
+  "patchouli.lucentics.entry.devices.assembling_table.text.misc": "$(#aaaaaa) - 様々なクーポンがはいっている",
+
+  "patchouli.lucentics.entry.devices.pedestals.name": "台座",
+  "patchouli.lucentics.entry.devices.pedestals.text.ritual": "儀式の台座は、一種類のアイテムを保持できます。主に儀式クラフトに用いられる台座で、儀式に用いるアイテムを指定する役割があります。",
+  "patchouli.lucentics.entry.devices.pedestals.title.ritual": "儀式の台座",
+
+  "patchouli.lucentics.entry.devices.tank.name": "タンク",
+  "patchouli.lucentics.entry.devices.tank.text.intro": "タンクは一定量の同じ液体を貯めておける入れ物です。儀式クラフトに用いられることもあり、儀式に用いる液体を指定する役割があります。",
+  "patchouli.lucentics.entry.devices.tank.text.bold": "タンクには外枠が太いバージョンがあります。2つは相互に変換可能で、どちらも基本性能は全く同じです。$(br2)一体何のために？",
+
+  "patchouli.lucentics.entry.devices.toggled_emitter.name": "切替式放射器",
+  "patchouli.lucentics.entry.devices.toggled_emitter.text.intro": "$(l:lucentics:getting_started/emitter#anchor1)放射器$()をレッドストーントーチと一緒にクラフトすると、切替式放射器を作ることができます。基本的な機能は変わりませんが、一度レッドストーン信号を受けると光を出し続け、もう一度信号が入力されると光を止めるといった動作をします。",
+
+  "patchouli.lucentics.entry.devices.advanced_emitter.name": "発展型放射器",
+  "patchouli.lucentics.entry.devices.advanced_emitter.text.intro": "$(l:lucentics:getting_started/emitter#anchor1)放射器$()を蛍鉄と集光環で強化した装置です。光の届く最大距離が2倍になり、より多くのノードを一つの光路に置けるようになります。",
+
+
+  "patchouli.lucentics.category.prism.name": "プリズム",
+  "patchouli.lucentics.category.prism.description": "小さな働き者。",
+
+  "patchouli.lucentics.entry.prism.what_are_prisms.name": "プリズムとは",
+  "patchouli.lucentics.entry.prism.what_are_prisms.text.intro": "プリズムは、半透明で水晶質の不思議な立方体です。$(br)無地のプリズムに特定のシンボルを刻むことで、固有の機能を持たせることができます。それ単体では単なる装飾品ですが、決められた光を通すことで機能を発揮することができます。$(br)光を通し、機能を発揮できる状態のプリズム、及び光路の終端にある(光が当たっている)ブロックのことを『ノード』と呼びます。",
+  "patchouli.lucentics.entry.prism.what_are_prisms.text.intro2": "プリズムの機能には大きく分けて『アクティブ』型と『パッシブ』型の二つがあります。$(br2)アクティブ型の機能は、プリズムに同じ色の光が通っている間発動し続けます。無色のプリズムは何色の光でも動作します。$(br2)パッシブ型の機能は、#foregoing:自身より前$()にある#node:ノード$()のアクティブ型機能に連鎖して発動します。この機能はプリズムの色と光の色が違っても発動します。",
+  "patchouli.lucentics.entry.prism.what_are_prisms.text.transporting": "一部のプリズムはアイテムや液体を運ぶことができます。運ばれた物は光の粒子となって光路上を移動し、搬出先の#node:ノード$()へと吸い込まれます。この粒子の見た目は$(l:https://ja.minecraft.wiki/w/設定#映像の質とパフォーマンス)世界の見方$(/l)に影響されやすく、時折目に見えたり、見えなくなったりします。",
+  "patchouli.lucentics.entry.prism.what_are_prisms.title.transporting": "プリズムの物流",
+  "patchouli.lucentics.entry.prism.what_are_prisms.text.transporting2": "有効な搬出先とは、$(li)同じ光路上にあり$()$(li)光路上でアイテムを搬出しようとしている#node:ノード$()よりも後にある$()$(li)そのアイテムや液体を受け入れ可能な$()#node:ノード$()$(br)のことを指します。",
+  "patchouli.lucentics.entry.prism.what_are_prisms.title.transporting2": "有効な搬出先",
+
+  "patchouli.lucentics.entry.prism.prism_ritual.name": "儀式のプリズム",
+  "patchouli.lucentics.entry.prism.prism_ritual.text.intro": "儀式のプリズムは機能を持たない特殊なプリズムです。$(br)その代わり、光を用いた儀式を行う際にクラフト台とそれに対する入力を繋げるための窓口として働きます。$(br)儀式のプリズムは、真上のブロックから入力を参照します。",
+
+  "patchouli.lucentics.entry.prism.prism_importing.name": "搬入のプリズム",
+  "patchouli.lucentics.entry.prism.prism_importing.text.intro": "#active:アクティブ:$() 真上のコンテナからアイテムや液体を取り出し、同じ光路上の#exportable:有効な搬出先$()へと搬出します。$(br2)#exportable:有効な搬出先$()が無い場合、何もしません。",
+
+  "patchouli.lucentics.entry.prism.prism_exporting.name": "搬出のプリズム",
+  "patchouli.lucentics.entry.prism.prism_exporting.text.intro": "#passive:パッシブ:$() 真上のコンテナが受け入れ可能なアイテムや液体を受け入れます。$(br2)受け入れたアイテムや液体は真上のコンテナへと格納されます。",
+
+  "patchouli.lucentics.entry.prism.prism_io.name": "搬入出のプリズム",
+  "patchouli.lucentics.entry.prism.prism_io.text.intro": "$(l:lucentics:prism/prism_importing#anchor1)搬入のプリズム$()と$(l:lucentics:prism/prism_exporting#anchor1)搬出のプリズム$()とを組み合わせたプリズムで、両方の性質を併せ持ちます。$(br)受け入れたものを#exportable:有効な搬出先$()に即座に送り出すため、#foregoing:光路上で後$()の方にアイテムや液体を詰めていくことができます。",
+
+  "patchouli.lucentics.entry.prism.prism_collecting.name": "集積のプリズム",
+  "patchouli.lucentics.entry.prism.prism_collecting.text.intro": "基本性能は$(l:lucentics:prism/prism_io#anchor1)搬入出のプリズム$()と同じですが、#foregoing:自身より前$()の#node:ノード$()はこの先の#node:ノード$()に搬出できなくなります。$(br)つまり、このプリズムの真上のコンテナが埋まっていたとしても、#foregoing:このプリズムより後$()にある搬出先に搬出することはできません。$(br)この性質は儀式を自動化するうえでとても役立ちます。",
+
+  "patchouli.lucentics.entry.prism.prism_break.name": "破壊のプリズム",
+  "patchouli.lucentics.entry.prism.prism_break.text.intro": "#active:アクティブ:$() 真上のブロックを破壊します。$(br)破壊した後のドロップアイテムは#exportable:有効な搬出先$()へと搬出され、搬出しきれなかった分はその場にドロップします。",
+
+  "patchouli.lucentics.entry.prism.prism_attack.name": "攻撃のプリズム",
+  "patchouli.lucentics.entry.prism.prism_attack.text.intro": "#active:アクティブ:$() 真上のブロックにいる全てのモブにダメージを与えます。",
+
+  "patchouli.lucentics.entry.prism.prism_fluid_drain.name": "液体回収のプリズム",
+  "patchouli.lucentics.entry.prism.prism_fluid_drain.text.intro": "#active:アクティブ:$() 真上の液体ブロックを液体として回収し、#exportable:有効な搬出先$()へと搬出します。#exportable:有効な搬出先$()が無ければ回収しません。$(br2)#passive:パッシブ:$() 他の#node:ノード$()から液体を入れられるアイテムを搬入されたとき、そのアイテムに真上の液体を入れます。#exportable:有効な搬出先$()があれば液体を入れた後のアイテムを搬出します。",
+
+  "patchouli.lucentics.entry.prism.prism_fluid_place.name": "液体設置のプリズム",
+  "patchouli.lucentics.entry.prism.prism_fluid_place.text.intro": "#passive:パッシブ:$() 他の#node:ノード$()から液体入りのアイテムを搬入されたとき、液体を1バケツ分取り出し真上に設置します。#exportable:有効な搬出先$()があれば液体を取り出した後のアイテムを搬出します。$(br)また、他の#node:ノード$()から液体を1バケツ分以上搬入されたとき、その液体を1バケツ分使用して真上に設置します。$(br)いずれの機能も真上のブロックが空いていなければ作動しません。",
+
+  "patchouli.lucentics.entry.prism.prism_place.name": "設置のプリズム",
+  "patchouli.lucentics.entry.prism.prism_place.text.intro": "#passive:パッシブ:$() 他の#node:ノード$()からブロックアイテムを搬入されたとき、そのアイテムを1つ使用し真上に設置します。真上のブロックが空いていなければ作動しません。",
+
+  "patchouli.lucentics.entry.prism.prism_dyeing.name": "染色のプリズム",
+  "patchouli.lucentics.entry.prism.prism_dyeing.text.intro": "#active:アクティブ:$() 真上の$(l:lucentics:devices/pedestals#anchor1)儀式の台座$()に置かれたアイテムを染色します。作動には条件が3つあります。$(li)台座に置かれたアイテムが染色可能なこと。$()$(li)#foregoing:自身より後$(/l)に調合台があり、その中に十分な量の染料液が入っていること。$()$(li)調合台より#foregoing:さらに後$(/l)に染色後のアイテムを搬出できる#exportable:有効な搬出先$(/l)があること。$()$(br)通常の作業台で行う大抵の染色レシピを実行でき、染料の消費量も抑えられます。",
+  "patchouli.lucentics.entry.prism.prism_dyeing.text.intro2": "多くのプリズムはその機能に関連した色を持っています。逆に言えば、その機能に関連した色を持つ無地のプリズムにしか、その機能を持たせることはできません。$(br)無地のプリズムは普通の染料を使ったクラフト方法では染色できず、染色のプリズムを介して染色する必要があります。",
+  "patchouli.lucentics.entry.prism.prism_dyeing.title.intro2": "プリズムの色",
+  "patchouli.lucentics.entry.prism.prism_dyeing.text.intro3": "ところで、染色のプリズムも色付きのプリズムのようですが...ご安心を。多少値は張りますが、染色のプリズムだけは別経路で作成することができます。",
+
+
+  "patchouli.lucentics.category.material_and_tool.name": "素材とツール",
+  "patchouli.lucentics.category.material_and_tool.description": "基礎をなすもの。",
+
+  "patchouli.lucentics.entry.material_and_tool.stones.name": "光の石材",
+  "patchouli.lucentics.entry.material_and_tool.stones.text.dusk_brick": "レンガに光を注入して作成します。$(br)光を吸収・放出する性質があり、組み上げて装置の土台にすることも可能です。",
+  "patchouli.lucentics.entry.material_and_tool.stones.text.dawnstone": "閃緑岩に光を注入して作成します。$(br)光を拡散・偏向させる性質があり、砕いて粉にすると他の素材を光と馴染ませることができます。",
+
+  "patchouli.lucentics.entry.material_and_tool.hammer.name": "ハンマー",
+  "patchouli.lucentics.entry.material_and_tool.hammer.text.intro": "ハンマーはブロックを粉砕して新たな素材を得るための道具です。$(br)使い方は簡単。粉砕したいブロックを置き、ハンマーを持って$(k:use)を押すだけです。$(br)ブロックによっては複数回叩く必要があるものもあります。また、高位のハンマーになるほど粉砕の効率が上がります。",
+  "patchouli.lucentics.entry.material_and_tool.hammer.text.intro2": "金のハンマーは少々特殊です。金のハンマーは耐久値の消費が極めて速い代わりに、大抵のブロックを他のハンマーより高速で粉砕でき、より多くの素材を入手しやすくなっています。$(br2)ハンマーは採掘用ツールとしても使用できます。性能は同種のツルハシよりも少し高性能で耐久力も高いですが、コストを考えると必ずしも良い手段とは言えません。",
+
+  "patchouli.lucentics.entry.material_and_tool.dye_liquid.name": "染料液",
+  "patchouli.lucentics.entry.material_and_tool.dye_liquid.text.intro": "染料液は染料を水に溶かしこんだ液体です。$(br)儀式に用いるほか、$(l:lucentics:prism/prism_dyeing)染色のプリズム$()による染色レシピにも用います。",
+
+  "patchouli.lucentics.entry.material_and_tool.patina_liquid.name": "緑青液",
+  "patchouli.lucentics.entry.material_and_tool.patina_liquid.text.intro": "緑青液は水に銅の粉を溶かしこみ、緑青化させた液体です。$(br)一部の儀式に用いて、注入・塗布した染料を定着させるはたらきがあります。"
 }

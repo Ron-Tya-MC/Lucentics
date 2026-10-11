@@ -1,0 +1,19 @@
+{
+  "category": "lucentics:devices",
+  "icon": "lucentics:assembling_table",
+  "name": "patchouli.lucentics.entry.devices.assembling_table.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.devices.assembling_table.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/functional/assembling_table",
+      "text": "patchouli.lucentics.entry.devices.assembling_table.text.misc"
+    }
+  ],
+  "sortnum": 4
+}

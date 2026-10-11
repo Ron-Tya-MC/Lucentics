@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,12 +28,9 @@ public abstract class BaseBlockEntity extends BlockEntity {
 
     public abstract void attachBehavior(List<BlockEntityBehavior> behaviors);
 
+    @SuppressWarnings("unchecked")
     public <T extends BlockEntityBehavior> T getBehavior(BehaviorType<T> type) {
         return (T) behaviors.get(type);
-    }
-
-    public Vec3 getCenter(BlockPos pos) {
-        return new Vec3(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5);
     }
 
     public void updated() {

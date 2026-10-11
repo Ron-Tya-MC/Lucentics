@@ -5,6 +5,7 @@ import io.github.rontyamc.lucentics.client.particle.FlowingGlowParticleOptions;
 import io.github.rontyamc.lucentics.common.beam.node.BeamNode;
 import io.github.rontyamc.lucentics.common.beam.node.NodeScheduleHelper;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
 import net.minecraft.resources.ResourceLocation;
@@ -65,12 +66,10 @@ public class BeamParticles {
         waypoints.add(Vec3.atCenterOf(nodeTo));
         waypoints.add(Vec3.atCenterOf(containerTo));
 
-        int rgb = color.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = color.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
-        return new FlowingGlowParticleOptions(waypoints, r, g, b, FLOWING_DURATION, RANDOM_SOURCE.nextFloat() * 0.3f + 0.05f, delta);
+        return new FlowingGlowParticleOptions(waypoints, rgb[0], rgb[1], rgb[2], FLOWING_DURATION, RANDOM_SOURCE.nextFloat() * 0.3f + 0.05f, delta);
     }
 
     public static FlowingGlowParticleOptions buildOptions(BlockPos containerFrom, BlockPos nodeFrom, BeamNode target, Colors color) {

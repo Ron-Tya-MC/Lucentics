@@ -12,7 +12,7 @@ public class PrismFluidPlaceBlock extends PrismBlock {
     public static final MapCodec<PrismFluidPlaceBlock> CODEC = simpleCodec(PrismFluidPlaceBlock::new);
 
     public PrismFluidPlaceBlock(Properties properties) {
-        super(properties, Optional.of(Colors.RED));
+        super(properties, Optional.of(Colors.BLUE));
     }
 
     @Override

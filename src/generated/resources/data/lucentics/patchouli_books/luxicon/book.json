@@ -1,0 +1,19 @@
+{
+  "book_texture": "patchouli:textures/gui/book_red.png",
+  "creative_tab": "lucentics:tools",
+  "filler_texture": "lucentics:textures/gui/patchouli/blank_page.png",
+  "i18n": true,
+  "landing_text": "patchouli.lucentics.landing_text",
+  "macros": {
+    "#active:": "$(l:lucentics:prism/what_are_prisms#anchor2)",
+    "#engraving:": "$(l:lucentics:devices/engraving_table#anchor2)",
+    "#exportable:": "$(l:lucentics:prism/what_are_prisms#anchor5)",
+    "#foregoing:": "$(l:lucentics:getting_started/emitter#anchor3)",
+    "#node:": "$(l:lucentics:prism/what_are_prisms#anchor1)",
+    "#passive:": "$(l:lucentics:prism/what_are_prisms#anchor2)"
+  },
+  "model": "lucentics:luxicon",
+  "name": "patchouli.lucentics.name",
+  "use_resource_pack": true,
+  "version": 1
+}

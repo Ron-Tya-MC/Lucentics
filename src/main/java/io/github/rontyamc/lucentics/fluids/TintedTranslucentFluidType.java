@@ -1,6 +1,7 @@
 package io.github.rontyamc.lucentics.fluids;
 
 import com.tterrag.registrate.builders.FluidBuilder;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.BlockAndTintGetter;
@@ -62,6 +63,7 @@ public class TintedTranslucentFluidType extends TintedFluidType {
     }
 
     protected static Vector3f toVector3f(int color) {
-        return new Vector3f(((color >> 16) & 0xFF) / 255f, ((color >> 8) & 0xFF) / 255f, (color & 0xFF) / 255f);
+        Float[] rgb = MiscUtil.separateRGB(color);
+        return new Vector3f(rgb[0], rgb[1], rgb[2]);
     }
 }

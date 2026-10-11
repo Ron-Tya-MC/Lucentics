@@ -5,6 +5,7 @@ import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -34,10 +35,8 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.5f, 1.0f);
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_RESONATE, SoundSource.BLOCKS, 0.1f, p);
 
-        int rgb = Colors.WHITE.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = Colors.WHITE.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
         double Sx = pos.getX() + 0.5;
         double Sy = pos.getY() + 0.8;
@@ -51,7 +50,7 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        serverLevel.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
+        serverLevel.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
     }
 
     @Override
@@ -69,10 +68,8 @@ public class PedestalRitualBehavior extends PedestalBehavior {
 
         if (hold&& getContent().isEmpty()) level.playSound(null, pos, SoundEvents.ITEM_BREAK, SoundSource.BLOCKS, 0.5f, 1.0f);;
 
-        int rgb = Colors.RED.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = Colors.RED.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
         double Sx = pos.getX() + 0.5;
         double Sy = pos.getY() + 0.8;
@@ -86,7 +83,7 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        serverLevel.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
+        serverLevel.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
     }
 
     @Override
@@ -101,10 +98,8 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.5f, 1.0f);
         level.playSound(null, pos, SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS, 0.1f, p);
 
-        int rgb = Colors.LIGHT_BLUE.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = Colors.LIGHT_BLUE.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
         double Sx = pos.getX() + 0.5;
         double Sy = pos.getY() + 0.8;
@@ -118,7 +113,7 @@ public class PedestalRitualBehavior extends PedestalBehavior {
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        serverLevel.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
+        serverLevel.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 5, Vx, Vy, Vz, 0.01);
     }
 
     @Override

@@ -9,6 +9,7 @@ import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.util.FluidUtil;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -284,12 +285,10 @@ public class MixingTableBehavior extends TrailCraftingBehavior implements Cleara
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        int rgb = Colors.BLUE.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = Colors.BLUE.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
-        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.15);
+        level.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.15);
     }
 
     private void spawnCraftCompleteParticles(ServerLevel level) {

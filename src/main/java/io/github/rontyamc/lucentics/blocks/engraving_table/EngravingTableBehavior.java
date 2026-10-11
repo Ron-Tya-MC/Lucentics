@@ -8,6 +8,7 @@ import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -234,22 +235,20 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        int rgb;
+        int rgbInt;
 
         if (!beams.isEmpty()) {
             List<Integer> colors = new ArrayList<>();
             for (Beam beam : beams) {
                 colors.add(beam.color().getColorCode());
             }
-            rgb = colors.get(Mth.lerpInt(RANDOM_SOURCE.nextFloat(), 1, colors.size()) - 1);
+            rgbInt = colors.get(Mth.lerpInt(RANDOM_SOURCE.nextFloat(), 1, colors.size()) - 1);
         } else {
-            rgb = Colors.SUNLIGHT.getColorCode();
+            rgbInt = Colors.SUNLIGHT.getColorCode();
         }
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
-        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.07);
+        level.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.07);
     }
 
     private void spawnCraftCompleteParticles(ServerLevel level, BlockPos pos) {

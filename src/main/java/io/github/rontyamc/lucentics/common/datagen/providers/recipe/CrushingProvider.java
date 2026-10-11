@@ -1,7 +1,8 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
 import io.github.rontyamc.lucentics.common.SoundSpec;
-import io.github.rontyamc.lucentics.common.datagen.builders.OutputSpec;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.OutputSpec;
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsITags;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.block.Blocks;
 public class CrushingProvider {
     public CrushingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         provider.generic(LucenticsItemRegister.DAWNSTONE_DUST)
@@ -157,6 +158,89 @@ public class CrushingProvider {
                 .crushing(b -> b.input(Blocks.RAW_COPPER_BLOCK)
                         .output(OutputSpec.of(Items.RAW_COPPER).count(UniformInt.of(7,9)))
                         .output(OutputSpec.of(LucenticsItemRegister.COPPER_DUST).count(UniformInt.of(2,10)))
+                        .tool(LucenticsItemRegister.GOLDEN_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(40)
+                        .requiredHits(1));
+
+        provider.generic()
+                .suffix("_with_copper_hammer")
+                .crushing(b -> b.input(Blocks.RAW_IRON_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_IRON).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.IRON_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.COPPER_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(8));
+        provider.generic()
+                .suffix("_with_iron_hammer")
+                .crushing(b -> b.input(Blocks.RAW_IRON_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_IRON).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.IRON_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.IRON_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(6));
+        provider.generic()
+                .suffix("_with_diamond_hammer")
+                .crushing(b -> b.input(Blocks.RAW_IRON_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_IRON).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.IRON_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.DIAMOND_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(2));
+        provider.generic()
+                .suffix("_with_golden_hammer")
+                .crushing(b -> b.input(Blocks.RAW_IRON_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_IRON).count(UniformInt.of(7,9)))
+                        .output(OutputSpec.of(LucenticsItemRegister.IRON_DUST).count(UniformInt.of(2,10)))
+                        .tool(LucenticsItemRegister.GOLDEN_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(40)
+                        .requiredHits(1));
+
+
+        provider.generic()
+                .suffix("_with_copper_hammer")
+                .crushing(b -> b.input(Blocks.RAW_GOLD_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_GOLD).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.GOLD_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.COPPER_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(8));
+        provider.generic()
+                .suffix("_with_iron_hammer")
+                .crushing(b -> b.input(Blocks.RAW_GOLD_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_GOLD).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.GOLD_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.IRON_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(6));
+        provider.generic()
+                .suffix("_with_diamond_hammer")
+                .crushing(b -> b.input(Blocks.RAW_GOLD_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_GOLD).count(UniformInt.of(5,7)))
+                        .output(OutputSpec.of(LucenticsItemRegister.GOLD_DUST).count(UniformInt.of(4,6)))
+                        .tool(LucenticsItemRegister.DIAMOND_HAMMER)
+                        .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(4)
+                        .requiredHits(2));
+        provider.generic()
+                .suffix("_with_golden_hammer")
+                .crushing(b -> b.input(Blocks.RAW_GOLD_BLOCK)
+                        .output(OutputSpec.of(Items.RAW_GOLD).count(UniformInt.of(7,9)))
+                        .output(OutputSpec.of(LucenticsItemRegister.GOLD_DUST).count(UniformInt.of(2,10)))
                         .tool(LucenticsItemRegister.GOLDEN_HAMMER)
                         .clickSound(SoundSpec.of(SoundEvents.STONE_HIT, SoundSource.BLOCKS))
                         .breakSound(SoundSpec.of(SoundEvents.STONE_BREAK, SoundSource.BLOCKS))

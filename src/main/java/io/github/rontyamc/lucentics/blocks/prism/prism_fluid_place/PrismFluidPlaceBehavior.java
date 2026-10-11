@@ -8,10 +8,13 @@ import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts;
 import io.github.rontyamc.lucentics.common.util.TransferUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.LiquidBlockContainer;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.SoundActions;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.FluidType;
 import net.neoforged.neoforge.fluids.capability.IFluidHandler;
@@ -58,40 +61,24 @@ public class PrismFluidPlaceBehavior extends PrismBehavior implements IItemAccep
         if (stack.getAmount() < FluidType.BUCKET_VOLUME) return 0;
 
         BlockPos interactPos = acceptorPos.above();
-        BlockState state = level.getBlockState(interactPos);
-
         Fluid fluid = stack.getFluid();
 
-        if (state instanceof LiquidBlockContainer liquidBlockContainer) {
-            boolean canPlace = liquidBlockContainer.canPlaceLiquid(null, level, interactPos, state, fluid);
-            if (!canPlace) return 0;
+        boolean canPlace = canPlace(level, interactPos, fluid);
+        if (!canPlace) return 0;
 
-            if (simulate) {
-                return FluidType.BUCKET_VOLUME;
-            }
-            else {
-                return liquidBlockContainer.placeLiquid(level, interactPos, state, fluid.defaultFluidState())
-                        ? FluidType.BUCKET_VOLUME : 0;
-            }
-        }
-        else {
-            boolean canPlace = canPlace(level, interactPos, fluid);
-            if (!canPlace) return 0;
+        if (!simulate) {
+            level.destroyBlock(interactPos, true);
+            BlockState fluidBlockState = fluid.defaultFluidState().createLegacyBlock();
+            boolean success = level.setBlock(interactPos, fluidBlockState, 3);
+            if (!success) return 0;
 
-            if (simulate) {
-                return FluidType.BUCKET_VOLUME;
-            }
-            else {
-                level.destroyBlock(interactPos, true);
-                BlockState fluidBlockState = fluid.defaultFluidState().createLegacyBlock();
-                boolean success = level.setBlock(interactPos, fluidBlockState, 3);
-                if (success) {
-                    level.updateNeighborsAt(interactPos, fluidBlockState.getBlock());
-                    level.scheduleTick(interactPos, fluid, fluid.getTickDelay(level));
-                }
-                return success ? FluidType.BUCKET_VOLUME : 0;
-            }
+            level.updateNeighborsAt(interactPos, fluidBlockState.getBlock());
+            level.scheduleTick(interactPos, fluid, fluid.getTickDelay(level));
+
+            Optional<SoundEvent> placeSound = Optional.ofNullable(fluid.getFluidType().getSound(SoundActions.BUCKET_EMPTY));
+            level.playSound(null, interactPos, placeSound.orElse(SoundEvents.BUCKET_EMPTY), SoundSource.BLOCKS, 1.0f, 1.0f);
         }
+        return FluidType.BUCKET_VOLUME;
     }
 
     private boolean canPlace(ServerLevel level, BlockPos pos, Fluid fluid) {

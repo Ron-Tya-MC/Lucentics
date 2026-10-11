@@ -9,6 +9,7 @@ import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.OutputReceiver;
 import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipeInput;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
@@ -412,12 +413,10 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
         double Vy = Ty - Sy;
         double Vz = Tz - Sz;
 
-        int rgb = Colors.SUNLIGHT.getColorCode();
-        float r = ((rgb >> 16) & 0xFF) / 255f;
-        float g = ((rgb >> 8) & 0xFF) / 255f;
-        float b = (rgb & 0xFF) / 255f;
+        int rgbInt = Colors.SUNLIGHT.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
 
-        level.sendParticles(new GlowParticleOptions(r,g,b), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.05);
+        level.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.05);
     }
 
     private void spawnCraftCompleteParticles(ServerLevel level, BlockPos pos) {

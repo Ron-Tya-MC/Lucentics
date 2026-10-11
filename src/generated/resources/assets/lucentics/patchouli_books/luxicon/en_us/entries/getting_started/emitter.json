@@ -1,0 +1,24 @@
+{
+  "category": "lucentics:getting_started",
+  "icon": "lucentics:emitter",
+  "name": "patchouli.lucentics.entry.getting_started.emitter.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.getting_started.emitter.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/functional/emitter",
+      "text": "patchouli.lucentics.entry.getting_started.emitter.text.emitter"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor3",
+      "text": "patchouli.lucentics.entry.getting_started.emitter.text.emitter2"
+    }
+  ],
+  "sortnum": 3
+}

@@ -21,7 +21,7 @@ import java.util.List;
 
 public abstract class EmitBehavior extends BlockEntityBehavior {
     public static final BehaviorType<EmitBehavior> TYPE = new BehaviorType<>("emit");
-    public static final int MAX_DISTANCE = 8;
+    public int maxDistance;
 
     protected int beamLength = 0;
 
@@ -33,6 +33,10 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
 
     public EmitBehavior(BaseBlockEntity be) {
         super(be);
+    }
+
+    public void setMaxDistance(int maxDistance) {
+        this.maxDistance = maxDistance;
     }
 
     @Override
@@ -97,9 +101,9 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
     protected void scan(ServerLevel level, BlockPos origin, Direction direction, List<BeamNode> precedingTrail, Colors color) {
         List<BeamNode> newTrail = new ArrayList<>(precedingTrail);
         BeamNode newEndpoint = null;
-        int reachedDistance = MAX_DISTANCE;
+        int reachedDistance = maxDistance;
 
-        for (int distance = 1; distance <= MAX_DISTANCE; distance++) {
+        for (int distance = 1; distance <= maxDistance; distance++) {
             BlockPos checkPos = origin.relative(direction, distance);
             BlockState state = level.getBlockState(checkPos);
 
@@ -121,7 +125,7 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
         }
 
         if (newEndpoint == null) {
-            BlockPos checkPos = origin.relative(direction, MAX_DISTANCE + 1);
+            BlockPos checkPos = origin.relative(direction, maxDistance + 1);
             BlockState state = level.getBlockState(checkPos);
             ResourceLocation blockId = BuiltInRegistries.BLOCK.getKey(state.getBlock());
             if (!state.is(BlockTags.AIR)) newEndpoint = new BeamNode(blockId, checkPos.immutable(), level.dimension(), true);
@@ -134,7 +138,7 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
     }
 
     protected int rayCast(ServerLevel level, BlockPos origin, Direction direction) {
-        for (int distance = 1; distance <= MAX_DISTANCE; distance++) {
+        for (int distance = 1; distance <= maxDistance; distance++) {
             BlockPos checkPos = origin.relative(direction, distance);
             BlockState state = level.getBlockState(checkPos);
 
@@ -144,7 +148,7 @@ public abstract class EmitBehavior extends BlockEntityBehavior {
 
             return distance - 1;
         }
-        return MAX_DISTANCE;
+        return maxDistance;
     }
 
     private void clearBeam(ServerLevel level) {

@@ -1,0 +1,18 @@
+{
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_importing",
+  "name": "patchouli.lucentics.entry.prism.prism_importing.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.prism_importing.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/prisms/prism_importing_from_blank"
+    }
+  ],
+  "sortnum": 3
+}

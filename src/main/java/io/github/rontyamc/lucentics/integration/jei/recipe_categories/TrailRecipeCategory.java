@@ -35,18 +35,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRecipe> {
-    // これ以上はGUIサイズによってはみ出す
-    private static final int MAX_BEAMS = 4;
-    private static final int MAX_DEVICES = 32;
-
     private static final int WIDTH = 160;
     private static final int HEADER_HEIGHT = 30;
     private static final int ROW_HEIGHT = 30;
     private static final int FOOTER_HEIGHT = 20;
-    private static final int HEIGHT = HEADER_HEIGHT + MAX_BEAMS * ROW_HEIGHT + FOOTER_HEIGHT;
+    private static final int HEIGHT = HEADER_HEIGHT + 4 * ROW_HEIGHT + FOOTER_HEIGHT;
 
-    private static final int NODE_AREA_LEFT_SIDE = 25;
-    private static final int NODE_AREA_WIDTH = 110;
+    private static final int NODE_AREA_LEFT_SIDE = 28;
+    private static final int NODE_AREA_WIDTH = 104;
     private static final int DEVICE_SLOT_OFFSET = 10;
     private static final int ITEM_SLOT_OFFSET = 0;
     private static final int LEFT_SPACE = 30;
@@ -76,7 +72,7 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
         int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
 
         List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
-        int rowCount = Math.min(trails.size(), MAX_BEAMS);
+        int rowCount = trails.size();
 
         for (int row = 0; row < rowCount; row++) {
             RecipeArguments.TrailInput trail = trails.get(row);
@@ -88,13 +84,6 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
 
             guiGraphics.drawString(Minecraft.getInstance().font, row + 1 + ".",
                     8, y+2, 0xFF808080, false);
-        }
-
-        if (trails.size() > MAX_BEAMS) {
-            guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("jei.lucentics.info.engraving.too_much_beam"),
-                    4, HEADER_HEIGHT + MAX_BEAMS * ROW_HEIGHT - 10, 0x404040, false);
-            guiGraphics.drawString(Minecraft.getInstance().font, Component.translatable("jei.lucentics.info.engraving.too_much_beam2"),
-                    4, HEADER_HEIGHT + MAX_BEAMS * ROW_HEIGHT, 0x404040, false);
         }
 
         ProbabilisticOutputSlots.drawRangeBadges(guiGraphics, recipeSlotsView, recipe.getOutputs(), left + 83, 5, 20, 20, Integer.MAX_VALUE, 3);
@@ -133,21 +122,21 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
         ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), left + 83, 5, 20, 20, Integer.MAX_VALUE, 3);
 
         List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
-        int rowCount = Math.min(trails.size(), MAX_BEAMS);
+        int rowCount = trails.size();
 
         for (int row = 0; row < rowCount; row++) {
             RecipeArguments.TrailInput trail = trails.get(row);
             int y = HEADER_HEIGHT + row * ROW_HEIGHT + 2;
 
             List<RecipeArguments.OrderingInput> orderings = trail.inputs();
-            int deviceCount = Math.min(orderings.size(), MAX_DEVICES);
+            int deviceCount = orderings.size();
             if (deviceCount == 0) continue;
 
-            int cellWidth = NODE_AREA_WIDTH / deviceCount;
+            int gridWidth = deviceCount >= 4 ? NODE_AREA_WIDTH / (deviceCount - 1) : NODE_AREA_WIDTH / (deviceCount + 1);
 
             for (int col = 0; col < deviceCount; col++) {
                 RecipeArguments.OrderingInput ordering = orderings.get(col);
-                int cellCenter = NODE_AREA_LEFT_SIDE + col * cellWidth + cellWidth / 2;
+                int cellCenter = deviceCount >= 4 ? NODE_AREA_LEFT_SIDE + col * gridWidth : NODE_AREA_LEFT_SIDE + (col + 1) * gridWidth;
                 int x = cellCenter - 8;
 
                 ordering.requiredType().ifPresent(type -> {

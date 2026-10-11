@@ -27,10 +27,12 @@ public class EmitterBehavior extends EmitBehavior implements Clearable {
     protected ItemStack lensContainer;
     protected final Integer maxStackSize;
     protected final EmitterIHandler iHandler;
+    public static final int MAX_DISTANCE = 8;
 
     public EmitterBehavior(BaseBlockEntity be) {
         super(be);
 
+        setMaxDistance(MAX_DISTANCE);
         maxStackSize = 1;
         iHandler = new EmitterIHandler(this);
         clearContent();

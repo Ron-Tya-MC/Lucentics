@@ -1,9 +1,10 @@
 package io.github.rontyamc.lucentics.common.datagen.providers.recipe;
 
 import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBehavior;
-import io.github.rontyamc.lucentics.common.datagen.builders.InputSpec;
-import io.github.rontyamc.lucentics.common.datagen.builders.OutputSpec;
-import io.github.rontyamc.lucentics.common.datagen.builders.TrailBuilder;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.InputSpec;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.OutputSpec;
+import io.github.rontyamc.lucentics.common.datagen.builders.recipe.TrailBuilder;
+import io.github.rontyamc.lucentics.common.datagen.providers.LucenticsRecipeProvider;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.registers.LucenticsBlockRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
@@ -16,11 +17,12 @@ import net.minecraft.world.level.block.Blocks;
 public class MillingProvider {
     public MillingProvider() {}
 
-    protected static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+    public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
         provider.leaveFolder();
 
         provider.generic(LucenticsItemRegister.DAWNSTONE_DUST)
                 .milling(b -> b.input(LucenticsBlockRegister.DAWNSTONE)
+                        .output(OutputSpec.of(LucenticsItemRegister.DAWNSTONE_DUST).probability(0.3f))
                         .trail(TrailBuilder.create(Colors.RED)
                                 .input(InputSpec.item(LucenticsITags.HAMMERS.tag)
                                         .requiredType(PedestalRitualBehavior.TYPE)
