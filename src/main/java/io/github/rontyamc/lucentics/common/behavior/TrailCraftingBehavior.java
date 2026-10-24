@@ -123,7 +123,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
             return;
         }
         if (isIdle()) {
-            startProcessing(serverLevel, recipe, beams);
+            startProcessing(serverLevel, recipeHolder.get(), beams);
             return;
         }
 
@@ -169,7 +169,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
         processingTime--;
         if (processingContinue < processingContinueMax) processingContinue++;
         syncProgressToClient(serverLevel);
-        whileCrafting(serverLevel, pos, beams);
+        whileCrafting(serverLevel, pos, recipeHolder.get(), beams);
         if (processingTime <= 0) {
             craft(serverLevel, recipeHolder.get(), input);
         }
@@ -274,7 +274,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
                 startProcessing(level, new TrailRecipeInput(getContainer(), input.beams()));
             }
 
-            onCraftCompleted(level, getPos(), input.beams());
+            onCraftCompleted(level, getPos(), recipeHolder, input.beams());
         }
         else {
             for (OutputRoller.RolledOutput output : rolled) {
@@ -291,22 +291,23 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
 
     protected void startProcessing(ServerLevel level, TrailRecipeInput input) {
         getCurrentRecipe(level, input)
-                .ifPresentOrElse(recipe -> startProcessing(level, recipe.value(), input.beams()),
+                .ifPresentOrElse(recipeHolder -> startProcessing(level, recipeHolder, input.beams()),
                         this::setIdle);
     }
 
-    protected void startProcessing(ServerLevel level, TrailRecipe recipe, List<Beam> beams) {
+    protected void startProcessing(ServerLevel level, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
+        TrailRecipe recipe = recipeHolder.value();
         processingTime = recipe.getProcessingDuration();
         if (processingTime <= 0) {
             processingTime = -1;
         }
         processingTimeMax = processingTime;
-        onCraftStarted(level, getPos(), beams);
+        onCraftStarted(level, getPos(), recipeHolder, beams);
     }
 
-    protected abstract void onCraftStarted(ServerLevel level, BlockPos pos, List<Beam> beams);
+    protected abstract void onCraftStarted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams);
 
-    protected abstract void whileCrafting(ServerLevel level, BlockPos pos, List<Beam> beams);
+    protected abstract void whileCrafting(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams);
 
     protected void whilePending(ServerLevel level, BlockPos pos, List<Beam> beams) {
         double Sx = pos.getX() + 0.5;
@@ -324,7 +325,7 @@ public abstract class TrailCraftingBehavior extends ReceiveBehavior implements O
         level.sendParticles(ParticleTypes.SMOKE, Sx, Sy, Sz, 1, Vx, Vy, Vz, 0.02);
     }
 
-    protected abstract void onCraftCompleted(ServerLevel level, BlockPos pos, List<Beam> beams);
+    protected abstract void onCraftCompleted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams);
 
     @Override
     public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {

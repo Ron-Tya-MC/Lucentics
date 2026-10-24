@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:light_copper",
   "category": "lucentics:devices",
   "icon": "lucentics:tank_light_copper",
   "name": "patchouli.lucentics.entry.devices.tank.name",
@@ -16,13 +17,13 @@
     {
       "type": "patchouli:text",
       "anchor": "anchor3",
-      "text": "patchouli.lucentics.entry.devices.tank.text.bold"
+      "text": "patchouli.lucentics.entry.devices.tank.text.thick"
     },
     {
       "type": "patchouli:crafting",
       "anchor": "anchor4",
-      "recipe": "lucentics:crafting/functional/tank_light_copper_bold",
-      "recipe2": "lucentics:crafting/functional/tank_light_copper_from_bold"
+      "recipe": "lucentics:crafting/functional/tank_light_copper_thick",
+      "recipe2": "lucentics:crafting/functional/tank_light_copper_from_thick"
     }
   ],
   "sortnum": 6

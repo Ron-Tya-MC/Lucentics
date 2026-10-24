@@ -17,14 +17,11 @@ import io.github.rontyamc.lucentics.common.beam.transfer.ExportingContexts.ItemE
 import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts.ItemImportingContext;
 import io.github.rontyamc.lucentics.common.beam.transfer.TransferManager;
 import io.github.rontyamc.lucentics.common.dict.Colors;
-import io.github.rontyamc.lucentics.common.util.ItemUtil;
-import io.github.rontyamc.lucentics.common.util.MiscUtil;
-import io.github.rontyamc.lucentics.common.util.ParticleUtil;
-import io.github.rontyamc.lucentics.common.util.TransferUtil;
+import io.github.rontyamc.lucentics.common.util.*;
 import io.github.rontyamc.lucentics.recipes.dyeing.process.DyeingProgressEntry;
 import io.github.rontyamc.lucentics.recipes.dyeing.process.DyeingProgressHelper;
 import io.github.rontyamc.lucentics.recipes.dyeing.process.DyeingRecipeResolver;
-import io.github.rontyamc.lucentics.registers.LucenticsFluidRegister;
+import io.github.rontyamc.lucentics.registers.LucenticsAdvancementEventRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -77,19 +74,19 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
 
         ItemStack dyeable = importingContext.itemStack();
 
-        Optional<ColorSupply> supply = findDyeSupply(level, context.nodesAhead());
+        Optional<FluidSupply> supply = findSupply(level, context.nodesAhead());
         if (supply.isEmpty()) {
             DyeingProgressHelper.clear(chunk, prismPos);
             return;
         }
 
-        Optional<DyeingRecipeResolver.Result> recipe =
-                DyeingRecipeResolver.resolve(level, dyeable, supply.get().color());
+        FluidStack content = supply.get().content();
+        Optional<DyeingRecipeResolver.Result> recipe = DyeingRecipeResolver.resolve(level, dyeable, content);
         if (recipe.isEmpty()) {
             DyeingProgressHelper.clear(chunk, prismPos);
             return;
         }
-        if (supply.get().containedAmount() < recipe.get().liquidAmount()) {
+        if (content.getAmount() < recipe.get().liquidAmount()) {
             DyeingProgressHelper.clear(chunk, prismPos);
             return;
         }
@@ -104,15 +101,15 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
         }
 
         ResourceLocation itemId = BuiltInRegistries.ITEM.getKey(dyeable.getItem());
-        String colorName = supply.get().color().getSerializedName();
+        ResourceLocation fluidId = BuiltInRegistries.FLUID.getKey(content.getFluid());
 
         DyeingProgressEntry existing = DyeingProgressHelper.get(chunk, prismPos);
         boolean sameContext = existing != null
                 && existing.itemId().equals(itemId)
-                && existing.color().equals(colorName);
+                && existing.fluidId().equals(fluidId);
 
         int remaining = sameContext ? Math.max(existing.processingTime() - 1, 0) : recipe.get().processingDuration();
-        whileCrafting(level, interactPos);
+        whileCrafting(level, interactPos, recipe.get());
 
         if (remaining == 0) {
             craft(level, prismPos, importingContext, supply.get(), exportingContext, recipe.get(), interactPos, context.color());
@@ -120,12 +117,12 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
             return;
         }
 
-        DyeingProgressHelper.set(chunk, prismPos, itemId, colorName, remaining);
+        DyeingProgressHelper.set(chunk, prismPos, itemId, fluidId, remaining);
     }
 
     private void craft(ServerLevel level, BlockPos prismPos, ItemImportingContext importingContext,
-                       ColorSupply supply, ItemExportingContext exportingContext,
-                       DyeingRecipeResolver.Result recipe, BlockPos interactPos, Colors color) {
+                       FluidSupply supply, ItemExportingContext exportingContext,
+                       DyeingRecipeResolver.Result recipe, BlockPos interactPos, Colors beamColor) {
         importingContext.handler().extractItem(importingContext.slot(), 1, false);
 
         FluidStack currentDye = supply.handler().getFluidInTank(supply.tank());
@@ -138,15 +135,15 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
             ItemUtil.dropItem(level, prismPos, exportingContext.fallbacks().leftover());
         }
 
-        onCrafted(level, interactPos, prismPos, exportingContext, color);
+        onCrafted(level, interactPos, prismPos, exportingContext, recipe, beamColor);
     }
 
-    private void whileCrafting(ServerLevel level, BlockPos pos) {
+    private void whileCrafting(ServerLevel level, BlockPos pos, DyeingRecipeResolver.Result recipe) {
         float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 1.2f, 1.5f);
         level.playSound(null, pos, SoundEvents.BUBBLE_COLUMN_UPWARDS_AMBIENT, SoundSource.BLOCKS, 0.1f, p);
     }
 
-    private void onCrafted(ServerLevel level, BlockPos interactPos, BlockPos prismPos, ItemExportingContext exportingContext, Colors beamColor) {
+    private void onCrafted(ServerLevel level, BlockPos interactPos, BlockPos prismPos, ItemExportingContext exportingContext, DyeingRecipeResolver.Result recipe, Colors beamColor) {
         float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 1.7f, 2.0f);
         level.playSound(null, interactPos, SoundEvents.BREWING_STAND_BREW, SoundSource.BLOCKS, 0.1f, p);
 
@@ -172,11 +169,14 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
                 ParticleUtil.spawnAndScheduleFlowing(level, interactPos, prismPos, info.targetNode(), beamColor, PARTICLE_INTERVAL);
             }
         }
+
+        if (recipe.recipeId().isPresent()) AdvancementUtil.grantNearby(level, prismPos, LucenticsAdvancementEventRegister.DYEING_COMPLETED, recipe.recipeId().get());
+        else AdvancementUtil.grantNearby(level, prismPos, LucenticsAdvancementEventRegister.DYEING_COMPLETED);
     }
 
-    private record ColorSupply(Colors color, IFluidHandler handler, int tank, int containedAmount, int supplyIndex) {}
+    private record FluidSupply(FluidStack content, IFluidHandler handler, int tank, int supplyIndex) {}
 
-    private Optional<ColorSupply> findDyeSupply(ServerLevel level, List<BeamNode> nodesAhead) {
+    private Optional<FluidSupply> findSupply(ServerLevel level, List<BeamNode> nodesAhead) {
         for (int i = 0; i < nodesAhead.size(); i++) {
             BeamNode node = nodesAhead.get(i);
             Optional<BlockPos> devicePos = TransferManager.resolveDevicePos(node, level, PrismQualifier.PRISM_RITUAL);
@@ -191,10 +191,7 @@ public class PrismDyeingBehavior extends PrismBehavior implements IFlowingPartic
                 FluidStack content = handler.getFluidInTank(tank);
                 if (content.isEmpty()) continue;
 
-                Optional<Colors> color = LucenticsFluidRegister.getColor(content.getFluid());
-                if (color.isPresent()) {
-                    return Optional.of(new ColorSupply(color.get(), handler, tank, content.getAmount(), i));
-                }
+                return Optional.of(new FluidSupply(content, handler, tank, i));
             }
         }
         return Optional.empty();

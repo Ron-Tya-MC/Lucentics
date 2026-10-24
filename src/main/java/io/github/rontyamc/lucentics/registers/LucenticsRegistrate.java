@@ -12,7 +12,7 @@ import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.blocks.LucenticsBlockEntityBuilder;
 import io.github.rontyamc.lucentics.common.VirtualFluid;
-import io.github.rontyamc.lucentics.common.datagen.builders.VirtualFluidBuilder;
+import io.github.rontyamc.lucentics.datagen.builders.VirtualFluidBuilder;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;

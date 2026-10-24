@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:dawnstone",
   "category": "lucentics:devices",
   "icon": "lucentics:pedestal_ritual",
   "name": "patchouli.lucentics.entry.devices.pedestals.name",

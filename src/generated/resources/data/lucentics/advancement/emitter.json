@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:dusk_brick",
+  "criteria": {
+    "emitter": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:emitter"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.emitter.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:emitter"
+    },
+    "title": {
+      "translate": "advancement.lucentics.emitter"
+    }
+  },
+  "requirements": [
+    [
+      "emitter"
+    ]
+  ]
+}

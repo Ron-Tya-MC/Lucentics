@@ -33,6 +33,6 @@ public class InjectorComponentProvider implements IBlockComponentProvider, IServ
 
     @Override
     public net.minecraft.resources.ResourceLocation getUid() {
-        return Lucentics.defaultLocation("injector");
+        return Lucentics.path("injector");
     }
 }

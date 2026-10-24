@@ -1,6 +1,9 @@
 {
   "type": "lucentics:dyeing",
-  "color": "white",
+  "color": {
+    "amount": 400,
+    "fluid": "lucentics:white_dye_liquid"
+  },
   "input": {
     "tag": "minecraft:banners"
   },
@@ -8,6 +11,5 @@
     "count": 1,
     "id": "minecraft:white_banner"
   },
-  "processing_duration": 15,
-  "required_mb": 400
+  "processing_duration": 15
 }

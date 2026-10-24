@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:dawnstone",
   "category": "lucentics:devices",
   "icon": "lucentics:engraving_table",
   "name": "patchouli.lucentics.entry.devices.engraving_table.name",

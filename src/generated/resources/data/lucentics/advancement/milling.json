@@ -1,0 +1,28 @@
+{
+  "parent": "lucentics:red_lens",
+  "criteria": {
+    "lucentics:milling_completed": {
+      "conditions": {
+        "event": "lucentics:milling_completed"
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.milling.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:milling_table"
+    },
+    "title": {
+      "translate": "advancement.lucentics.milling"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:milling_completed"
+    ]
+  ]
+}

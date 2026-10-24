@@ -1,0 +1,28 @@
+{
+  "parent": "lucentics:dusk_brick",
+  "criteria": {
+    "lucentics:crushing_completed": {
+      "conditions": {
+        "event": "lucentics:crushing_completed"
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.crushing.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:copper_hammer"
+    },
+    "title": {
+      "translate": "advancement.lucentics.crushing"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:crushing_completed"
+    ]
+  ]
+}

@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:light_copper",
   "category": "lucentics:devices",
   "icon": "lucentics:milling_table",
   "name": "patchouli.lucentics.entry.devices.milling_table.name",

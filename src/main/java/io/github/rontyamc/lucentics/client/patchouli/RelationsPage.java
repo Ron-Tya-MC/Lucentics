@@ -27,15 +27,15 @@ public class RelationsPage extends BasePage<RelationsPage> {
     }
 
     public RelationsPage addEntry(ResourceLocation category, String entry) {
-        return addEntry(category, Lucentics.defaultLocation(entry));
+        return addEntry(category, Lucentics.path(entry));
     }
 
     public RelationsPage addEntry(String category, ResourceLocation entry) {
-        return addEntry(Lucentics.defaultLocation(category), entry);
+        return addEntry(Lucentics.path(category), entry);
     }
 
     public RelationsPage addEntry(String category, String entry) {
-        return addEntry(Lucentics.defaultLocation(category), Lucentics.defaultLocation(entry));
+        return addEntry(Lucentics.path(category), Lucentics.path(entry));
     }
 
     public RelationsPage setTitle(String key) {

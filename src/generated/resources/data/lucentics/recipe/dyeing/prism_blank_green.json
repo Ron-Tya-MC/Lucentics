@@ -1,6 +1,9 @@
 {
   "type": "lucentics:dyeing",
-  "color": "green",
+  "color": {
+    "amount": 500,
+    "fluid": "lucentics:green_dye_liquid"
+  },
   "input": {
     "item": "lucentics:prism_blank"
   },
@@ -8,6 +11,5 @@
     "count": 1,
     "id": "lucentics:prism_blank_green"
   },
-  "processing_duration": 30,
-  "required_mb": 500
+  "processing_duration": 30
 }

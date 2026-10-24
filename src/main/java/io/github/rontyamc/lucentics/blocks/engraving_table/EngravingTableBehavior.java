@@ -1,5 +1,6 @@
 package io.github.rontyamc.lucentics.blocks.engraving_table;
 
+import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
 import io.github.rontyamc.lucentics.common.BaseBlockEntity;
 import io.github.rontyamc.lucentics.common.ThingStack;
@@ -7,10 +8,12 @@ import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.util.AdvancementUtil;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
+import io.github.rontyamc.lucentics.registers.LucenticsAdvancementEventRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -291,9 +294,9 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         return craftSucceeded;
     }
 
-    protected void onCraftStarted(ServerLevel level, BlockPos pos, List<Beam> beams) {}
+    protected void onCraftStarted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {}
 
-    protected void whileCrafting(ServerLevel level, BlockPos pos, List<Beam> beams) {
+    protected void whileCrafting(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
         if (processingTime %3 == 0) {
             spawnCraftingParticles(level, pos, beams);
             spawnCraftingParticles(level, pos, beams);
@@ -303,9 +306,12 @@ public class EngravingTableBehavior extends TrailCraftingBehavior implements Cle
         }
     }
 
-    protected void onCraftCompleted(ServerLevel level, BlockPos pos, List<Beam> beams) {
+    protected void onCraftCompleted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
         spawnCraftCompleteParticles(level, pos);
         level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.4f, 1.5f);
+
+        Lucentics.LOGGER.info("{}", recipeHolder.id());
+        AdvancementUtil.grantNearby(level, pos, LucenticsAdvancementEventRegister.ENGRAVING_COMPLETED, recipeHolder.id());
     }
 
     @Override

@@ -1,0 +1,46 @@
+{
+  "parent": "lucentics:prism_dyeing",
+  "criteria": {
+    "lucentics:dyeing_completed": {
+      "conditions": {
+        "event": "lucentics:dyeing_completed",
+        "recipes": [
+          "lucentics:dyeing/prism_blank_red",
+          "lucentics:dyeing/prism_blank_blue",
+          "lucentics:dyeing/prism_blank_green",
+          "lucentics:dyeing/prism_blank_yellow",
+          "lucentics:dyeing/prism_blank_magenta",
+          "lucentics:dyeing/prism_blank_cyan",
+          "lucentics:dyeing/prism_blank_pink",
+          "lucentics:dyeing/prism_blank_lime",
+          "lucentics:dyeing/prism_blank_light_blue",
+          "lucentics:dyeing/prism_blank_brown",
+          "lucentics:dyeing/prism_blank_gray",
+          "lucentics:dyeing/prism_blank_light_gray",
+          "lucentics:dyeing/prism_blank_orange",
+          "lucentics:dyeing/prism_blank_purple",
+          "lucentics:dyeing/prism_blank_white",
+          "lucentics:dyeing/prism_blank_black"
+        ]
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.colored_prism_blank.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:prism_blank_red"
+    },
+    "title": {
+      "translate": "advancement.lucentics.colored_prism_blank"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:dyeing_completed"
+    ]
+  ]
+}

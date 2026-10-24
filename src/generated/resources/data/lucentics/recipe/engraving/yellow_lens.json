@@ -65,7 +65,7 @@
           "damage_item": 0,
           "input": {
             "count": 1,
-            "item": "minecraft:soul_lantern"
+            "item": "minecraft:lightning_rod"
           },
           "required_type": "lucentics:pedestal_ritual"
         },

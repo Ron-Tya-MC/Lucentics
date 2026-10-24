@@ -27,7 +27,7 @@ import java.util.List;
 
 @JeiPlugin
 public class LucenticsJEIIntegration implements IModPlugin {
-    private static final ResourceLocation PLUGIN_ID = Lucentics.defaultLocation("jei_plugin");
+    private static final ResourceLocation PLUGIN_ID = Lucentics.path("jei_plugin");
 
     public static final RecipeType<InjectingRecipe> INJECTING =
             RecipeType.create(Lucentics.MOD_ID, "injecting", InjectingRecipe.class);

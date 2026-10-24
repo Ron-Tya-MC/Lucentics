@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:advanced_emitter",
+  "criteria": {
+    "yellow_lens": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:yellow_lens"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.yellow_lens.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:yellow_lens"
+    },
+    "title": {
+      "translate": "advancement.lucentics.yellow_lens"
+    }
+  },
+  "requirements": [
+    [
+      "yellow_lens"
+    ]
+  ]
+}

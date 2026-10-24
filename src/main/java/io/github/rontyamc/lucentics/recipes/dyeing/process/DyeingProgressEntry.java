@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public record DyeingProgressEntry(BlockPos pos, ResourceLocation itemId, String color, int processingTime) {
+public record DyeingProgressEntry(BlockPos pos, ResourceLocation itemId, ResourceLocation fluidId, int processingTime) {
     public static final Codec<DyeingProgressEntry> CODEC = RecordCodecBuilder.create(ins -> ins.group(
             BlockPos.CODEC.fieldOf("pos").forGetter(DyeingProgressEntry::pos),
             ResourceLocation.CODEC.fieldOf("item_id").forGetter(DyeingProgressEntry::itemId),
-            Codec.STRING.fieldOf("color").forGetter(DyeingProgressEntry::color),
+            ResourceLocation.CODEC.fieldOf("fluid_id").forGetter(DyeingProgressEntry::fluidId),
             Codec.INT.fieldOf("processing_time").forGetter(DyeingProgressEntry::processingTime)
     ).apply(ins, DyeingProgressEntry::new));
 

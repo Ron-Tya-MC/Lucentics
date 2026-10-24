@@ -15,11 +15,11 @@ public class DyeingRecipeCollector {
         List<DyeingRecipeEntry> result = new ArrayList<>();
 
         for (var holder : manager.getAllRecipesFor(RecipeType.CRAFTING)) {
-            DyeingRecipeConverter.from(holder.value(), registries).ifPresent(result::add);
+            DyeingRecipeConverter.fromCrafting(holder.value(), registries).ifPresent(result::add);
         }
 
         for (var holder : manager.getAllRecipesFor(LucenticsRecipeTypesRegister.DYEING_TYPE.get())) {
-            result.add(DyeingRecipeConverter.fromJson(holder.value()));
+            result.add(DyeingRecipeConverter.fromJson(holder.value(), holder.id()));
         }
 
         return result;

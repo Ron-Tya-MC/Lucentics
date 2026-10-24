@@ -10,9 +10,9 @@ public class DyeingProgressHelper {
         return chunk.getData(LucenticsAttachmentRegister.DYEING_PROGRESS).get(pos.immutable());
     }
 
-    public static void set(LevelChunk chunk, BlockPos pos, ResourceLocation itemId, String color, int processingTime) {
+    public static void set(LevelChunk chunk, BlockPos pos, ResourceLocation itemId, ResourceLocation fluidId, int processingTime) {
         chunk.getData(LucenticsAttachmentRegister.DYEING_PROGRESS)
-                .put(pos.immutable(), new DyeingProgressEntry(pos.immutable(), itemId, color, processingTime));
+                .put(pos.immutable(), new DyeingProgressEntry(pos.immutable(), itemId, fluidId, processingTime));
     }
 
     public static void clear(LevelChunk chunk, BlockPos pos) {

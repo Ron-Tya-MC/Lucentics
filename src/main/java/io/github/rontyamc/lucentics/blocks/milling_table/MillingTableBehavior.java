@@ -8,11 +8,13 @@ import io.github.rontyamc.lucentics.common.beam.Beam;
 import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
 import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.util.AdvancementUtil;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.network.MillingProcessPayload;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
 import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
+import io.github.rontyamc.lucentics.registers.LucenticsAdvancementEventRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -299,10 +301,10 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     }
 
     @Override
-    protected void onCraftStarted(ServerLevel level, BlockPos pos, List<Beam> beams) {}
+    protected void onCraftStarted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {}
 
     @Override
-    protected void whileCrafting(ServerLevel level, BlockPos pos, List<Beam> beams) {
+    protected void whileCrafting(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
         if (processingTime %7 == 0) {
             spawnCraftingParticles(level, beams, pos);
             spawnCraftingParticles(level, beams, pos);
@@ -321,10 +323,12 @@ public class MillingTableBehavior extends TrailCraftingBehavior implements Clear
     }
 
     @Override
-    protected void onCraftCompleted(ServerLevel level, BlockPos pos, List<Beam> beams) {
+    protected void onCraftCompleted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
         spawnCraftCompleteParticles(level);
 
         level.playSound(null, pos, SoundEvents.TUFF_BREAK, SoundSource.BLOCKS, 0.4f, 0.5f);
+
+        AdvancementUtil.grantNearby(level, pos, LucenticsAdvancementEventRegister.MILLING_COMPLETED, recipeHolder.id());
     }
 
     @Override

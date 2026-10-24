@@ -8,10 +8,12 @@ import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
 import io.github.rontyamc.lucentics.common.dict.Colors;
 import io.github.rontyamc.lucentics.common.recipe.OutputReceiver;
 import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
+import io.github.rontyamc.lucentics.common.util.AdvancementUtil;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.common.util.MiscUtil;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipe;
 import io.github.rontyamc.lucentics.recipes.injecting.InjectingRecipeInput;
+import io.github.rontyamc.lucentics.registers.LucenticsAdvancementEventRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
@@ -154,10 +156,10 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
             Optional<RecipeHolder<InjectingRecipe>> recipeHolder = getCurrentRecipe(serverLevel, input);
             if (recipeHolder.isPresent() && checkDayLightCondition(serverLevel, recipeHolder.get().value()) && !swapped) {
                 if (!(processingTime == 1 && getRemainingSpaceBuffer() <= 0)) processingTime--;
-                whileCrafting(serverLevel, getPos());
+                whileCrafting(serverLevel, getPos(), recipeHolder.get());
                 blockEntity.setChanged();
                 if (processingTime <= 0) {
-                    craft(serverLevel, recipeHolder.get().value(), input);
+                    craft(serverLevel, recipeHolder.get(), input);
                 }
             } else {
                 setIdle();
@@ -181,7 +183,8 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
         resetTransportNotifies();
     }
 
-    private boolean craft(ServerLevel level, InjectingRecipe recipe, InjectingRecipeInput input) {
+    private boolean craft(ServerLevel level, RecipeHolder<InjectingRecipe> recipeHolder, InjectingRecipeInput input) {
+        InjectingRecipe recipe = recipeHolder.value();
         boolean craftSucceeded = true;
         List<OutputRoller.RolledOutput> rolled = OutputRoller.roll(RANDOM_SOURCE, recipe.getOutputs());
 
@@ -217,7 +220,7 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
                 startProcessing(level, new InjectingRecipeInput(getContainer()));
             }
 
-            onCraftCompleted(level, getPos());
+            onCraftCompleted(level, getPos(), recipeHolder);
         }
         else {
             for (OutputRoller.RolledOutput output : rolled) {
@@ -230,15 +233,17 @@ public class InjectorBehavior extends BlockEntityBehavior implements Clearable, 
         return craftSucceeded;
     }
 
-    protected void onCraftStarted(ServerLevel level, BlockPos pos) {}
+    protected void onCraftStarted(ServerLevel level, BlockPos pos, RecipeHolder<InjectingRecipe> recipeHolder) {}
 
-    protected void whileCrafting(ServerLevel level, BlockPos pos) {
+    protected void whileCrafting(ServerLevel level, BlockPos pos, RecipeHolder<InjectingRecipe> recipeHolder) {
         if (processingTime %5 == 0) spawnCraftingParticles(level, pos);
     }
 
-    protected void onCraftCompleted(ServerLevel level, BlockPos pos) {
+    protected void onCraftCompleted(ServerLevel level, BlockPos pos, RecipeHolder<InjectingRecipe> recipeHolder) {
         spawnCraftCompleteParticles(level, pos);
         level.playSound(null, pos, SoundEvents.ENCHANTMENT_TABLE_USE, SoundSource.BLOCKS, 0.4f, 1.5f);
+
+        AdvancementUtil.grantNearby(level, pos, LucenticsAdvancementEventRegister.INJECTING_COMPLETED, recipeHolder.id());
     }
 
     private void startProcessing(ServerLevel level, InjectingRecipeInput input) {

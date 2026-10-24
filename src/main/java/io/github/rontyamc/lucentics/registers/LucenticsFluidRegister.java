@@ -56,8 +56,8 @@ public class LucenticsFluidRegister {
             if (color == Colors.SUNLIGHT) continue;
             String name = color.getName() + "_coloquid";
             FluidEntry<BaseFlowingFluid.Flowing> entry = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, name)
-                    .fluid(name, Lucentics.defaultLocation("block/coloquid_still"),
-                            Lucentics.defaultLocation("block/coloquid_flow"),
+                    .fluid(name, Lucentics.path("block/coloquid_still"),
+                            Lucentics.path("block/coloquid_flow"),
                             TintedTranslucentFluidType.create(color.getColorCode(), 255, color.getColorCode(), () -> 0.1f))
                     .properties(p -> p.density(1500).viscosity(1500))
                     .fluidProperties(p -> p.tickRate(15))
@@ -78,8 +78,8 @@ public class LucenticsFluidRegister {
     }
 
     public static final FluidEntry<BaseFlowingFluid.Flowing> CLAY_WATER = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, "clay_water")
-            .fluid("clay_water", Lucentics.defaultLocation("block/clay_water_still"),
-                    Lucentics.defaultLocation("block/clay_water_flow"))
+            .fluid("clay_water", Lucentics.path("block/clay_water_still"),
+                    Lucentics.path("block/clay_water_flow"))
             .properties(p -> p.density(1800).viscosity(1200))
             .fluidProperties(p -> p.tickRate(15))
             .source(BaseFlowingFluid.Source::new)
@@ -91,8 +91,8 @@ public class LucenticsFluidRegister {
             .register();
 
     public static final FluidEntry<BaseFlowingFluid.Flowing> PATINA_LIQUID = REGISTRATE.fluidItemRegister(CategoryType.BLOCKS, "patina_liquid")
-            .fluid("patina_liquid", Lucentics.defaultLocation("block/patina_liquid_still"),
-                    Lucentics.defaultLocation("block/patina_liquid_flow"))
+            .fluid("patina_liquid", Lucentics.path("block/patina_liquid_still"),
+                    Lucentics.path("block/patina_liquid_flow"))
             .properties(p -> p.density(1500).viscosity(1000))
             .source(BaseFlowingFluid.Source::new)
             .block()

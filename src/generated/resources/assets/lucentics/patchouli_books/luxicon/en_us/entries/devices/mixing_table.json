@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:light_copper",
   "category": "lucentics:devices",
   "icon": "lucentics:mixing_table",
   "name": "patchouli.lucentics.entry.devices.mixing_table.name",

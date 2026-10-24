@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:advanced_emitter",
+  "criteria": {
+    "cyan_lens": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:cyan_lens"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.cyan_lens.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:cyan_lens"
+    },
+    "title": {
+      "translate": "advancement.lucentics.cyan_lens"
+    }
+  },
+  "requirements": [
+    [
+      "cyan_lens"
+    ]
+  ]
+}

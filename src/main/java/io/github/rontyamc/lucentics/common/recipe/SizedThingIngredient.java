@@ -7,22 +7,24 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.Optional;
 
 public record SizedThingIngredient(Either<SizedIngredient, SizedFluidIngredient> content) {
-    public static final SizedThingIngredient EMPTY = new SizedThingIngredient(Either.left(SizedIngredient.EMPTY));
+    public static final SizedThingIngredient EMPTY = new SizedThingIngredient(Either.left(SizedIngredient.of(Items.AIR, 1)));
 
     public static SizedThingIngredient of(ThingStack stack) {
         return new SizedThingIngredient(stack.content().map(
-                item -> Either.left(SizedIngredient.of(item)), fluid -> Either.right(SizedFluidIngredient.of(fluid))
+                item -> Either.left(SizedIngredient.of(item.getItem(), item.getCount())), fluid -> Either.right(SizedFluidIngredient.of(fluid))
         ));
     }
 
     public static SizedThingIngredient of(ItemStack stack) {
-        return new SizedThingIngredient(Either.left(SizedIngredient.of(stack)));
+        return new SizedThingIngredient(Either.left(SizedIngredient.of(stack.getItem(), stack.getCount())));
     }
 
     public static SizedThingIngredient of(SizedIngredient ingredient) {
@@ -85,7 +87,7 @@ public record SizedThingIngredient(Either<SizedIngredient, SizedFluidIngredient>
     }
 
     public static final Codec<SizedThingIngredient> CODEC =
-            Codec.either(SizedIngredient.CODEC, SizedFluidIngredient.FLAT_CODEC)
+            Codec.either(SizedIngredient.FLAT_CODEC, SizedFluidIngredient.FLAT_CODEC)
                     .xmap(SizedThingIngredient::new, SizedThingIngredient::content);
 
     public static final StreamCodec<RegistryFriendlyByteBuf, SizedThingIngredient> STREAM_CODEC =

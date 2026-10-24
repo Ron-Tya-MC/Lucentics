@@ -15,7 +15,7 @@ public class PendingOutputs {
     private ResourceLocation recipeId;
     private final List<ThingStack> contents;
 
-    private static final PendingOutputs EMPTY = new PendingOutputs(Lucentics.defaultLocation( "empty"), new ArrayList<>());
+    private static final PendingOutputs EMPTY = new PendingOutputs(Lucentics.path( "empty"), new ArrayList<>());
 
     public PendingOutputs(ResourceLocation recipeId, List<ThingStack> contents) {
         this.recipeId = recipeId;
@@ -31,7 +31,7 @@ public class PendingOutputs {
     }
 
     public static PendingOutputs empty() {
-        return new PendingOutputs(Lucentics.defaultLocation( "empty"), new ArrayList<>());
+        return new PendingOutputs(Lucentics.path( "empty"), new ArrayList<>());
     }
 
     public ResourceLocation recipeId() {

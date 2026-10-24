@@ -2,13 +2,13 @@ package io.github.rontyamc.lucentics.common;
 
 import com.mojang.datafixers.util.Either;
 import com.mojang.serialization.Codec;
-import io.github.rontyamc.lucentics.common.recipe.SizedIngredient;
 import io.github.rontyamc.lucentics.common.util.FluidUtil;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.common.crafting.SizedIngredient;
 import net.neoforged.neoforge.fluids.FluidStack;
 import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
@@ -61,7 +61,7 @@ public record ThingStack(Either<ItemStack, FluidStack> content) {
 
     public Either<SizedIngredient, SizedFluidIngredient> asIngredient() {
         return content.map(
-                item -> Either.left(SizedIngredient.of(item)),
+                item -> Either.left(SizedIngredient.of(item.getItem(), item.getCount())),
                 fluid -> Either.right(SizedFluidIngredient.of(fluid))
         );
     }

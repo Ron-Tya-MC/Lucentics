@@ -203,9 +203,10 @@ public class LucenticsBlockRegister {
             .initialProperties(() -> Blocks.STONE)
             .tag(BlockTags.MINEABLE_WITH_PICKAXE, LucenticsBTags.PEDESTALS.tag, LucenticsBTags.PEDESTAL_RITUAL.tag)
             .blockstate(ModelUtil.simpleBlockState("pedestals"))
+            .lang("Ritual Pedestal")
             .item()
             .model((context, provider) -> provider.withExistingParent(context.getName(),
-                    Lucentics.defaultLocation("block/pedestals/" + context.getName())))
+                    Lucentics.path("block/pedestals/" + context.getName())))
             .build()
             .register();
 
@@ -217,18 +218,18 @@ public class LucenticsBlockRegister {
             .lang("Light Copper Tank")
             .item()
             .model((context, provider) -> provider.withExistingParent(context.getName(),
-                    Lucentics.defaultLocation("block/tanks/" + context.getName())))
+                    Lucentics.path("block/tanks/" + context.getName())))
             .build()
             .register();
-    public static final BlockEntry<TankLightCopperBlock> TANK_LIGHT_COPPER_BOLD = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"tank_light_copper_bold", TankLightCopperBlock::new)
+    public static final BlockEntry<TankLightCopperBlock> TANK_LIGHT_COPPER_THICK = REGISTRATE.lucenticsBlockBuilder(CategoryType.FUNCTIONAL,"tank_light_copper_thick", TankLightCopperBlock::new)
             .initialProperties(() -> Blocks.COPPER_BLOCK)
             .properties(p -> p.noOcclusion())
             .tag(BlockTags.MINEABLE_WITH_PICKAXE)
             .blockstate(ModelUtil.simpleBlockState("tanks"))
-            .lang("Bold Light Copper Tank")
+            .lang("Thick Light Copper Tank")
             .item()
             .model((context, provider) -> provider.withExistingParent(context.getName(),
-                    Lucentics.defaultLocation("block/tanks/" + context.getName())))
+                    Lucentics.path("block/tanks/" + context.getName())))
             .build()
             .register();
 
@@ -373,7 +374,7 @@ public class LucenticsBlockRegister {
         BehaviorTypeBlockRegistry.register(ENGRAVING_TABLE::asStack, EngravingTableBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(PEDESTAL_RITUAL::asStack, PedestalRitualBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER::asStack, TankBehavior.TYPE);
-        BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER_BOLD::asStack, TankBehavior.TYPE);
+        BehaviorTypeBlockRegistry.register(TANK_LIGHT_COPPER_THICK::asStack, TankBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(MILLING_TABLE::asStack, MillingTableBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(MIXING_TABLE::asStack, MixingTableBehavior.TYPE);
         BehaviorTypeBlockRegistry.register(ASSEMBLING_TABLE::asStack, AssemblingTableBehavior.TYPE);

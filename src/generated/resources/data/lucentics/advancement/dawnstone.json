@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:injector",
+  "criteria": {
+    "dawnstone": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:dawnstone"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.dawnstone.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:dawnstone"
+    },
+    "title": {
+      "translate": "advancement.lucentics.dawnstone"
+    }
+  },
+  "requirements": [
+    [
+      "dawnstone"
+    ]
+  ]
+}

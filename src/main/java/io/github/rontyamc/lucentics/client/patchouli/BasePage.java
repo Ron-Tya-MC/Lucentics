@@ -1,7 +1,7 @@
 package io.github.rontyamc.lucentics.client.patchouli;
 
 import com.google.gson.JsonObject;
-import io.github.rontyamc.lucentics.common.datagen.providers.patchouli.ILuxiconPage;
+import io.github.rontyamc.lucentics.datagen.providers.patchouli.ILuxiconPage;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.Nullable;
 

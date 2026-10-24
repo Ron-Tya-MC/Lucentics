@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:dawnstone",
+  "criteria": {
+    "dawnstone_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:dawnstone_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.dawnstone_dust.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:dawnstone_dust"
+    },
+    "title": {
+      "translate": "advancement.lucentics.dawnstone_dust"
+    }
+  },
+  "requirements": [
+    [
+      "dawnstone_dust"
+    ]
+  ]
+}

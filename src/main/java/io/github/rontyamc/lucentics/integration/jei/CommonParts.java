@@ -6,20 +6,20 @@ import mezz.jei.api.helpers.IGuiHelper;
 import net.minecraft.resources.ResourceLocation;
 
 public class CommonParts {
-    private static final ResourceLocation SLOT_NORMAL_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/slot_normal.png");
-    private static final ResourceLocation SLOT_FRAMED_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/slot_framed.png");
-    private static final ResourceLocation SLOT_BLUE_BLUR_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/slot_blue_blur.png");
-    private static final ResourceLocation SLOT_YELLOW_BLUR_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/slot_yellow_blur.png");
+    private static final ResourceLocation SLOT_NORMAL_TEXTURE = Lucentics.path("textures/gui/jei/slot_normal.png");
+    private static final ResourceLocation SLOT_FRAMED_TEXTURE = Lucentics.path("textures/gui/jei/slot_framed.png");
+    private static final ResourceLocation SLOT_BLUE_BLUR_TEXTURE = Lucentics.path("textures/gui/jei/slot_blue_blur.png");
+    private static final ResourceLocation SLOT_YELLOW_BLUR_TEXTURE = Lucentics.path("textures/gui/jei/slot_yellow_blur.png");
 
-    private static final ResourceLocation ARROW_LIGHT_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/injector_arrow.png");
-    private static final ResourceLocation ARROW_NORMAL_60_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/normal_arrow_60.png");
-    private static final ResourceLocation ARROW_NORMAL_48_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/normal_arrow_48.png");
+    private static final ResourceLocation ARROW_LIGHT_TEXTURE = Lucentics.path("textures/gui/jei/injector_arrow.png");
+    private static final ResourceLocation ARROW_NORMAL_60_TEXTURE = Lucentics.path("textures/gui/jei/normal_arrow_60.png");
+    private static final ResourceLocation ARROW_NORMAL_48_TEXTURE = Lucentics.path("textures/gui/jei/normal_arrow_48.png");
 
-    private static final ResourceLocation ARROW_WAVE_LEFT_21_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/waving_arrow_left_21.png");
-    private static final ResourceLocation ARROW_WHITE_RIGHT_21_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/white_arrow_right_21.png");
-    private static final ResourceLocation ARROW_SHADOW_RIGHT_21_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/arrow_right_21_shadow.png");
+    private static final ResourceLocation ARROW_WAVE_LEFT_21_TEXTURE = Lucentics.path("textures/gui/jei/waving_arrow_left_21.png");
+    private static final ResourceLocation ARROW_WHITE_RIGHT_21_TEXTURE = Lucentics.path("textures/gui/jei/white_arrow_right_21.png");
+    private static final ResourceLocation ARROW_SHADOW_RIGHT_21_TEXTURE = Lucentics.path("textures/gui/jei/arrow_right_21_shadow.png");
 
-    private static final ResourceLocation UNDER_COVER_TEXTURE = Lucentics.defaultLocation("textures/gui/jei/under_cover.png");
+    private static final ResourceLocation UNDER_COVER_TEXTURE = Lucentics.path("textures/gui/jei/under_cover.png");
 
     public static IDrawableStatic slot_normal;
     public static IDrawableStatic slot_framed;

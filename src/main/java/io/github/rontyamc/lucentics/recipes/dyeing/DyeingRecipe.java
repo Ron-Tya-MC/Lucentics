@@ -25,7 +25,7 @@ public class DyeingRecipe implements Recipe<DyeingRecipeInput> {
 
     @Override
     public boolean matches(DyeingRecipeInput input, Level level) {
-        return arguments.input().test(input.ingredient()) && arguments.color() == input.color();
+        return arguments.input().test(input.ingredient()) && arguments.fluid().test(input.fluid());
     }
 
     @Override

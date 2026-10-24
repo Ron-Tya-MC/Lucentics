@@ -1,0 +1,62 @@
+{
+  "advancement": "lucentics:light_copper",
+  "category": "lucentics:getting_started",
+  "icon": "lucentics:lens_frame",
+  "name": "patchouli.lucentics.entry.getting_started.color_of_light.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/ingredients/lens_frame",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.lens"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor3",
+      "item": "lucentics:red_lens",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.red",
+      "title": "patchouli.lucentics.entry.getting_started.color_of_light.title.red"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor4",
+      "item": "lucentics:blue_lens",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.blue",
+      "title": "patchouli.lucentics.entry.getting_started.color_of_light.title.blue"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor5",
+      "item": "lucentics:green_lens",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.green",
+      "title": "patchouli.lucentics.entry.getting_started.color_of_light.title.green"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor6",
+      "item": "lucentics:yellow_lens",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.yellow",
+      "title": "patchouli.lucentics.entry.getting_started.color_of_light.title.yellow"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor7",
+      "item": "lucentics:magenta_lens",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.magenta",
+      "title": "patchouli.lucentics.entry.getting_started.color_of_light.title.magenta"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor8",
+      "item": "lucentics:cyan_lens",
+      "text": "patchouli.lucentics.entry.getting_started.color_of_light.text.cyan",
+      "title": "patchouli.lucentics.entry.getting_started.color_of_light.title.cyan"
+    }
+  ],
+  "sortnum": 6
+}

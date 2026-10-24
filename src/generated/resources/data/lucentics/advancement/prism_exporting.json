@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:prism_importing",
+  "criteria": {
+    "prism_exporting": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:prism_exporting"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.prism_exporting.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:prism_exporting"
+    },
+    "title": {
+      "translate": "advancement.lucentics.prism_exporting"
+    }
+  },
+  "requirements": [
+    [
+      "prism_exporting"
+    ]
+  ]
+}

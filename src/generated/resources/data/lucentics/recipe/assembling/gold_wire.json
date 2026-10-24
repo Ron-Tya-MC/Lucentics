@@ -2,7 +2,7 @@
   "type": "lucentics:assembling",
   "input": {
     "count": 1,
-    "item": "lucentics:gold_plate"
+    "tag": "c:plates/gold"
   },
   "outputs": [
     {

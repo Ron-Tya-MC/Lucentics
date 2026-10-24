@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:glimmer_iron",
   "category": "lucentics:devices",
   "icon": "lucentics:advanced_emitter",
   "name": "patchouli.lucentics.entry.devices.advanced_emitter.name",

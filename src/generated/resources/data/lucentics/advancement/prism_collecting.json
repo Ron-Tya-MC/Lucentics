@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:prism_io",
+  "criteria": {
+    "prism_collecting": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:prism_collecting"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.prism_collecting.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:prism_collecting"
+    },
+    "title": {
+      "translate": "advancement.lucentics.prism_collecting"
+    }
+  },
+  "requirements": [
+    [
+      "prism_collecting"
+    ]
+  ]
+}

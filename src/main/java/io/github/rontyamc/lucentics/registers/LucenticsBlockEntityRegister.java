@@ -42,7 +42,7 @@ public class LucenticsBlockEntityRegister {
 
     public static final BlockEntityEntry<TankLightCopperBlockEntity> TANK_LIGHT_COPPER = REGISTRATE.blockEntity("tank_light_copper", TankLightCopperBlockEntity::new)
             .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER)
-            .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER_BOLD)
+            .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER_THICK)
             .register();
 
     public static final BlockEntityEntry<MillingTableBlockEntity> MILLING_TABLE = REGISTRATE.blockEntity("milling_table", MillingTableBlockEntity::new)

@@ -8,7 +8,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 
 public interface IFlowingParticleSchedulable extends ISchedulable {
-    ResourceLocation SCHEDULE_ID = Lucentics.defaultLocation("flowing_particle");
+    ResourceLocation SCHEDULE_ID = Lucentics.path("flowing_particle");
 
     @Override
     IFlowingParticleScheduleTicker getTicker();

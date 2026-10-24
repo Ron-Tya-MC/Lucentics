@@ -1,0 +1,28 @@
+{
+  "parent": "lucentics:blue_lens",
+  "criteria": {
+    "lucentics:mixing_completed": {
+      "conditions": {
+        "event": "lucentics:mixing_completed"
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.mixing.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:mixing_table"
+    },
+    "title": {
+      "translate": "advancement.lucentics.mixing"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:mixing_completed"
+    ]
+  ]
+}

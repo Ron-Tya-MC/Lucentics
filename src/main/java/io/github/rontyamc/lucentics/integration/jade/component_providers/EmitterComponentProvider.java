@@ -42,6 +42,6 @@ public class EmitterComponentProvider implements IBlockComponentProvider, IServe
 
     @Override
     public net.minecraft.resources.ResourceLocation getUid() {
-        return Lucentics.defaultLocation("emitter");
+        return Lucentics.path("emitter");
     }
 }

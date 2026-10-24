@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:mixing",
   "category": "lucentics:material_and_tool",
   "icon": "lucentics:patina_liquid_bucket",
   "name": "patchouli.lucentics.entry.material_and_tool.patina_liquid.name",
@@ -7,7 +8,8 @@
       "type": "patchouli:spotlight",
       "anchor": "anchor1",
       "item": "lucentics:patina_liquid_bucket",
-      "text": "patchouli.lucentics.entry.material_and_tool.patina_liquid.text.intro"
+      "text": "patchouli.lucentics.entry.material_and_tool.patina_liquid.text.intro",
+      "title": "patchouli.lucentics.entry.material_and_tool.patina_liquid.title.intro"
     }
   ],
   "sortnum": 4

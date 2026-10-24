@@ -12,7 +12,7 @@ import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
 import io.github.rontyamc.lucentics.client.particle.FlowingGlowParticle;
 import io.github.rontyamc.lucentics.client.particle.GlowParticle;
 import io.github.rontyamc.lucentics.client.particle.SphereParticle;
-import io.github.rontyamc.lucentics.common.datagen.providers.AddRawLang;
+import io.github.rontyamc.lucentics.datagen.providers.lang.AddRawLang;
 import io.github.rontyamc.lucentics.network.LucenticsNetwork;
 import io.github.rontyamc.lucentics.registers.*;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
@@ -55,16 +55,20 @@ public class Lucentics {
         NeoForge.EVENT_BUS.register(this);
 
         REGISTRATE.registerEventListeners(modEventBus);
+        LucenticsRegistries.register(modEventBus);
 
         LucenticsTabRegister.register(modEventBus);
         LucenticsBlockRegister.register();
         LucenticsBlockEntityRegister.register();
         LucenticsItemRegister.register();
         LucenticsFluidRegister.register();
-        LucenticsParticleRegister.register(modEventBus);
 
+        LucenticsParticleRegister.register(modEventBus);
         LucenticsRecipeTypesRegister.register(modEventBus);
         LucenticsAttachmentRegister.register(modEventBus);
+
+        LucenticsAdvancementEventRegister.register(modEventBus);
+        LucenticsTriggerRegister.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
         modEventBus.addListener(this::registerCapabilities);
@@ -150,7 +154,7 @@ public class Lucentics {
         );
     }
 
-    public static ResourceLocation defaultLocation(String path) {
+    public static ResourceLocation path(String path) {
         return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 

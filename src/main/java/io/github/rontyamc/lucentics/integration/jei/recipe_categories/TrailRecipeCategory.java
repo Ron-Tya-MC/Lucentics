@@ -48,9 +48,9 @@ public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRe
     private static final int LEFT_SPACE = 30;
 
     private static final ResourceLocation ARROW_ALPHA_TEXTURE =
-            Lucentics.defaultLocation("textures/gui/jei/engraving_arrow_alpha.png");
+            Lucentics.path("textures/gui/jei/engraving_arrow_alpha.png");
     private static final ResourceLocation ARROW_OVERLAY_TEXTURE =
-            Lucentics.defaultLocation("textures/gui/jei/engraving_arrow_overlay.png");
+            Lucentics.path("textures/gui/jei/engraving_arrow_overlay.png");
 
 
     private final IDrawableStatic arrowAlpha;

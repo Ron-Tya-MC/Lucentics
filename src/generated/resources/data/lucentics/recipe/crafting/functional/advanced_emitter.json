@@ -12,7 +12,7 @@
       "item": "lucentics:glimmer_iron"
     },
     "P": {
-      "item": "lucentics:iron_plate"
+      "tag": "c:plates/iron"
     }
   },
   "pattern": [

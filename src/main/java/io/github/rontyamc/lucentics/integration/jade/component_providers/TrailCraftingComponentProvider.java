@@ -1,7 +1,9 @@
 package io.github.rontyamc.lucentics.integration.jade.component_providers;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlockEntity;
+import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.behavior.BlockEntityBehavior;
+import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
 import net.minecraft.ChatFormatting;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -11,6 +13,8 @@ import snownee.jade.api.IBlockComponentProvider;
 import snownee.jade.api.IServerDataProvider;
 import snownee.jade.api.ITooltip;
 import snownee.jade.api.config.IPluginConfig;
+
+import java.util.Optional;
 
 public class TrailCraftingComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
     public static final TrailCraftingComponentProvider INSTANCE = new TrailCraftingComponentProvider();
@@ -29,14 +33,16 @@ public class TrailCraftingComponentProvider implements IBlockComponentProvider, 
 
     @Override
     public void appendServerData(CompoundTag data, BlockAccessor accessor) {
-        if (!(accessor.getBlockEntity() instanceof EngravingTableBlockEntity be)) return;
-        var behavior = be.getEngravingTableBehavior();
+        if (!(accessor.getBlockEntity() instanceof BaseBlockEntity be)) return;
+        Optional<BlockEntityBehavior> foundBehavior = be.findBehavior(behavior -> behavior instanceof TrailCraftingBehavior);
+        if (foundBehavior.isEmpty()) return;
+        TrailCraftingBehavior behavior = (TrailCraftingBehavior) foundBehavior.get();
 
         data.putBoolean("met_daylight_condition", behavior.metDayLightCondition());
     }
 
     @Override
     public ResourceLocation getUid() {
-        return Lucentics.defaultLocation("trail_crafting");
+        return Lucentics.path("trail_crafting");
     }
 }

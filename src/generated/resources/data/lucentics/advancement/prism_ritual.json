@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:dawnstone_dust",
+  "criteria": {
+    "prism_ritual": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:prism_ritual"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.prism_ritual.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:prism_ritual"
+    },
+    "title": {
+      "translate": "advancement.lucentics.prism_ritual"
+    }
+  },
+  "requirements": [
+    [
+      "prism_ritual"
+    ]
+  ]
+}

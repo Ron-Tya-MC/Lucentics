@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:dusk_brick",
   "category": "lucentics:getting_started",
   "icon": "lucentics:emitter",
   "name": "patchouli.lucentics.entry.getting_started.emitter.name",

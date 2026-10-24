@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:mixing",
+  "criteria": {
+    "patina_liquid_bucket": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:patina_liquid_bucket"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.patina_liquid_bucket.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:patina_liquid_bucket"
+    },
+    "title": {
+      "translate": "advancement.lucentics.patina_liquid_bucket"
+    }
+  },
+  "requirements": [
+    [
+      "patina_liquid_bucket"
+    ]
+  ]
+}

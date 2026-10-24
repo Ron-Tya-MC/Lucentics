@@ -24,10 +24,12 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.neoforged.neoforge.fluids.FluidStack;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class DyeingRecipeCategory extends AbstractRecipeCategory<DyeingRecipeEntry> {
     private static final int WIDTH = 120;
@@ -47,7 +49,19 @@ public class DyeingRecipeCategory extends AbstractRecipeCategory<DyeingRecipeEnt
     public void draw(DyeingRecipeEntry recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
         CommonParts.arrowWaveLeft21.draw(guiGraphics, WIDTH / 2 - 30, 0);
 
-        Colors color = recipe.color();
+        int color = -1;
+
+        for (FluidStack stack : recipe.fluid().getFluids()) {
+            Optional<Colors> oColor = LucenticsFluidRegister.getColor(stack.getFluid());
+            if (oColor.isPresent()) color = oColor.get().getColorCode();
+        }
+
+        if (color == -1) {
+            FluidStack firstStack = recipe.fluid().getFluids()[0];
+            IClientFluidTypeExtensions extensions = IClientFluidTypeExtensions.of(firstStack.getFluid());
+            color = extensions.getTintColor();
+        }
+
         GUIUtil.drawColored(guiGraphics, CommonParts.arrowWhiteRight21, WIDTH / 2 + 9, 0, color);
         CommonParts.arrowShadowRight21.draw(guiGraphics, WIDTH / 2 + 9, 0);
 
@@ -61,12 +75,12 @@ public class DyeingRecipeCategory extends AbstractRecipeCategory<DyeingRecipeEnt
                 .setBackground(CommonParts.slot_normal, -1, -1)
                 .addIngredients(recipe.ingredient());
 
-        FluidStack fluid = new FluidStack(LucenticsFluidRegister.DYE_LIQUIDS.get(recipe.color()).get().getSource(), recipe.liquidAmount());
+        List<FluidStack> fluid = List.of(recipe.fluid().ingredient().getStacks());
 
         builder.addInputSlot(52, 1)
                 .setBackground(CommonParts.slot_framed, -1, -1)
                 .setFluidRenderer(1, false, 16, 16)
-                .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(fluid));
+                .addIngredients(NeoForgeTypes.FLUID_STACK, fluid);
 
         builder.addOutputSlot(94, 1)
                 .setBackground(CommonParts.slot_normal, -1, -1)

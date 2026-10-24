@@ -1,0 +1,27 @@
+{
+  "criteria": {
+    "root": {
+      "trigger": "minecraft:tick"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "lucentics:textures/gui/advancements/backgrounds/dusk_bricks.png",
+    "description": {
+      "translate": "advancement.lucentics.root.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:luxicon"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "advancement.lucentics.root"
+    }
+  },
+  "requirements": [
+    [
+      "root"
+    ]
+  ]
+}

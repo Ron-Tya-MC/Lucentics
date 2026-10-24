@@ -2,7 +2,7 @@
   "type": "lucentics:assembling",
   "input": {
     "count": 1,
-    "item": "lucentics:gold_plate"
+    "tag": "c:plates/gold"
   },
   "outputs": [
     {
@@ -24,7 +24,7 @@
           "damage_item": 0,
           "input": {
             "count": 1,
-            "item": "lucentics:gold_plate"
+            "tag": "c:plates/gold"
           },
           "required_type": "lucentics:pedestal_ritual"
         },
@@ -32,7 +32,7 @@
           "damage_item": 0,
           "input": {
             "count": 1,
-            "item": "lucentics:gold_plate"
+            "tag": "c:plates/gold"
           },
           "required_type": "lucentics:pedestal_ritual"
         },

@@ -1,6 +1,9 @@
 {
   "type": "lucentics:dyeing",
-  "color": "lime",
+  "color": {
+    "amount": 400,
+    "fluid": "lucentics:lime_dye_liquid"
+  },
   "input": {
     "tag": "minecraft:candles"
   },
@@ -8,6 +11,5 @@
     "count": 1,
     "id": "minecraft:lime_candle"
   },
-  "processing_duration": 15,
-  "required_mb": 400
+  "processing_duration": 15
 }

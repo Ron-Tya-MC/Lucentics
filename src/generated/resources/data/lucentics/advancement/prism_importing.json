@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:dawnstone_dust",
+  "criteria": {
+    "prism_importing": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:prism_importing"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.prism_importing.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:prism_importing"
+    },
+    "title": {
+      "translate": "advancement.lucentics.prism_importing"
+    }
+  },
+  "requirements": [
+    [
+      "prism_importing"
+    ]
+  ]
+}

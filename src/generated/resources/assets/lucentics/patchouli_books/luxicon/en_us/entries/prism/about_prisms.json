@@ -1,0 +1,36 @@
+{
+  "advancement": "lucentics:dawnstone_dust",
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_blank",
+  "name": "patchouli.lucentics.entry.prism.about_prisms.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.about_prisms.text.intro"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor2",
+      "text": "patchouli.lucentics.entry.prism.about_prisms.text.intro2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor3",
+      "recipe": "lucentics:crafting/prisms/prism_blank"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor4",
+      "text": "patchouli.lucentics.entry.prism.about_prisms.text.transporting",
+      "title": "patchouli.lucentics.entry.prism.about_prisms.title.transporting"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor5",
+      "text": "patchouli.lucentics.entry.prism.about_prisms.text.transporting2",
+      "title": "patchouli.lucentics.entry.prism.about_prisms.title.transporting2"
+    }
+  ],
+  "sortnum": 1
+}

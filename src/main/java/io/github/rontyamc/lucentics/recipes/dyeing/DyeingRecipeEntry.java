@@ -1,7 +1,16 @@
 package io.github.rontyamc.lucentics.recipes.dyeing;
 
-import io.github.rontyamc.lucentics.common.dict.Colors;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
-public record DyeingRecipeEntry(Ingredient ingredient, Colors color, int liquidAmount, ItemStack result, int processingDuration) {}
+import java.util.Optional;
+
+public record DyeingRecipeEntry(
+        Ingredient ingredient, 
+        SizedFluidIngredient fluid,
+        ItemStack result,
+        int processingDuration,
+        Optional<ResourceLocation> recipeId
+) {}

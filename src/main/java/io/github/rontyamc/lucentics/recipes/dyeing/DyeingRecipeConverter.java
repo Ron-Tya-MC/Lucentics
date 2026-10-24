@@ -1,13 +1,16 @@
 package io.github.rontyamc.lucentics.recipes.dyeing;
 
 import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.registers.LucenticsFluidRegister;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
+import net.neoforged.neoforge.fluids.crafting.SizedFluidIngredient;
 
 import java.util.Optional;
 
@@ -17,7 +20,7 @@ public class DyeingRecipeConverter {
 
     private DyeingRecipeConverter() {}
 
-    public static Optional<DyeingRecipeEntry> from(Recipe<CraftingInput> recipe, HolderLookup.Provider registries) {
+    public static Optional<DyeingRecipeEntry> fromCrafting(Recipe<CraftingInput> recipe, HolderLookup.Provider registries) {
         var ingredients = recipe.getIngredients();
         if (ingredients.isEmpty()) return Optional.empty();
 
@@ -56,7 +59,8 @@ public class DyeingRecipeConverter {
         int liquidAmount = (BASE_MB_PER_DYE + notDyeCount - 1) / notDyeCount;
         int outputCount = Math.max(1, result.getCount() / notDyeCount);
 
-        return Optional.of(new DyeingRecipeEntry(dyeable, dyeColor, liquidAmount, result.copyWithCount(outputCount), BASE_PROCESSING_DURATION));
+        return Optional.of(new DyeingRecipeEntry(dyeable, SizedFluidIngredient.of(LucenticsFluidRegister.DYE_LIQUIDS.get(dyeColor).get().getSource(), liquidAmount),
+                result.copyWithCount(outputCount), BASE_PROCESSING_DURATION, Optional.empty()));
     }
 
     private static Optional<Colors> extractColor(Ingredient ingredient) {
@@ -72,8 +76,8 @@ public class DyeingRecipeConverter {
         return Optional.ofNullable(extracted);
     }
 
-    public static DyeingRecipeEntry fromJson(DyeingRecipe recipe) {
+    public static DyeingRecipeEntry fromJson(DyeingRecipe recipe, ResourceLocation id) {
         DyeingRecipeArguments args = recipe.getArguments();
-        return new DyeingRecipeEntry(args.input(), args.color(), args.liquidAmount(), args.output(), args.processingDuration());
+        return new DyeingRecipeEntry(args.input(), args.fluid(), args.output(), args.processingDuration(), Optional.of(id));
     }
 }

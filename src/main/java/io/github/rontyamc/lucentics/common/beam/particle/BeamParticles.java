@@ -20,7 +20,7 @@ public class BeamParticles {
     public static final int FLOWING_DURATION = 20;
     private static final int PARTICLE_AMOUNT = 1;
 
-    public static final ResourceLocation FLOWING_COOLDOWN = Lucentics.defaultLocation("flowing_cooldown");
+    public static final ResourceLocation FLOWING_COOLDOWN = Lucentics.path("flowing_cooldown");
 
     private static final RandomSource RANDOM_SOURCE = RandomSource.create();
 

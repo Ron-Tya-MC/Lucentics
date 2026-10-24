@@ -2,9 +2,11 @@ package io.github.rontyamc.lucentics.recipes.crushing.process;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.recipe.OutputRoller;
+import io.github.rontyamc.lucentics.common.util.AdvancementUtil;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipeInput;
+import io.github.rontyamc.lucentics.registers.LucenticsAdvancementEventRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.core.BlockPos;
 import net.minecraft.resources.ResourceLocation;
@@ -83,6 +85,8 @@ public class CrushingInteractionHandler {
             for (OutputRoller.RolledOutput rolled : OutputRoller.roll(serverLevel.getRandom(), recipe.getOutputs())) {
                 rolled.item().ifPresent(item -> ItemUtil.dropItem(serverLevel, pos, item));
             }
+
+            AdvancementUtil.grant(serverPlayer, LucenticsAdvancementEventRegister.CRUSHING_COMPLETED, recipeId);
         } else {
             int progress = Mth.clamp((int) ((float) hits / args.requiredHits() * 9), 0, 9);
             serverLevel.destroyBlockProgress(pos.hashCode(), pos, progress);

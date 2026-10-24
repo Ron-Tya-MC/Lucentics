@@ -16,4 +16,14 @@ public class GUIUtil {
         drawable.draw(guiGraphics, x, y);
         RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
+
+    public static void drawColored(GuiGraphics guiGraphics, IDrawableStatic drawable, int x, int y, int color) {
+        Float[] rgb = MiscUtil.separateRGB(color);
+
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(rgb[0], rgb[1], rgb[2], 1.0f);
+        drawable.draw(guiGraphics, x, y);
+        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+    }
 }

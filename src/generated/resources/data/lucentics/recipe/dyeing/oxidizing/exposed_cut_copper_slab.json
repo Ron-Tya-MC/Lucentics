@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 20,
+    "fluid": "lucentics:patina_liquid"
+  },
+  "input": {
+    "item": "minecraft:cut_copper_slab"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:exposed_cut_copper_slab"
+  },
+  "processing_duration": 10
+}

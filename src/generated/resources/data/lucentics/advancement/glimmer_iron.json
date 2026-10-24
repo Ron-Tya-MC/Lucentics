@@ -1,0 +1,30 @@
+{
+  "parent": "lucentics:focus_ring",
+  "criteria": {
+    "lucentics:engraving_completed": {
+      "conditions": {
+        "event": "lucentics:engraving_completed",
+        "recipes": "lucentics:engraving/glimmer_iron"
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.glimmer_iron.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "lucentics:glimmer_iron"
+    },
+    "title": {
+      "translate": "advancement.lucentics.glimmer_iron"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:engraving_completed"
+    ]
+  ]
+}

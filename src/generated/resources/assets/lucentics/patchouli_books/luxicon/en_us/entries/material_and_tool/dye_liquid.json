@@ -1,4 +1,5 @@
 {
+  "advancement": "lucentics:mixing",
   "category": "lucentics:material_and_tool",
   "icon": "lucentics:red_dye_liquid_bucket",
   "name": "patchouli.lucentics.entry.material_and_tool.dye_liquid.name",
@@ -7,7 +8,8 @@
       "type": "patchouli:spotlight",
       "anchor": "anchor1",
       "item": "lucentics:red_dye_liquid_bucket,lucentics:blue_dye_liquid_bucket,lucentics:green_dye_liquid_bucket,lucentics:yellow_dye_liquid_bucket,lucentics:magenta_dye_liquid_bucket,lucentics:cyan_dye_liquid_bucket,lucentics:pink_dye_liquid_bucket,lucentics:lime_dye_liquid_bucket,lucentics:light_blue_dye_liquid_bucket,lucentics:gray_dye_liquid_bucket,lucentics:light_gray_dye_liquid_bucket,lucentics:brown_dye_liquid_bucket,lucentics:purple_dye_liquid_bucket,lucentics:orange_dye_liquid_bucket,lucentics:white_dye_liquid_bucket",
-      "text": "patchouli.lucentics.entry.material_and_tool.dye_liquid.text.intro"
+      "text": "patchouli.lucentics.entry.material_and_tool.dye_liquid.text.intro",
+      "title": "patchouli.lucentics.entry.material_and_tool.dye_liquid.title.intro"
     }
   ],
   "sortnum": 3
