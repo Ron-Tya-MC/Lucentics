@@ -1,0 +1,19 @@
+{
+  "advancement": "lucentics:dusk_brick",
+  "category": "lucentics:material_and_tool",
+  "icon": "minecraft:brick",
+  "name": "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.text.intro"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor2",
+      "text": "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.text.intro2"
+    }
+  ],
+  "sortnum": 3
+}

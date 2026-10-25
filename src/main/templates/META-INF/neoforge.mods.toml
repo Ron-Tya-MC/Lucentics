@@ -22,3 +22,10 @@ authors = "Ron-Tya-MC"
     versionRange="${minecraft_version_range}"
     ordering="NONE"
     side="BOTH"
+
+[[dependencies.lucentics]]
+    modId="patchouli"
+    type="required"
+    versionRange="[1.21-87,)"
+    ordering="BEFORE"
+    side="BOTH"

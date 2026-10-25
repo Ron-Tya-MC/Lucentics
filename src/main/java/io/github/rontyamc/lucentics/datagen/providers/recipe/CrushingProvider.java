@@ -301,5 +301,13 @@ public class CrushingProvider {
                         .breakSound(SoundSpec.of(SoundEvents.GRAVEL_BREAK, SoundSource.BLOCKS))
                         .damagePerHit(1)
                         .requiredHits(2));
+        provider.generic()
+                .crushing(b -> b.input(Blocks.AMETHYST_BLOCK)
+                        .tool(ItemTags.PICKAXES)
+                        .output(Items.AMETHYST_SHARD, 4)
+                        .clickSound(SoundSpec.of(SoundEvents.AMETHYST_BLOCK_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.AMETHYST_BLOCK_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(1)
+                        .requiredHits(2));
     }
 }
