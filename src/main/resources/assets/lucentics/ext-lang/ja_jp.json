@@ -358,6 +358,10 @@
   "patchouli.lucentics.entry.material_and_tool.hammer.text.intro": "ハンマーはブロックを粉砕して新たな素材を得るための道具です。$(br)使い方は簡単。粉砕したいブロックを置き、ハンマーを使用するだけです。$(br)ブロックによっては複数回叩く必要があるものもあります。また、高位のハンマーになるほど粉砕の効率が上がります。",
   "patchouli.lucentics.entry.material_and_tool.hammer.text.intro2": "金のハンマーは少々特殊です。金のハンマーは耐久値の消費が極めて速い代わりに、大抵のブロックを他のハンマーより高速で粉砕でき、より多くの素材を入手しやすくなっています。$(br2)ハンマーは採掘用ツールとしても使用できます。性能は同種のツルハシよりも少し高性能で耐久力も高いですが、コストを考えると必ずしも良い手段とは言えません。",
 
+  "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.name": "粉砕と素材",
+  "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.text.intro": "一部のブロックは粉砕することで材料に戻したり、追加のアイテムを得ることができます。$(br)例えば、鉱石の原石ブロックを粉砕すると鉱石の粉といくつかの原石を得られます。得た原石をまた固めれば、再度砕くことができます！$(br)また、草やシダを粉砕することで稀に緑の染料を得ることができます。これで近くに砂漠が無くても安心です。",
+  "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.text.intro2": "レンガやクォーツ、アメジストなどの固めると元に戻せないブロックも、適切なツールを用いて分解できます。",
+
   "patchouli.lucentics.entry.material_and_tool.dye_liquid.name": "染料液",
   "patchouli.lucentics.entry.material_and_tool.dye_liquid.text.intro": "染料液は染料を水に溶かしこんだ液体です。$(br)儀式に用いるほか、$(l:lucentics:prism/prism_dyeing)染色のプリズム$()による染色レシピにも用います。",
   "patchouli.lucentics.entry.material_and_tool.dye_liquid.title.intro": "染料液",

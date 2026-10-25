@@ -1,0 +1,27 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.amethyst_block.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.amethyst_block.hit",
+    "source": "block"
+  },
+  "input": "minecraft:amethyst_block",
+  "outputs": [
+    {
+      "content": {
+        "count": 4,
+        "item": {
+          "count": 1,
+          "id": "minecraft:amethyst_shard"
+        }
+      }
+    }
+  ],
+  "required_hit": 2,
+  "tool": {
+    "tag": "minecraft:pickaxes"
+  }
+}

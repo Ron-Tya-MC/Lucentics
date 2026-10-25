@@ -43,6 +43,13 @@ public class MaterialAndToolProvider {
                 .page(new CraftingPage(Lucentics.path("crafting/tools/copper_hammer")).addRecipe(Lucentics.path("crafting/tools/iron_hammer")))
                 .page(new CraftingPage(Lucentics.path("crafting/tools/diamond_hammer")).addRecipe(Lucentics.path("crafting/tools/golden_hammer")));
 
+        provider.entry(CATEGORY_ID, "crushing_vanilla_block")
+                .icon(() -> Items.BRICK)
+                .sortnum(index())
+                .advancement(LucenticsAdvancementGenerator.DUSK_BRICK)
+                .text("intro")
+                .text("intro2");
+
         List<ItemStack> dyeLiquids = new ArrayList<>();
         for (Colors color : Colors.values()) {
             if (color == Colors.SUNLIGHT) continue;

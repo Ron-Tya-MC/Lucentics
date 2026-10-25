@@ -269,6 +269,10 @@
   "patchouli.lucentics.entry.material_and_tool.hammer.text.intro": "The hammer is a tool for crushing blocks into new materials.$(br)Simple to use: place the block to be crushed, and strike it with the hammer.$(br)Some blocks must be struck more than once. The higher the hammer’s grade, the more efficient the crushing.",
   "patchouli.lucentics.entry.material_and_tool.hammer.text.intro2": "The golden hammer is rather peculiar. It wears down at a terrible pace, yet crushes most blocks faster than any other hammer, and yields more materials.$(br2)Hammers may also serve as a mining tool. It outperforms a pickaxe of the same kind a little, and lasts longer, but given the cost, it is not always the wiser choice.",
 
+  "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.name": "Crushing and Material",
+  "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.text.intro": "Some blocks can be crushed to reduce to their materials, or to yield additional items.$(br)Crush a raw ore block, for instance, and you will gain ore dust and a few raw ores besides. Compact those raw ores together once more, and the block may be crushed again!$(br)Grass and ferns, when crushed, will rarely yield green dye. Fear not if no desert lies near.",
+  "patchouli.lucentics.entry.material_and_tool.crushing_vanilla_block.text.intro2": "Blocks that cannot be restored once compacted, such as brick, quartz, and amethyst, may still be broken down with the proper tool.",
+
   "patchouli.lucentics.entry.material_and_tool.dye_liquid.name": "Dye Liquids",
   "patchouli.lucentics.entry.material_and_tool.dye_liquid.text.intro": "Dye liquid is dye dissolved in water.$(br)Besides its use in rituals, it is also used in the dyeing recipes of the $(l:lucentics:prism/prism_dyeing)dyeing prism$().",
   "patchouli.lucentics.entry.material_and_tool.dye_liquid.title.intro": "Dye Liquid",
