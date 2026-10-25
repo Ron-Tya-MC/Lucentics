@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "D": {
+      "item": "minecraft:dropper"
+    },
+    "P": {
+      "item": "lucentics:prism_importing"
+    }
+  },
+  "pattern": [
+    " D ",
+    "BPB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_collecting"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "minecraft:dropper"
+    },
+    "P": {
+      "item": "lucentics:prism_blank"
+    }
+  },
+  "pattern": [
+    "D",
+    "P"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_exporting"
+  }
+}

@@ -1,0 +1,91 @@
+package io.github.rontyamc.lucentics.blocks.prism.prism_fluid_place;
+
+import io.github.rontyamc.lucentics.blocks.prism.PrismBehavior;
+import io.github.rontyamc.lucentics.common.beam.node.NodeActivationContext;
+import io.github.rontyamc.lucentics.common.beam.transfer.IFluidAcceptor;
+import io.github.rontyamc.lucentics.common.beam.transfer.IItemAcceptor;
+import io.github.rontyamc.lucentics.common.beam.transfer.ImportingContexts;
+import io.github.rontyamc.lucentics.common.util.TransferUtil;
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+import net.neoforged.neoforge.common.SoundActions;
+import net.neoforged.neoforge.fluids.FluidStack;
+import net.neoforged.neoforge.fluids.FluidType;
+import net.neoforged.neoforge.fluids.capability.IFluidHandler;
+import net.neoforged.neoforge.fluids.capability.IFluidHandlerItem;
+
+import java.util.List;
+import java.util.Optional;
+
+public class PrismFluidPlaceBehavior extends PrismBehavior implements IItemAcceptor, IFluidAcceptor {
+    public static final PrismFluidPlaceBehavior INSTANCE = new PrismFluidPlaceBehavior();
+
+    protected PrismFluidPlaceBehavior() {}
+
+    @Override
+    public void activate(ServerLevel level, BlockPos prismPos, BlockPos interactPos, NodeActivationContext context) {}
+
+    @Override
+    public IItemAcceptor.Result acceptItems(ServerLevel level, BlockPos acceptorPos, ItemStack stack, boolean simulate) {
+        Optional<IFluidHandlerItem> handler = TransferUtil.getFluidHandlerItem(stack);
+        if (handler.isEmpty() || handler.get().getTanks() < 1) return Result.of(stack.copy());
+
+        ImportingContexts.FluidImportingContext context = TransferUtil.firstImportableWithAmount(handler.get(), FluidType.BUCKET_VOLUME);
+        if (context.isEmpty()) return Result.of(stack.copy());
+
+        FluidStack simulated = context.handler().drain(context.fluidStack().copyWithAmount(FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.SIMULATE);
+        if (simulated.isEmpty() || acceptFluids(level, acceptorPos, simulated, true) <= 0) return Result.of(stack.copy());
+
+        if (!simulate) {
+            FluidStack extracted = context.handler().drain(context.fluidStack().copyWithAmount(FluidType.BUCKET_VOLUME), IFluidHandler.FluidAction.EXECUTE);
+            if (extracted.isEmpty() || extracted.getAmount() < FluidType.BUCKET_VOLUME) {
+                context.handler().fill(extracted, IFluidHandler.FluidAction.EXECUTE);
+                return Result.of(stack.copy());
+            }
+            if (acceptFluids(level, acceptorPos, extracted, false) <= 0) {
+                context.handler().fill(extracted, IFluidHandler.FluidAction.EXECUTE);
+                return Result.of(stack.copy());
+            }
+        }
+        return new Result(stack.copyWithCount(stack.getCount() - 1), List.of(handler.get().getContainer()));
+    }
+
+    @Override
+    public int acceptFluids(ServerLevel level, BlockPos acceptorPos, FluidStack stack, boolean simulate) {
+        if (stack.getAmount() < FluidType.BUCKET_VOLUME) return 0;
+
+        BlockPos interactPos = acceptorPos.above();
+        Fluid fluid = stack.getFluid();
+
+        boolean canPlace = canPlace(level, interactPos, fluid);
+        if (!canPlace) return 0;
+
+        if (!simulate) {
+            level.destroyBlock(interactPos, true);
+            BlockState fluidBlockState = fluid.defaultFluidState().createLegacyBlock();
+            boolean success = level.setBlock(interactPos, fluidBlockState, 3);
+            if (!success) return 0;
+
+            level.updateNeighborsAt(interactPos, fluidBlockState.getBlock());
+            level.scheduleTick(interactPos, fluid, fluid.getTickDelay(level));
+
+            Optional<SoundEvent> placeSound = Optional.ofNullable(fluid.getFluidType().getSound(SoundActions.BUCKET_EMPTY));
+            level.playSound(null, interactPos, placeSound.orElse(SoundEvents.BUCKET_EMPTY), SoundSource.BLOCKS, 1.0f, 1.0f);
+        }
+        return FluidType.BUCKET_VOLUME;
+    }
+
+    private boolean canPlace(ServerLevel level, BlockPos pos, Fluid fluid) {
+        BlockState state = level.getBlockState(pos);
+        if (level.isOutsideBuildHeight(pos)) return false;
+        if (level.isDebug()) return false;
+        if (!state.canBeReplaced(fluid)) return false;
+        return (state.getFluidState().isEmpty() || !state.getFluidState().isSource());
+    }
+}

@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "lucentics:dusk_bricks"
+    },
+    "G": {
+      "item": "minecraft:gold_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "T": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "pattern": [
+    "DDD",
+    "RTG",
+    "DDD"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:toggled_emitter"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 500,
+    "fluid": "lucentics:magenta_dye_liquid"
+  },
+  "input": {
+    "item": "lucentics:prism_blank"
+  },
+  "output": {
+    "count": 1,
+    "id": "lucentics:prism_blank_magenta"
+  },
+  "processing_duration": 30
+}

@@ -1,0 +1,20 @@
+{
+  "advancement": "lucentics:light_copper",
+  "category": "lucentics:devices",
+  "icon": "lucentics:milling_table",
+  "name": "patchouli.lucentics.entry.devices.milling_table.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.devices.milling_table.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/functional/milling_table",
+      "text": "patchouli.lucentics.entry.devices.milling_table.text.misc"
+    }
+  ],
+  "sortnum": 2
+}

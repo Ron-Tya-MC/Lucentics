@@ -1,0 +1,19 @@
+{
+  "advancement": "lucentics:emitter",
+  "category": "lucentics:devices",
+  "icon": "lucentics:toggled_emitter",
+  "name": "patchouli.lucentics.entry.devices.toggled_emitter.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.devices.toggled_emitter.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/functional/toggled_emitter_from_emitter"
+    }
+  ],
+  "sortnum": 7
+}

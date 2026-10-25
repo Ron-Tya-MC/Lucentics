@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:light_copper",
+  "criteria": {
+    "red_lens": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:red_lens"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.red_lens.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:red_lens"
+    },
+    "title": {
+      "translate": "advancement.lucentics.red_lens"
+    }
+  },
+  "requirements": [
+    [
+      "red_lens"
+    ]
+  ]
+}

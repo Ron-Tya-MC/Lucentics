@@ -1,0 +1,100 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "lucentics:lens_frame"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:cyan_lens"
+        }
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:mossy_stone_bricks"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:chiseled_sandstone"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:tuff_bricks"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:bell"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:chiseled_nether_bricks"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:chiseled_polished_blackstone"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:chiseled_deepslate"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:cyan_stained_glass"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:focus_ring"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

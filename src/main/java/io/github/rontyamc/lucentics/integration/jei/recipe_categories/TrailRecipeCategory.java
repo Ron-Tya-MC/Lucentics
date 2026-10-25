@@ -1,0 +1,209 @@
+package io.github.rontyamc.lucentics.integration.jei.recipe_categories;
+
+import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
+import io.github.rontyamc.lucentics.common.behavior.BehaviorTypeBlockRegistry;
+import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.recipe.RecipeArguments;
+import io.github.rontyamc.lucentics.common.util.GUIUtil;
+import io.github.rontyamc.lucentics.integration.jei.CommonParts;
+import io.github.rontyamc.lucentics.integration.jei.LucenticsJEIIntegration;
+import io.github.rontyamc.lucentics.integration.jei.ProbabilisticOutputSlots;
+import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
+import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
+import mezz.jei.api.gui.builder.IRecipeLayoutBuilder;
+import mezz.jei.api.gui.drawable.IDrawable;
+import mezz.jei.api.gui.drawable.IDrawableStatic;
+import mezz.jei.api.gui.ingredient.IRecipeSlotsView;
+import mezz.jei.api.gui.placement.HorizontalAlignment;
+import mezz.jei.api.gui.placement.VerticalAlignment;
+import mezz.jei.api.gui.widgets.IRecipeExtrasBuilder;
+import mezz.jei.api.helpers.IGuiHelper;
+import mezz.jei.api.neoforge.NeoForgeTypes;
+import mezz.jei.api.recipe.IFocusGroup;
+import mezz.jei.api.recipe.RecipeIngredientRole;
+import mezz.jei.api.recipe.RecipeType;
+import mezz.jei.api.recipe.category.AbstractRecipeCategory;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.ItemStack;
+import net.neoforged.neoforge.fluids.FluidStack;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class TrailRecipeCategory extends AbstractRecipeCategory<TrailRecipe> {
+    private static final int WIDTH = 160;
+    private static final int HEADER_HEIGHT = 30;
+    private static final int ROW_HEIGHT = 30;
+    private static final int FOOTER_HEIGHT = 20;
+    private static final int HEIGHT = HEADER_HEIGHT + 4 * ROW_HEIGHT + FOOTER_HEIGHT;
+
+    private static final int NODE_AREA_LEFT_SIDE = 28;
+    private static final int NODE_AREA_WIDTH = 104;
+    private static final int DEVICE_SLOT_OFFSET = 10;
+    private static final int ITEM_SLOT_OFFSET = 0;
+    private static final int LEFT_SPACE = 30;
+
+    private static final ResourceLocation ARROW_ALPHA_TEXTURE =
+            Lucentics.path("textures/gui/jei/engraving_arrow_alpha.png");
+    private static final ResourceLocation ARROW_OVERLAY_TEXTURE =
+            Lucentics.path("textures/gui/jei/engraving_arrow_overlay.png");
+
+
+    private final IDrawableStatic arrowAlpha;
+    private final IDrawableStatic arrowOverlay;
+
+    public TrailRecipeCategory(RecipeType<TrailRecipe> recipeType, Component title, IDrawable icon, IGuiHelper guiHelper) {
+        super(recipeType, title, icon, WIDTH, HEIGHT);
+
+        this.arrowAlpha = guiHelper.drawableBuilder(ARROW_ALPHA_TEXTURE, 0, 0, 120, 14)
+                .setTextureSize(120, 14)
+                .build();
+        this.arrowOverlay = guiHelper.drawableBuilder(ARROW_OVERLAY_TEXTURE, 0, 0, 120, 14)
+                .setTextureSize(120, 14)
+                .build();
+    }
+
+    @Override
+    public void draw(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
+        List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
+        int rowCount = trails.size();
+
+        for (int row = 0; row < rowCount; row++) {
+            RecipeArguments.TrailInput trail = trails.get(row);
+            int y = HEADER_HEIGHT + row * ROW_HEIGHT + 19;
+
+            Colors color = Colors.byName(trail.color()).orElse(Colors.SUNLIGHT);
+            GUIUtil.drawColored(guiGraphics, arrowAlpha, 20, y, color);
+            arrowOverlay.draw(guiGraphics, 20, y);
+
+            guiGraphics.drawString(Minecraft.getInstance().font, row + 1 + ".",
+                    8, y+2, 0xFF808080, false);
+        }
+
+        ProbabilisticOutputSlots.drawRangeBadges(guiGraphics, recipeSlotsView, recipe.getOutputs(), left + 83, 5, 20, 20, Integer.MAX_VALUE, 3);
+    }
+
+    public void drawArrowLight(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
+        CommonParts.arrowLight.draw(guiGraphics, left + 26 , 4);
+    }
+
+    public void drawArrowNormal(TrailRecipe recipe, IRecipeSlotsView recipeSlotsView, GuiGraphics guiGraphics, double mouseX, double mouseY) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
+        CommonParts.arrowNormal48.draw(guiGraphics, left + 26 , 4);
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayoutBuilder builder, TrailRecipe recipe, IFocusGroup focuses) {
+        int left = LEFT_SPACE - 9 * (Math.clamp(recipe.getOutputs().size(), 0, 3) - 1);
+
+        recipe.getMainInput().content().map(
+                item -> builder.addInputSlot(left, 5)
+                        .setBackground(CommonParts.slot_normal, -1, -1)
+                        .addItemStacks(List.of(item.getItems())),
+                fluid -> {
+                    List<FluidStack> stacks = List.of(fluid.getFluids());
+
+                    return builder.addInputSlot(left, 5)
+                            .setBackground(CommonParts.slot_normal, -1, -1)
+                            .setFluidRenderer(1, false, 16, 16)
+                            .addIngredients(NeoForgeTypes.FLUID_STACK, stacks);
+                }
+        );
+
+        ProbabilisticOutputSlots.addSlots(builder, recipe.getOutputs(), left + 83, 5, 20, 20, Integer.MAX_VALUE, 3);
+
+        List<RecipeArguments.TrailInput> trails = recipe.getTrailInputs();
+        int rowCount = trails.size();
+
+        for (int row = 0; row < rowCount; row++) {
+            RecipeArguments.TrailInput trail = trails.get(row);
+            int y = HEADER_HEIGHT + row * ROW_HEIGHT + 2;
+
+            List<RecipeArguments.OrderingInput> orderings = trail.inputs();
+            int deviceCount = orderings.size();
+            if (deviceCount == 0) continue;
+
+            int gridWidth = deviceCount >= 4 ? NODE_AREA_WIDTH / (deviceCount - 1) : NODE_AREA_WIDTH / (deviceCount + 1);
+
+            for (int col = 0; col < deviceCount; col++) {
+                RecipeArguments.OrderingInput ordering = orderings.get(col);
+                int cellCenter = deviceCount >= 4 ? NODE_AREA_LEFT_SIDE + col * gridWidth : NODE_AREA_LEFT_SIDE + (col + 1) * gridWidth;
+                int x = cellCenter - 8;
+
+                ordering.requiredType().ifPresent(type -> {
+                    List<BehaviorType<?>> matches = new ArrayList<>();
+                    matches.add(type);
+                    matches.addAll(type.getAllChildren());
+
+                    List<ItemStack> deviceBlocks = new ArrayList<>();
+                    for (BehaviorType<?> behaviorType : matches) {
+                         deviceBlocks.addAll(BehaviorTypeBlockRegistry.getProviders(behaviorType));
+                    }
+
+                    if (!deviceBlocks.isEmpty()) {
+                        builder.addSlot(RecipeIngredientRole.CATALYST, x, y + DEVICE_SLOT_OFFSET)
+                                .addItemStacks(deviceBlocks);
+                    }
+                    else {
+                        builder.addSlot(RecipeIngredientRole.CATALYST, x, y + DEVICE_SLOT_OFFSET)
+                                .addItemStack(new ItemStack(LucenticsItemRegister.NOTHING.asItem(), 1))
+                                .addRichTooltipCallback((view, tooltip) ->
+                                        tooltip.add(Component.translatable("jei.lucentics.info.missing_catalyst").withColor(0xFFFF8080)));
+                    }
+                });
+
+                ordering.ingredient().asItem().ifPresent(item ->
+                        builder.addSlot(RecipeIngredientRole.CATALYST, x, y + ITEM_SLOT_OFFSET)
+                                .addItemStacks(List.of(item.getItems()))
+                                .addRichTooltipCallback((slotView, tooltip) -> {
+                                    if (ordering.notConsume()) tooltip.add(Component.translatable("jei.lucentics.info.not_consume"));
+                                    else if (ordering.damageItem() > 0) tooltip.add(Component.translatable("jei.lucentics.info.damage_item", ordering.damageItem()));
+                                })
+                );
+                ordering.ingredient().asFluid().ifPresent(fluid ->
+                        builder.addSlot(RecipeIngredientRole.CATALYST, x, y + ITEM_SLOT_OFFSET)
+                                .setFluidRenderer(1, false, 16, 16)
+                                .addIngredients(NeoForgeTypes.FLUID_STACK, List.of(fluid.getFluids()))
+                                .addRichTooltipCallback((slotView, tooltip) -> {
+                                    if (ordering.notConsume()) tooltip.add(Component.translatable("jei.lucentics.info.not_consume"));
+                                })
+                );
+            }
+        }
+    }
+
+    protected void addDaylightCondition(IRecipeExtrasBuilder builder, TrailRecipe recipe) {
+        int daylightCondition = recipe.getDayLightCondition();
+        if (daylightCondition <= 0) {
+            daylightCondition = 0;
+        }
+
+        Component text = Component.translatable("jei.lucentics.info.daylight_condition", daylightCondition);
+        builder.addText(text, getWidth() / 2, 10)
+                .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.LEFT, VerticalAlignment.BOTTOM)
+                .setTextAlignment(HorizontalAlignment.LEFT)
+                .setColor(0xFF808080);
+    }
+
+    protected void addProcessingDuration(IRecipeExtrasBuilder builder, TrailRecipe recipe) {
+        int processingDuration = recipe.getProcessingDuration();
+        if (processingDuration <= 0) {
+            processingDuration = 0;
+        }
+
+        Component text = Component.translatable("jei.lucentics.info.processing_duration", LucenticsJEIIntegration.makeSecond(processingDuration));
+        builder.addText(text, getWidth() / 2, 10)
+                .setPosition(0, 0, getWidth(), getHeight(), HorizontalAlignment.RIGHT, VerticalAlignment.BOTTOM)
+                .setTextAlignment(HorizontalAlignment.RIGHT)
+                .setColor(0xFF808080);
+    }
+}

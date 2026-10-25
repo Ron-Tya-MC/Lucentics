@@ -1,0 +1,30 @@
+{
+  "parent": "lucentics:engraving_table",
+  "criteria": {
+    "lucentics:engraving_completed": {
+      "conditions": {
+        "event": "lucentics:engraving_completed",
+        "recipes": "lucentics:engraving/light_copper"
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.light_copper.desc"
+    },
+    "frame": "goal",
+    "icon": {
+      "count": 1,
+      "id": "lucentics:light_copper"
+    },
+    "title": {
+      "translate": "advancement.lucentics.light_copper"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:engraving_completed"
+    ]
+  ]
+}

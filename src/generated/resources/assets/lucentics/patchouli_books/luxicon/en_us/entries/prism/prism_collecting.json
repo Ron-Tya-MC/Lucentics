@@ -1,0 +1,19 @@
+{
+  "advancement": "lucentics:dawnstone_dust",
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_collecting",
+  "name": "patchouli.lucentics.entry.prism.prism_collecting.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.prism_collecting.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/prisms/prism_collecting_from_io"
+    }
+  ],
+  "sortnum": 6
+}

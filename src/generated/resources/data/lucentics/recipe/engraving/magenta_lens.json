@@ -1,0 +1,100 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "lucentics:lens_frame"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:magenta_lens"
+        }
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:brewing_stand"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:cauldron"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:enchanted_book"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:bookshelf"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "tag": "minecraft:candles"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:amethyst_block"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:lapis_block"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:magenta_stained_glass"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:focus_ring"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

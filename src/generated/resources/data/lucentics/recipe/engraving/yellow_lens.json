@@ -1,0 +1,100 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 8,
+  "input": {
+    "count": 1,
+    "item": "lucentics:lens_frame"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:yellow_lens"
+        }
+      }
+    }
+  ],
+  "processing_duration": 300,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:torch"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:lantern"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:redstone_lamp"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:shroomlight"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:campfire"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:lightning_rod"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:copper_bulb"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:yellow_stained_glass"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:focus_ring"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

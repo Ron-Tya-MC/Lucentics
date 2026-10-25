@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "lucentics:dawnstone_dust"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    }
+  },
+  "pattern": [
+    "LDL",
+    "DGD",
+    "LDL"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_ritual"
+  }
+}

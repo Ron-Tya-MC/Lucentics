@@ -1,0 +1,44 @@
+{
+  "type": "lucentics:milling",
+  "input": {
+    "count": 1,
+    "item": "lucentics:dawnstone"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:dawnstone_dust"
+        }
+      }
+    },
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:dawnstone_dust"
+        }
+      },
+      "probability": 0.3
+    }
+  ],
+  "processing_duration": 20,
+  "trail_inputs": [
+    {
+      "color": "red",
+      "inputs": [
+        {
+          "damage_item": 1,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammers"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

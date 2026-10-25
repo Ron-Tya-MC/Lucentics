@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "lucentics:block/toggled_emitter",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "lucentics:block/toggled_emitter",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "lucentics:block/toggled_emitter"
+    },
+    "facing=west": {
+      "model": "lucentics:block/toggled_emitter",
+      "y": 90
+    }
+  }
+}

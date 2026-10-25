@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 400,
+    "fluid": "lucentics:magenta_dye_liquid"
+  },
+  "input": {
+    "tag": "minecraft:banners"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:magenta_banner"
+  },
+  "processing_duration": 15
+}

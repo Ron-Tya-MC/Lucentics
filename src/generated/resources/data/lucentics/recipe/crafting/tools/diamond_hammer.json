@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:diamond_block"
+    },
+    "D": {
+      "item": "lucentics:dusk_brick"
+    },
+    "M": {
+      "item": "minecraft:diamond"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "BDM",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:diamond_hammer"
+  }
+}

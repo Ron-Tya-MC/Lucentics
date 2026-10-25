@@ -1,0 +1,22 @@
+{
+  "advancement": "lucentics:dawnstone_dust",
+  "category": "lucentics:getting_started",
+  "icon": "lucentics:prism_blank",
+  "name": "patchouli.lucentics.entry.getting_started.prism.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.getting_started.prism.text.intro"
+    },
+    {
+      "type": "patchouli:relations",
+      "anchor": "anchor2",
+      "entries": [
+        "lucentics:prism/about_prisms"
+      ],
+      "title": "patchouli.lucentics.common.relations"
+    }
+  ],
+  "sortnum": 4
+}

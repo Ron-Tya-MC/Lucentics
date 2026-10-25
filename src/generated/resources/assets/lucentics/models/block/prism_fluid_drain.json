@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "lucentics:block/prisms/prism_blank_blue",
+    "side": "lucentics:block/prisms/prism_fluid_drain"
+  }
+}

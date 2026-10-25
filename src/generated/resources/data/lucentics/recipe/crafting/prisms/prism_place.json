@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "minecraft:cobblestone"
+    },
+    "D": {
+      "item": "minecraft:dispenser"
+    },
+    "P": {
+      "item": "lucentics:prism_blank_green"
+    }
+  },
+  "pattern": [
+    " D ",
+    "CPC",
+    " C "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_place"
+  }
+}

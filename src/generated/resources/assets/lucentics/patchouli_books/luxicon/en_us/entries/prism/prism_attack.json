@@ -1,0 +1,19 @@
+{
+  "advancement": "lucentics:colored_prism_blank",
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_attack",
+  "name": "patchouli.lucentics.entry.prism.prism_attack.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.prism_attack.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/prisms/prism_attack"
+    }
+  ],
+  "sortnum": 8
+}

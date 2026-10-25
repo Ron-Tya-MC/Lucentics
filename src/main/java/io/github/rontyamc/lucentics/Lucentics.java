@@ -1,31 +1,43 @@
 package io.github.rontyamc.lucentics;
 
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockRenderer;
-import io.github.rontyamc.lucentics.common.recipe.LucenticsRecipes;
-import io.github.rontyamc.lucentics.registers.*;
-
-import net.minecraft.resources.ResourceKey;
-import net.minecraft.world.item.CreativeModeTab;
-
-import net.neoforged.api.distmarker.Dist;
-import net.neoforged.fml.common.EventBusSubscriber;
-import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
-import net.neoforged.neoforge.client.event.EntityRenderersEvent;
-import net.neoforged.neoforge.client.gui.ConfigurationScreen;
-import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
-import org.slf4j.Logger;
-
 import com.mojang.logging.LogUtils;
-
+import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableRenderer;
+import io.github.rontyamc.lucentics.blocks.emitter.EmitterRenderer;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableRenderer;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorRenderer;
+import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableRenderer;
+import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableRenderer;
+import io.github.rontyamc.lucentics.blocks.pedestals.PedestalRenderer;
+import io.github.rontyamc.lucentics.blocks.tank.TankRenderer;
+import io.github.rontyamc.lucentics.client.particle.FlowingGlowParticle;
+import io.github.rontyamc.lucentics.client.particle.GlowParticle;
+import io.github.rontyamc.lucentics.client.particle.SphereParticle;
+import io.github.rontyamc.lucentics.datagen.providers.lang.AddRawLang;
+import io.github.rontyamc.lucentics.network.LucenticsNetwork;
+import io.github.rontyamc.lucentics.registers.*;
+import net.minecraft.client.renderer.ItemBlockRenderTypes;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.CreativeModeTab;
+import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig;
-import net.neoforged.fml.ModContainer;
+import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
+import net.neoforged.neoforge.client.event.EntityRenderersEvent;
+import net.neoforged.neoforge.client.event.RegisterParticleProvidersEvent;
+import net.neoforged.neoforge.client.gui.ConfigurationScreen;
+import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
 import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.event.server.ServerStartingEvent;
+import org.slf4j.Logger;
 
 // The value here should match an entry in the META-INF/neoforge.mods.toml file
 @Mod(Lucentics.MOD_ID)
@@ -43,17 +55,28 @@ public class Lucentics {
         NeoForge.EVENT_BUS.register(this);
 
         REGISTRATE.registerEventListeners(modEventBus);
+        LucenticsRegistries.register(modEventBus);
 
         LucenticsTabRegister.register(modEventBus);
         LucenticsBlockRegister.register();
         LucenticsBlockEntityRegister.register();
         LucenticsItemRegister.register();
+        LucenticsFluidRegister.register();
 
-        LucenticsRecipes.register(modEventBus);
+        LucenticsParticleRegister.register(modEventBus);
+        LucenticsRecipeTypesRegister.register(modEventBus);
+        LucenticsAttachmentRegister.register(modEventBus);
+
+        LucenticsAdvancementEventRegister.register(modEventBus);
+        LucenticsTriggerRegister.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
+        modEventBus.addListener(this::registerCapabilities);
+        modEventBus.addListener(LucenticsNetwork::register);
 
         modContainer.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+
+        AddRawLang.register();
     }
 
     private void commonSetup(FMLCommonSetupEvent event) {
@@ -73,20 +96,107 @@ public class Lucentics {
         return REGISTRATE;
     }
 
+    private void registerCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.INJECTOR.get(),
+                (be, side) -> be.getInjectorBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.TOGGLED_EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ADVANCED_EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ADVANCED_TOGGLED_EMITTER.get(),
+                (be, side) -> be.getEmitterBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(),
+                (be, side) -> be.getEngravingTableBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(),
+                (be, side) -> be.getPedestalRitualBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(),
+                (be, side) -> be.getTankLightCopperBehavior().getFHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.MILLING_TABLE.get(),
+                (be, side) -> be.getMillingTableBehavior().getIHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.FluidHandler.BLOCK,
+                LucenticsBlockEntityRegister.MIXING_TABLE.get(),
+                (be, side) -> be.getMixingTableBehavior().getFHandler()
+        );
+        event.registerBlockEntity(
+                Capabilities.ItemHandler.BLOCK,
+                LucenticsBlockEntityRegister.ASSEMBLING_TABLE.get(),
+                (be, side) -> be.getAssemblingTableBehavior().getIHandler()
+        );
+    }
+
+    public static ResourceLocation path(String path) {
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+    }
+
     @EventBusSubscriber(modid = Lucentics.MOD_ID, value = Dist.CLIENT)
     public static class LucenticsClient {
         public LucenticsClient(ModContainer container) {
             container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
         }
 
+        @SuppressWarnings("deprecation")
         @SubscribeEvent
         static void onClientSetup(FMLClientSetupEvent event) {
-
+            event.enqueueWork(() -> {
+                for (var entry : LucenticsRenderTypeRegister.getBlocks()) {
+                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), entry.toRenderType());
+                }
+                for (var entry : LucenticsRenderTypeRegister.getFluids()) {
+                    ItemBlockRenderTypes.setRenderLayer(entry.value().get(), entry.toRenderType());
+                }
+            });
         }
 
         @SubscribeEvent
         public static void registerBER(EntityRenderersEvent.RegisterRenderers event){
-            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorBlockRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.INJECTOR.get(), InjectorRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TOGGLED_EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ADVANCED_EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ADVANCED_TOGGLED_EMITTER.get(), EmitterRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ENGRAVING_TABLE.get(), EngravingTableRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.PEDESTAL_RITUAL.get(), PedestalRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.TANK_LIGHT_COPPER.get(), TankRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MILLING_TABLE.get(), MillingTableRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.MIXING_TABLE.get(), MixingTableRenderer::new);
+            event.registerBlockEntityRenderer(LucenticsBlockEntityRegister.ASSEMBLING_TABLE.get(), AssemblingTableRenderer::new);
+        }
+
+        @SubscribeEvent
+        static void registerParticleProviders(RegisterParticleProvidersEvent event) {
+            event.registerSpriteSet(LucenticsParticleRegister.SPHERE.get(), SphereParticle.Provider::new);
+            event.registerSpriteSet(LucenticsParticleRegister.GLOW.get(), GlowParticle.Provider::new);
+            event.registerSpriteSet(LucenticsParticleRegister.FLOWING_GLOW.get(), FlowingGlowParticle.Provider::new);
         }
     }
 }

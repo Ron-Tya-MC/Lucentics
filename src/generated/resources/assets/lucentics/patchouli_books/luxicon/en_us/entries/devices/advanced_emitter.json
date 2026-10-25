@@ -1,0 +1,20 @@
+{
+  "advancement": "lucentics:glimmer_iron",
+  "category": "lucentics:devices",
+  "icon": "lucentics:advanced_emitter",
+  "name": "patchouli.lucentics.entry.devices.advanced_emitter.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.devices.advanced_emitter.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/functional/advanced_emitter",
+      "recipe2": "lucentics:crafting/functional/advanced_toggled_emitter"
+    }
+  ],
+  "sortnum": 8
+}

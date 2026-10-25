@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:colored_prism_blank",
+  "criteria": {
+    "prism_break": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:prism_break"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.prism_break.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:prism_break"
+    },
+    "title": {
+      "translate": "advancement.lucentics.prism_break"
+    }
+  },
+  "requirements": [
+    [
+      "prism_break"
+    ]
+  ]
+}

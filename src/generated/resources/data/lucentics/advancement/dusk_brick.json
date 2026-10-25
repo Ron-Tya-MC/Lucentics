@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:injector",
+  "criteria": {
+    "dusk_brick": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:dusk_brick"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.dusk_brick.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:dusk_brick"
+    },
+    "title": {
+      "translate": "advancement.lucentics.dusk_brick"
+    }
+  },
+  "requirements": [
+    [
+      "dusk_brick"
+    ]
+  ]
+}

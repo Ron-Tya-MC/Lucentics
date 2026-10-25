@@ -1,0 +1,57 @@
+{
+  "parent": "lucentics:patina_liquid_bucket",
+  "criteria": {
+    "lucentics:dyeing_completed": {
+      "conditions": {
+        "event": "lucentics:dyeing_completed",
+        "recipes": [
+          "lucentics:dyeing/oxidizing/exposed_copper",
+          "lucentics:dyeing/oxidizing/exposed_chiseled_copper",
+          "lucentics:dyeing/oxidizing/exposed_copper_bulb",
+          "lucentics:dyeing/oxidizing/exposed_copper_door",
+          "lucentics:dyeing/oxidizing/exposed_copper_grate",
+          "lucentics:dyeing/oxidizing/exposed_cut_copper",
+          "lucentics:dyeing/oxidizing/exposed_cut_copper_slab",
+          "lucentics:dyeing/oxidizing/exposed_cut_copper_stairs",
+          "lucentics:dyeing/oxidizing/exposed_cut_copper_trapdoor",
+          "lucentics:dyeing/oxidizing/weathered_copper",
+          "lucentics:dyeing/oxidizing/weathered_chiseled_copper",
+          "lucentics:dyeing/oxidizing/weathered_copper_bulb",
+          "lucentics:dyeing/oxidizing/weathered_copper_door",
+          "lucentics:dyeing/oxidizing/weathered_copper_grate",
+          "lucentics:dyeing/oxidizing/weathered_cut_copper",
+          "lucentics:dyeing/oxidizing/weathered_cut_copper_slab",
+          "lucentics:dyeing/oxidizing/weathered_cut_copper_stairs",
+          "lucentics:dyeing/oxidizing/weathered_cut_copper_trapdoor",
+          "lucentics:dyeing/oxidizing/oxidized_copper",
+          "lucentics:dyeing/oxidizing/oxidized_chiseled_copper",
+          "lucentics:dyeing/oxidizing/oxidized_copper_bulb",
+          "lucentics:dyeing/oxidizing/oxidized_copper_door",
+          "lucentics:dyeing/oxidizing/oxidized_copper_grate",
+          "lucentics:dyeing/oxidizing/oxidized_cut_copper",
+          "lucentics:dyeing/oxidizing/oxidized_cut_copper_slab",
+          "lucentics:dyeing/oxidizing/oxidized_cut_copper_stairs",
+          "lucentics:dyeing/oxidizing/oxidized_cut_copper_trapdoor"
+        ]
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.oxidize.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "minecraft:oxidized_copper"
+    },
+    "title": {
+      "translate": "advancement.lucentics.oxidize"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:dyeing_completed"
+    ]
+  ]
+}

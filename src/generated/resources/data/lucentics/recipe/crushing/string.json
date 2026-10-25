@@ -1,0 +1,27 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.wool.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.wool.hit",
+    "source": "block"
+  },
+  "input": "#minecraft:wool",
+  "outputs": [
+    {
+      "content": {
+        "count": 4,
+        "item": {
+          "count": 1,
+          "id": "minecraft:string"
+        }
+      }
+    }
+  ],
+  "required_hit": 2,
+  "tool": {
+    "item": "minecraft:shears"
+  }
+}

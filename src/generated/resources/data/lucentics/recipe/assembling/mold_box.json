@@ -1,0 +1,43 @@
+{
+  "type": "lucentics:assembling",
+  "input": {
+    "count": 5,
+    "tag": "c:plates/iron"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:mold_box"
+        }
+      }
+    }
+  ],
+  "processing_duration": 160,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 12,
+          "input": {
+            "count": 1,
+            "tag": "lucentics:hammers"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "lucentics:dawnstone"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

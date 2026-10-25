@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 500,
+    "fluid": "lucentics:gray_dye_liquid"
+  },
+  "input": {
+    "item": "lucentics:prism_blank"
+  },
+  "output": {
+    "count": 1,
+    "id": "lucentics:prism_blank_gray"
+  },
+  "processing_duration": 30
+}

@@ -1,0 +1,72 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 7,
+  "input": {
+    "count": 1,
+    "item": "lucentics:dusk_brick"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:green_dusk_brick"
+        }
+      }
+    }
+  ],
+  "processing_duration": 60,
+  "trail_inputs": [
+    {
+      "color": "green",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:green_dye"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:green_dye"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:green_dye"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:green_dye"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "item": "minecraft:green_dye"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

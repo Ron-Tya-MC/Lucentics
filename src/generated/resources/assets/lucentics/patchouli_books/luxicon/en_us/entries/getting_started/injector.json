@@ -1,0 +1,30 @@
+{
+  "category": "lucentics:getting_started",
+  "icon": "lucentics:injector",
+  "name": "patchouli.lucentics.entry.getting_started.injector.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.getting_started.injector.text.intro"
+    },
+    {
+      "type": "patchouli:spotlight",
+      "anchor": "anchor2",
+      "item": "lucentics:injector",
+      "text": "patchouli.lucentics.entry.getting_started.injector.text.injector"
+    },
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor3",
+      "text": "patchouli.lucentics.entry.getting_started.injector.text.injector2"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor4",
+      "recipe": "lucentics:crafting/functional/injector",
+      "text": "patchouli.lucentics.entry.getting_started.injector.text.injector3"
+    }
+  ],
+  "sortnum": 2
+}

@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "A": {
+      "item": "minecraft:stone_axe"
+    },
+    "P": {
+      "item": "minecraft:stone_pickaxe"
+    },
+    "R": {
+      "item": "lucentics:prism_blank_red"
+    },
+    "S": {
+      "item": "minecraft:stone_shovel"
+    }
+  },
+  "pattern": [
+    " P ",
+    "ARS"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_break"
+  }
+}

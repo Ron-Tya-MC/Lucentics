@@ -1,0 +1,47 @@
+package io.github.rontyamc.lucentics.integration.jade.component_providers;
+
+import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
+import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.items.LensItem;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import snownee.jade.api.BlockAccessor;
+import snownee.jade.api.IBlockComponentProvider;
+import snownee.jade.api.IServerDataProvider;
+import snownee.jade.api.ITooltip;
+import snownee.jade.api.config.IPluginConfig;
+
+public class EmitterComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+    public static final EmitterComponentProvider INSTANCE = new EmitterComponentProvider();
+
+    @Override
+    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+        CompoundTag data = accessor.getServerData();
+        if (data.isEmpty() || !data.contains("lens")) return;
+
+        Level level = accessor.getLevel();
+
+        ItemStack content = ItemStack.parse(level.registryAccess(), data.getCompound("lens")).orElse(ItemStack.EMPTY);
+        Colors color = (!content.isEmpty() && content.getItem() instanceof LensItem) ? ((LensItem) content.getItem()).getColor() : Colors.SUNLIGHT;
+
+        tooltip.add(Component.translatable("term.lucentics.colors." + color.getName()));
+    }
+
+    @Override
+    public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+        if (!(accessor.getBlockEntity() instanceof EmitterBlockEntity be)) return;
+        var behavior = be.getEmitterBehavior();
+
+        if (!behavior.getLensContainer().isEmpty()) {
+            data.put("lens", behavior.getLensContainer().save(accessor.getLevel().registryAccess(), new CompoundTag()));
+        }
+    }
+
+    @Override
+    public net.minecraft.resources.ResourceLocation getUid() {
+        return Lucentics.path("emitter");
+    }
+}

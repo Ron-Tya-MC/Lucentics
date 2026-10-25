@@ -1,0 +1,38 @@
+package io.github.rontyamc.lucentics.integration.jade.component_providers;
+
+import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBlockEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
+import snownee.jade.api.*;
+import snownee.jade.api.config.IPluginConfig;
+
+public class InjectorComponentProvider implements IBlockComponentProvider, IServerDataProvider<BlockAccessor> {
+    public static final InjectorComponentProvider INSTANCE = new InjectorComponentProvider();
+
+    @Override
+    public void appendTooltip(ITooltip tooltip, BlockAccessor accessor, IPluginConfig config) {
+        CompoundTag data = accessor.getServerData();
+        if (data.isEmpty()) return;
+
+        boolean met = data.contains("met_daylight_condition") && data.getBoolean("met_daylight_condition");
+
+        if (!met) {
+            tooltip.add(Component.translatable("jade.lucentics.injector.insufficient_daylight").withStyle(ChatFormatting.RED));
+        }
+    }
+
+    @Override
+    public void appendServerData(CompoundTag data, BlockAccessor accessor) {
+        if (!(accessor.getBlockEntity() instanceof InjectorBlockEntity be)) return;
+        var behavior = be.getInjectorBehavior();
+
+        data.putBoolean("met_daylight_condition", behavior.metDayLightCondition());
+    }
+
+    @Override
+    public net.minecraft.resources.ResourceLocation getUid() {
+        return Lucentics.path("injector");
+    }
+}

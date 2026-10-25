@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:prism_ritual",
+  "criteria": {
+    "engraving_table": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:engraving_table"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.engraving_table.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:engraving_table"
+    },
+    "title": {
+      "translate": "advancement.lucentics.engraving_table"
+    }
+  },
+  "requirements": [
+    [
+      "engraving_table"
+    ]
+  ]
+}

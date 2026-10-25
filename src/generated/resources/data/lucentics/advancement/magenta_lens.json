@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:advanced_emitter",
+  "criteria": {
+    "magenta_lens": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:magenta_lens"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.magenta_lens.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:magenta_lens"
+    },
+    "title": {
+      "translate": "advancement.lucentics.magenta_lens"
+    }
+  },
+  "requirements": [
+    [
+      "magenta_lens"
+    ]
+  ]
+}

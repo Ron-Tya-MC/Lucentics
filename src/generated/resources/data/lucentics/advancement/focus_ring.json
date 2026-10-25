@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:prism_ball",
+  "criteria": {
+    "focus_ring": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:focus_ring"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.focus_ring.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:focus_ring"
+    },
+    "title": {
+      "translate": "advancement.lucentics.focus_ring"
+    }
+  },
+  "requirements": [
+    [
+      "focus_ring"
+    ]
+  ]
+}

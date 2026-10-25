@@ -1,0 +1,28 @@
+{
+  "parent": "lucentics:green_lens",
+  "criteria": {
+    "lucentics:assembling_completed": {
+      "conditions": {
+        "event": "lucentics:assembling_completed"
+      },
+      "trigger": "lucentics:event"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.assembling.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:assembling_table"
+    },
+    "title": {
+      "translate": "advancement.lucentics.assembling"
+    }
+  },
+  "requirements": [
+    [
+      "lucentics:assembling_completed"
+    ]
+  ]
+}

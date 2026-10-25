@@ -1,0 +1,16 @@
+{
+  "advancement": "lucentics:dawnstone",
+  "category": "lucentics:devices",
+  "icon": "lucentics:pedestal_ritual",
+  "name": "patchouli.lucentics.entry.devices.pedestals.name",
+  "pages": [
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor1",
+      "recipe": "lucentics:crafting/functional/pedestal_ritual",
+      "text": "patchouli.lucentics.entry.devices.pedestals.text.ritual",
+      "title": "patchouli.lucentics.entry.devices.pedestals.title.ritual"
+    }
+  ],
+  "sortnum": 5
+}

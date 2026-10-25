@@ -1,0 +1,386 @@
+package io.github.rontyamc.lucentics.blocks.milling_table;
+
+import io.github.rontyamc.lucentics.Lucentics;
+import io.github.rontyamc.lucentics.client.particle.GlowParticleOptions;
+import io.github.rontyamc.lucentics.common.BaseBlockEntity;
+import io.github.rontyamc.lucentics.common.ThingStack;
+import io.github.rontyamc.lucentics.common.beam.Beam;
+import io.github.rontyamc.lucentics.common.behavior.BehaviorType;
+import io.github.rontyamc.lucentics.common.behavior.TrailCraftingBehavior;
+import io.github.rontyamc.lucentics.common.dict.Colors;
+import io.github.rontyamc.lucentics.common.util.AdvancementUtil;
+import io.github.rontyamc.lucentics.common.util.ItemUtil;
+import io.github.rontyamc.lucentics.common.util.MiscUtil;
+import io.github.rontyamc.lucentics.network.MillingProcessPayload;
+import io.github.rontyamc.lucentics.recipes.trail.TrailRecipe;
+import io.github.rontyamc.lucentics.recipes.trail.TrailRecipeInput;
+import io.github.rontyamc.lucentics.registers.LucenticsAdvancementEventRegister;
+import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.particles.ItemParticleOption;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
+import net.minecraft.world.Clearable;
+import net.minecraft.world.Containers;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
+import net.neoforged.neoforge.network.PacketDistributor;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.Supplier;
+
+public class MillingTableBehavior extends TrailCraftingBehavior implements Clearable {
+    public static final BehaviorType<MillingTableBehavior> TYPE = new BehaviorType<>("milling_table", TrailCraftingBehavior.TYPE);
+
+    private ItemStack container = ItemStack.EMPTY;
+    private List<ItemStack> buffer = new ArrayList<>();
+    private boolean hasOutputItem;
+    private final Integer maxStackSize;
+    private final Supplier<Integer> maxBufferSize;
+    private final MillingTableIHandler iHandler;
+    private boolean blockMerge;
+
+    public MillingTableBehavior(BaseBlockEntity be) {
+        super(be);
+
+        hasOutputItem = false;
+        maxStackSize = 64;
+        maxBufferSize = () -> 6;
+        setBlockMerge(true);
+        iHandler = new MillingTableIHandler(this);
+        clearContent();
+    }
+
+    public void setBlockMerge(boolean blockMerge) {
+        this.blockMerge = blockMerge;
+    }
+
+    public boolean getBlockMerge() {
+        return blockMerge && !hasOutputItem;
+    }
+
+    @Override
+    public BehaviorType<?> getType() {
+        return TYPE;
+    }
+
+    @Override
+    public ThingStack getContainer(){
+        return ThingStack.of(container);
+    }
+
+    @Override
+    public void setContainer(ThingStack stack) {
+        container = stack.asItemOrEmpty();
+    }
+
+    public List<ThingStack> getBuffer() {
+        return ThingStack.fromItems(buffer);
+    }
+
+    public ItemStack getBufferAt(int index) {
+        if (index < 0 || index >= buffer.size()) return ItemStack.EMPTY;
+        return buffer.get(index) == null ? ItemStack.EMPTY : buffer.get(index);
+    }
+
+    public List<ItemStack> collectBuffer() {
+        List<ItemStack> collected = new ArrayList<>(buffer);
+        buffer.clear();
+        blockEntity.updated();
+        return collected;
+    }
+
+    @Override
+    public boolean hasOutputItem() {
+        return hasOutputItem;
+    }
+
+    @Override
+    public void setHasOutputItem(boolean hasOutputItem) {
+        this.hasOutputItem = hasOutputItem;
+    }
+
+    public Integer getMaxStackSize() {return maxStackSize;}
+
+    public Supplier<Integer> getMaxBufferSize() {return maxBufferSize;}
+
+    public List<ItemStack> getContents() {
+        List<ItemStack> list = new ArrayList<>();
+
+        list.addLast(getContainer().asItemOrEmpty());
+        for (ItemStack stack : buffer) {
+            list.addLast(stack == null ? ItemStack.EMPTY : stack);
+        }
+        return list;
+    }
+
+    public MillingTableIHandler getIHandler() {
+        return iHandler;
+    }
+
+    @Override
+    public void clearContent() {
+        container = ItemStack.EMPTY;
+        buffer.clear();
+        hasOutputItem = false;
+        setIdle();
+    }
+
+    public int getRemainingSpace() {
+        int max = maxStackSize;
+        if (getContainer().isEmpty()) return max;
+        return Math.min(max, getContainer().asItemOrEmpty().getMaxStackSize()) - getContainer().asItemOrEmpty().getCount();
+    }
+
+    public int getSlotLimit(int slot) {
+        int limit;
+        if (slot == 0) limit = getContainer().isEmpty() ? 64 : getContainer().asItemOrEmpty().getMaxStackSize();
+        else limit = getBufferAt(slot - 1).isEmpty() ? 64 : getBufferAt(slot - 1).getMaxStackSize();
+        return Math.min(maxStackSize, limit);
+    }
+
+    public ItemStack insert(ItemStack stack, boolean simulate) {
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        if (!getContainer().isEmpty() && !ItemUtil.isSameItem(getContainer().asItemOrEmpty(), stack, false)) return stack;
+
+        int remainingSpace = getRemainingSpace();
+        if (remainingSpace <= 0) return stack;
+
+        int insertCount = Math.min(remainingSpace, stack.getCount());
+        ItemStack leftover = stack.copyWithCount(stack.getCount() - insertCount);
+
+        if (!simulate) {
+            if (getContainer().isEmpty()) {
+                container = stack.copyWithCount(insertCount);
+            } else {
+                container.grow(insertCount);
+            }
+            hasOutputItem = false;
+            blockEntity.updated();
+        }
+
+        return leftover;
+    }
+
+    public ItemStack extract(int amount, boolean simulate) {
+        if (getContainer().isEmpty()) return ItemStack.EMPTY;
+
+        ItemStack copyStack = getContainer().asItemOrEmpty().copy();
+        ItemStack extracted = copyStack.split(amount);
+
+        if (!simulate) {
+            container = copyStack;
+            if (container.isEmpty()) hasOutputItem = false;
+            blockEntity.updated();
+        }
+
+        return extracted;
+    }
+
+    public ItemStack extractBufferAt(int index, int amount, boolean simulate) {
+        if (getBufferAt(index).isEmpty()) return ItemStack.EMPTY;
+
+        ItemStack copyStack = getBufferAt(index).copy();
+        ItemStack extracted = copyStack.split(amount);
+
+        if (!simulate) {
+            if (copyStack.isEmpty()) {
+                buffer.remove(index);
+            } else {
+                buffer.set(index, copyStack);
+            }
+            blockEntity.updated();
+        }
+
+        return extracted;
+    }
+
+    @Override
+    public ItemStack acceptItem(ItemStack stack, boolean simulate) {
+        if (stack.isEmpty()) return ItemStack.EMPTY;
+        Lucentics.LOGGER.info("accepting {}, {}", buffer, simulate);
+
+        List<ItemStack> newBuffer = ItemUtil.stackOrAppend(buffer, stack);
+        if (!simulate) buffer = newBuffer;
+
+        Lucentics.LOGGER.info("accepted {}, {}", buffer, simulate);
+        Lucentics.LOGGER.info(" ");
+
+        if (newBuffer.size() > maxBufferSize.get()) {
+            ItemStack leftover = newBuffer.getLast();
+            if (!simulate) buffer.removeLast();
+
+            return leftover;
+        }
+        return ItemStack.EMPTY;
+    }
+
+    public void dropContents(Level level, BlockPos pos) {
+        Vec3 vec = getCenter(pos);
+        List<ItemStack> contents = getContents();
+
+        if (!contents.isEmpty()) {
+            for (ItemStack stack : contents) {
+                Containers.dropItemStack(level, vec.x, vec.y, vec.z, stack);
+            }
+        }
+        clearContent();
+    }
+
+    private void spawnCraftingParticles(ServerLevel level, List<Beam> beams, BlockPos pos) {
+        double Sx = pos.getX() + Mth.lerp(RANDOM_SOURCE.nextDouble(), 3.0f / 8, 5.0f / 8);
+        double Sy = pos.getY() + Mth.lerp(RANDOM_SOURCE.nextDouble(), 3.0f / 8, 1.0);
+        double Sz = pos.getZ() + Mth.lerp(RANDOM_SOURCE.nextDouble(), 3.0f / 8, 5.0f / 8);
+
+        double Tx = Sx + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
+        double Ty = pos.getY() + 1.2;
+        double Tz = Sz + Mth.lerp(RANDOM_SOURCE.nextDouble(), -0.2, 0.2);
+
+        double Vx = Tx - Sx;
+        double Vy = Ty - Sy;
+        double Vz = Tz - Sz;
+
+        int rgbInt = Colors.RED.getColorCode();
+        Float[] rgb = MiscUtil.separateRGB(rgbInt);
+
+        level.sendParticles(new GlowParticleOptions(rgb[0], rgb[1], rgb[2]), Sx, Sy, Sz, 0, Vx, Vy, Vz, 0.15);
+    }
+
+    private void spawnCraftCompleteParticles(ServerLevel level) {
+        BlockPos pos = getPos();
+
+        double Sx = pos.getX() + 0.5;
+        double Sy = pos.getY() + 0.8;
+        double Sz = pos.getZ() + 0.5;
+
+        level.sendParticles(ParticleTypes.END_ROD, Sx, Sy, Sz, 2, 0.3, 0, 0.3, 0.1);
+    }
+
+    @Override
+    public void tick() {
+        processingContinueMax = processingTimeMax * 2;
+        super.tick();
+    }
+
+    protected void flushBuffer() {
+        container = buffer.getFirst();
+        buffer.removeFirst();
+        hasOutputItem = true;
+        blockEntity.updated();
+    }
+
+    protected Optional<RecipeHolder<TrailRecipe>> getCurrentRecipe(ServerLevel level, TrailRecipeInput input) {
+        if (level == null || input.isEmpty()) return Optional.empty();
+        return level.getRecipeManager().getRecipeFor(LucenticsRecipeTypesRegister.MILLING_TYPE.get(), input, level);
+    }
+
+    protected boolean craft(ServerLevel level, RecipeHolder<TrailRecipe> recipeHolder, TrailRecipeInput input) {
+        boolean craftSucceeded = super.craft(level, recipeHolder, input);
+
+        if (craftSucceeded) {
+            Optional<List<TrailRecipe.ConsumptionEntry>> catalysts = getCachedCatalysts();
+            if (catalysts.isPresent()) {
+                for (TrailRecipe.ConsumptionEntry entry : catalysts.get()) {
+                    entry.device().catalyst();
+                }
+            }
+        }
+
+        return craftSucceeded;
+    }
+
+    @Override
+    protected void onCraftStarted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {}
+
+    @Override
+    protected void whileCrafting(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
+        if (processingTime %7 == 0) {
+            spawnCraftingParticles(level, beams, pos);
+            spawnCraftingParticles(level, beams, pos);
+        }
+        if (processingTime %2 == 0) {
+            double Sx = pos.getX() + 0.5;
+            double Sy = pos.getY() + 0.5;
+            double Sz = pos.getZ() + 0.5;
+
+            level.sendParticles(new ItemParticleOption(ParticleTypes.ITEM, container), Sx, Sy, Sz, 2, 0.3, 0.1, 0.3, 0.01);
+        }
+        if (processingTime %2 == 0) {
+            float p = Mth.lerp(RANDOM_SOURCE.nextFloat(), 0.1f, 0.3f);
+            level.playSound(null, pos, SoundEvents.TUFF_HIT, SoundSource.BLOCKS, 0.4f, p);
+        }
+    }
+
+    @Override
+    protected void onCraftCompleted(ServerLevel level, BlockPos pos, RecipeHolder<TrailRecipe> recipeHolder, List<Beam> beams) {
+        spawnCraftCompleteParticles(level);
+
+        level.playSound(null, pos, SoundEvents.TUFF_BREAK, SoundSource.BLOCKS, 0.4f, 0.5f);
+
+        AdvancementUtil.grantNearby(level, pos, LucenticsAdvancementEventRegister.MILLING_COMPLETED, recipeHolder.id());
+    }
+
+    @Override
+    public void write(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(nbt, registries, clientPacket);
+
+        if (!getContainer().isEmpty()) {
+            nbt.put("container", getContainer().asItemOrEmpty().save(registries, new CompoundTag()));
+        }
+        ListTag bufferList = new ListTag();
+        for (ItemStack stack : buffer) {
+            if (!stack.isEmpty()) bufferList.add(stack.save(registries, new CompoundTag()));
+        }
+        nbt.put("buffer", bufferList);
+        nbt.putInt("processing_continue", processingContinue);
+        nbt.putBoolean("has_output_item", hasOutputItem);
+    }
+
+    @Override
+    public void read(CompoundTag nbt, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(nbt, registries, clientPacket);
+
+        container = nbt.contains("container")
+                ? ItemStack.parse(registries, nbt.getCompound("container")).orElse(ItemStack.EMPTY)
+                : ItemStack.EMPTY;
+
+        buffer.clear();
+        ListTag bufferList = nbt.getList("buffer", net.minecraft.nbt.Tag.TAG_COMPOUND);
+        for (int i = 0; i < bufferList.size(); i++) {
+            ItemStack.parse(registries, bufferList.getCompound(i)).ifPresent(buffer::add);
+        }
+        processingContinue = nbt.getInt("processing_continue");
+        hasOutputItem = nbt.getBoolean("has_output_item");
+    }
+
+    @Override
+    public boolean isSafeNBT() { return true; }
+
+    private int processingContinueClient = 0;
+    private int processingTimeMaxClient = -1;
+
+    public void applyClientProgress(int processingContinue, int processingTimeMax) {
+        this.processingContinueClient = processingContinue;
+        this.processingTimeMaxClient = processingTimeMax;
+    }
+
+    public int getProcessingContinueClient() { return processingContinueClient; }
+
+    public int getProcessingTimeMaxClient() { return processingTimeMaxClient; }
+
+    protected void syncProgressToClient(ServerLevel level) {
+        var payload = new MillingProcessPayload(getPos(), processingContinue, processingTimeMax);
+        PacketDistributor.sendToPlayersTrackingChunk(level, new ChunkPos(getPos()), payload);
+    }
+}

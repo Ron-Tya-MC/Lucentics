@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 20,
+    "fluid": "lucentics:patina_liquid"
+  },
+  "input": {
+    "item": "minecraft:weathered_chiseled_copper"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:oxidized_chiseled_copper"
+  },
+  "processing_duration": 10
+}

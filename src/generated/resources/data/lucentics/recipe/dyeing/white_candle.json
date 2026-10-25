@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 400,
+    "fluid": "lucentics:white_dye_liquid"
+  },
+  "input": {
+    "tag": "minecraft:candles"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:white_candle"
+  },
+  "processing_duration": 15
+}

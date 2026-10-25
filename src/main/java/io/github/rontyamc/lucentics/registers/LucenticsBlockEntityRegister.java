@@ -2,13 +2,59 @@ package io.github.rontyamc.lucentics.registers;
 
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.blocks.engraving_tables.injector.InjectorBlockEntity;
+import io.github.rontyamc.lucentics.blocks.assembling_table.AssemblingTableBlockEntity;
+import io.github.rontyamc.lucentics.blocks.emitter.EmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.emitter.advanced_emitter.AdvancedEmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.emitter.advanced_toggled_emitter.AdvancedToggledEmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.emitter.toggled_emitter.ToggledEmitterBlockEntity;
+import io.github.rontyamc.lucentics.blocks.engraving_table.EngravingTableBlockEntity;
+import io.github.rontyamc.lucentics.blocks.injector.InjectorBlockEntity;
+import io.github.rontyamc.lucentics.blocks.milling_table.MillingTableBlockEntity;
+import io.github.rontyamc.lucentics.blocks.mixing_table.MixingTableBlockEntity;
+import io.github.rontyamc.lucentics.blocks.pedestals.pedestal_ritual.PedestalRitualBlockEntity;
+import io.github.rontyamc.lucentics.blocks.tank.light_copper_tank.TankLightCopperBlockEntity;
 
 public class LucenticsBlockEntityRegister {
     public static final LucenticsRegistrate REGISTRATE = Lucentics.registrate();
 
     public static final BlockEntityEntry<InjectorBlockEntity> INJECTOR = REGISTRATE.blockEntity("injector", InjectorBlockEntity::new)
             .validBlock(LucenticsBlockRegister.INJECTOR)
+            .register();
+    public static final BlockEntityEntry<EmitterBlockEntity> EMITTER = REGISTRATE.blockEntity("emitter", EmitterBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.EMITTER)
+            .register();
+    public static final BlockEntityEntry<ToggledEmitterBlockEntity> TOGGLED_EMITTER = REGISTRATE.blockEntity("toggled_emitter", ToggledEmitterBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.TOGGLED_EMITTER)
+            .register();
+    public static final BlockEntityEntry<AdvancedEmitterBlockEntity> ADVANCED_EMITTER = REGISTRATE.blockEntity("advanced_emitter", AdvancedEmitterBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.ADVANCED_EMITTER)
+            .register();
+    public static final BlockEntityEntry<AdvancedToggledEmitterBlockEntity> ADVANCED_TOGGLED_EMITTER = REGISTRATE.blockEntity("advanced_toggled_emitter", AdvancedToggledEmitterBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.ADVANCED_TOGGLED_EMITTER)
+            .register();
+    public static final BlockEntityEntry<EngravingTableBlockEntity> ENGRAVING_TABLE = REGISTRATE.blockEntity("engraving_table", EngravingTableBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.ENGRAVING_TABLE)
+            .register();
+
+    public static final BlockEntityEntry<PedestalRitualBlockEntity> PEDESTAL_RITUAL = REGISTRATE.blockEntity("pedestal_ritual", PedestalRitualBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.PEDESTAL_RITUAL)
+            .register();
+
+    public static final BlockEntityEntry<TankLightCopperBlockEntity> TANK_LIGHT_COPPER = REGISTRATE.blockEntity("tank_light_copper", TankLightCopperBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER)
+            .validBlock(LucenticsBlockRegister.TANK_LIGHT_COPPER_THICK)
+            .register();
+
+    public static final BlockEntityEntry<MillingTableBlockEntity> MILLING_TABLE = REGISTRATE.blockEntity("milling_table", MillingTableBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.MILLING_TABLE)
+            .register();
+
+    public static final BlockEntityEntry<MixingTableBlockEntity> MIXING_TABLE = REGISTRATE.blockEntity("mixing_table", MixingTableBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.MIXING_TABLE)
+            .register();
+
+    public static final BlockEntityEntry<AssemblingTableBlockEntity> ASSEMBLING_TABLE = REGISTRATE.blockEntity("assembling_table", AssemblingTableBlockEntity::new)
+            .validBlock(LucenticsBlockRegister.ASSEMBLING_TABLE)
             .register();
 
     public static void register() {

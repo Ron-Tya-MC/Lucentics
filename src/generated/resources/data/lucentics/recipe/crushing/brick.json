@@ -1,0 +1,27 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.deepslate_bricks.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.deepslate_bricks.hit",
+    "source": "block"
+  },
+  "input": "minecraft:bricks",
+  "outputs": [
+    {
+      "content": {
+        "count": 4,
+        "item": {
+          "count": 1,
+          "id": "minecraft:brick"
+        }
+      }
+    }
+  ],
+  "required_hit": 2,
+  "tool": {
+    "tag": "minecraft:pickaxes"
+  }
+}

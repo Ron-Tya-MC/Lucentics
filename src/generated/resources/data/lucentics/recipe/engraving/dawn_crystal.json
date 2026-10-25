@@ -1,0 +1,68 @@
+{
+  "type": "lucentics:engraving",
+  "daylight_condition": 10,
+  "input": {
+    "count": 1,
+    "item": "lucentics:dawnstone_dust"
+  },
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "lucentics:dawn_crystal"
+        }
+      }
+    }
+  ],
+  "processing_duration": 120,
+  "trail_inputs": [
+    {
+      "color": "sunlight",
+      "inputs": [
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 2,
+            "item": "lucentics:dawnstone_dust"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "amount": 50,
+            "fluid": "minecraft:lava"
+          },
+          "required_type": "lucentics:tank"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 2,
+            "item": "lucentics:dawnstone_dust"
+          },
+          "required_type": "lucentics:pedestal_ritual"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "amount": 50,
+            "fluid": "minecraft:lava"
+          },
+          "required_type": "lucentics:tank"
+        },
+        {
+          "damage_item": 0,
+          "input": {
+            "count": 1,
+            "tag": "c:dusts/diamond"
+          },
+          "not_consume": true,
+          "required_type": "lucentics:pedestal_ritual"
+        }
+      ]
+    }
+  ]
+}

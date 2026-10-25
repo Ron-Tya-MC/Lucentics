@@ -1,0 +1,27 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.stone.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.stone.hit",
+    "source": "block"
+  },
+  "input": "minecraft:quartz_block",
+  "outputs": [
+    {
+      "content": {
+        "count": 4,
+        "item": {
+          "count": 1,
+          "id": "minecraft:quartz"
+        }
+      }
+    }
+  ],
+  "required_hit": 2,
+  "tool": {
+    "tag": "minecraft:pickaxes"
+  }
+}

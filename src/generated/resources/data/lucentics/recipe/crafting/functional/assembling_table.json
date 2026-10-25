@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "lucentics:green_dusk_bricks"
+    },
+    "D": {
+      "item": "lucentics:dawnstone"
+    },
+    "L": {
+      "item": "lucentics:light_copper"
+    }
+  },
+  "pattern": [
+    "DDD",
+    "LBL",
+    "BBB"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:assembling_table"
+  }
+}

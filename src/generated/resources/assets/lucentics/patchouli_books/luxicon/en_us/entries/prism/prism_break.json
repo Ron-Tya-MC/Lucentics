@@ -1,0 +1,19 @@
+{
+  "advancement": "lucentics:colored_prism_blank",
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_break",
+  "name": "patchouli.lucentics.entry.prism.prism_break.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.prism_break.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/prisms/prism_break"
+    }
+  ],
+  "sortnum": 7
+}

@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:root",
+  "criteria": {
+    "injector": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:injector"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.injector.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:injector"
+    },
+    "title": {
+      "translate": "advancement.lucentics.injector"
+    }
+  },
+  "requirements": [
+    [
+      "injector"
+    ]
+  ]
+}

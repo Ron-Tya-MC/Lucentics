@@ -1,0 +1,15 @@
+{
+  "type": "lucentics:dyeing",
+  "color": {
+    "amount": 20,
+    "fluid": "lucentics:patina_liquid"
+  },
+  "input": {
+    "item": "minecraft:weathered_copper_trapdoor"
+  },
+  "output": {
+    "count": 1,
+    "id": "minecraft:oxidized_copper_trapdoor"
+  },
+  "processing_duration": 10
+}

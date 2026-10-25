@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:milling",
+  "criteria": {
+    "diamond_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:diamond_dust"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.diamond_dust.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:diamond_dust"
+    },
+    "title": {
+      "translate": "advancement.lucentics.diamond_dust"
+    }
+  },
+  "requirements": [
+    [
+      "diamond_dust"
+    ]
+  ]
+}

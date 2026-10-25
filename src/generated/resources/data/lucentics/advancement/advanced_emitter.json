@@ -1,0 +1,32 @@
+{
+  "parent": "lucentics:glimmer_iron",
+  "criteria": {
+    "advanced_emitter": {
+      "conditions": {
+        "items": [
+          {
+            "items": "lucentics:advanced_emitter"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "description": {
+      "translate": "advancement.lucentics.advanced_emitter.desc"
+    },
+    "icon": {
+      "count": 1,
+      "id": "lucentics:advanced_emitter"
+    },
+    "title": {
+      "translate": "advancement.lucentics.advanced_emitter"
+    }
+  },
+  "requirements": [
+    [
+      "advanced_emitter"
+    ]
+  ]
+}

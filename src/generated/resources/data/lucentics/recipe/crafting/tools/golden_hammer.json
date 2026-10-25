@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:gold_block"
+    },
+    "D": {
+      "item": "lucentics:dusk_brick"
+    },
+    "M": {
+      "item": "minecraft:gold_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "BDM",
+    " S ",
+    " S "
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:golden_hammer"
+  }
+}

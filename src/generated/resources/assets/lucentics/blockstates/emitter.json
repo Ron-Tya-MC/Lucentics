@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "lucentics:block/emitter",
+      "y": 270
+    },
+    "facing=north": {
+      "model": "lucentics:block/emitter",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "lucentics:block/emitter"
+    },
+    "facing=west": {
+      "model": "lucentics:block/emitter",
+      "y": 90
+    }
+  }
+}

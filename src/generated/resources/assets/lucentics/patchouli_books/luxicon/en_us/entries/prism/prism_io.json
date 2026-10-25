@@ -1,0 +1,20 @@
+{
+  "advancement": "lucentics:dawnstone_dust",
+  "category": "lucentics:prism",
+  "icon": "lucentics:prism_io",
+  "name": "patchouli.lucentics.entry.prism.prism_io.name",
+  "pages": [
+    {
+      "type": "patchouli:text",
+      "anchor": "anchor1",
+      "text": "patchouli.lucentics.entry.prism.prism_io.text.intro"
+    },
+    {
+      "type": "patchouli:crafting",
+      "anchor": "anchor2",
+      "recipe": "lucentics:crafting/prisms/prism_io_from_importing",
+      "recipe2": "lucentics:crafting/prisms/prism_io_from_exporting"
+    }
+  ],
+  "sortnum": 5
+}

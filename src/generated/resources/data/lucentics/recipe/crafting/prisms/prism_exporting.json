@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "D": {
+      "item": "lucentics:dawnstone_dust"
+    },
+    "G": {
+      "item": "minecraft:glass"
+    },
+    "R": {
+      "item": "minecraft:dropper"
+    }
+  },
+  "pattern": [
+    "DRD",
+    " G ",
+    "D D"
+  ],
+  "result": {
+    "count": 1,
+    "id": "lucentics:prism_exporting"
+  }
+}
