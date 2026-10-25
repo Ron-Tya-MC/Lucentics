@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 public final class ItemUtil {
     public static boolean isSameItem(ItemStack stackA, ItemStack stackB, boolean allowEmpty) {
-        return allowEmpty ? stackA.is(stackB.getItem()) : !stackB.isEmpty() && stackA.is(stackB.getItem());
+        return (allowEmpty && (stackA.isEmpty() || stackB.isEmpty())) || stackA.is(stackB.getItem());
     }
 
     public static List<ItemStack> stackOrAppend(List<ItemStack> container, ItemStack addStack) {
@@ -125,8 +125,9 @@ public final class ItemUtil {
     }
 
     public static ItemMergeResult merge(ItemStack base, ItemStack add) {
+        if (base.isEmpty()) return ItemMergeResult.of(add.copy(), ItemStack.EMPTY);
         if (add.isEmpty()) return ItemMergeResult.of(base.copy(), ItemStack.EMPTY);
-        if (!isSameItem(base, add, false)) return ItemMergeResult.of(base.copy(), add.copy());
+        if (!isSameItem(base, add, true)) return ItemMergeResult.of(base.copy(), add.copy());
 
         int total = base.getCount() + add.getCount();
         return total <= base.getMaxStackSize()

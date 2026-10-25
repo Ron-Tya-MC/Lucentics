@@ -1,15 +1,20 @@
 package io.github.rontyamc.lucentics.datagen.providers.recipe;
 
 import io.github.rontyamc.lucentics.Lucentics;
-import io.github.rontyamc.lucentics.datagen.builders.IdPathResolvable;
-import io.github.rontyamc.lucentics.datagen.builders.recipe.*;
 import io.github.rontyamc.lucentics.common.recipe.SizedThingIngredient;
 import io.github.rontyamc.lucentics.common.util.ItemUtil;
 import io.github.rontyamc.lucentics.common.util.MiscUtil;
+import io.github.rontyamc.lucentics.datagen.builders.IdPathResolvable;
+import io.github.rontyamc.lucentics.datagen.builders.recipe.CrushingBuilder;
+import io.github.rontyamc.lucentics.datagen.builders.recipe.DyeingBuilder;
+import io.github.rontyamc.lucentics.datagen.builders.recipe.InjectingBuilder;
+import io.github.rontyamc.lucentics.datagen.builders.recipe.TrailRecipeBuilder;
 import io.github.rontyamc.lucentics.registers.LucenticsItemRegister;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.CachedOutput;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.resources.ResourceLocation;
@@ -37,6 +42,9 @@ public class LucenticsRecipeProvider extends RecipeProvider {
      */
     protected final List<GeneratedRecipe> generatedRecipes = new ArrayList<>();
 
+    @Nullable
+    private HolderLookup.Provider lookupProvider;
+
     public LucenticsRecipeProvider(PackOutput output, CompletableFuture<HolderLookup.Provider> completableFuture) {
         super(output, completableFuture);
     }
@@ -54,6 +62,12 @@ public class LucenticsRecipeProvider extends RecipeProvider {
         DyeingProvider.buildRecipes(this, recipeOutput);
 
         generatedRecipes.forEach(c -> c.register(recipeOutput));
+    }
+
+    @Override
+    protected CompletableFuture<?> run(CachedOutput output, HolderLookup.Provider registries) {
+        this.lookupProvider = registries;
+        return super.run(output, registries);
     }
 
     public GeneratedRecipeBuilder generic(Supplier<? extends ItemLike> result, int count) {
@@ -184,6 +198,10 @@ public class LucenticsRecipeProvider extends RecipeProvider {
             return register(output -> {
                 CrushingBuilder b =
                         builder.apply(CrushingBuilder.create(Ingredient.EMPTY, result.get()));
+                if (lookupProvider == null) {
+                    throw new IllegalStateException("HolderLookup.Provider is not available yet");
+                }
+                b.setBlockLookup(lookupProvider.lookupOrThrow(Registries.BLOCK));
                 b.save(output, createLocation("crushing", b));
             });
         }

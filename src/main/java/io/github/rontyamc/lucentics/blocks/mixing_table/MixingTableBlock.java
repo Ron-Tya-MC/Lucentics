@@ -81,7 +81,7 @@ public class MixingTableBlock extends BaseEntityBlock implements IBlockEntities<
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        var result = FluidUtil.interactWithFluidHandler(player, interactionHand, mixing.getMixingTableBehavior().getAdminFHandler());
+        boolean result = FluidUtil.interactWithFluidHandler(player, interactionHand, mixing.getMixingTableBehavior().getAdminFHandler());
         if (result) {
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }

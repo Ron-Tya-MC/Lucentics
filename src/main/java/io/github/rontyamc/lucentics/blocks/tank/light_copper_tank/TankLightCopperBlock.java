@@ -46,7 +46,7 @@ public class TankLightCopperBlock extends BaseEntityBlock implements IBlockEntit
             return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
 
-        var result = FluidUtil.interactWithFluidHandler(player, interactionHand, level, pos, hitResult.getDirection());
+        boolean result = FluidUtil.interactWithFluidHandler(player, interactionHand, level, pos, hitResult.getDirection());
         if (result) {
             return ItemInteractionResult.sidedSuccess(level.isClientSide());
         }

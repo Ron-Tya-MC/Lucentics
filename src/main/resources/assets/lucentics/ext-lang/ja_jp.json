@@ -1,4 +1,6 @@
 {
+  "item.lucentics.luxicon": "光辞苑",
+
   "item.lucentics.dusk_brick": "薄明石",
   "$R:item.lucentics.;tier2_colors/_dusk_brick" : "%Rの薄明石",
   "item.lucentics.light_copper": "光銅",
@@ -218,6 +220,7 @@
 
   "patchouli.lucentics.name": "光辞苑",
   "patchouli.lucentics.landing_text": "光と触れ合う全ての人のための入門書。",
+  "patchouli.lucentics.tooltip": "Lucenticsのガイドブック",
 
   "patchouli.lucentics.common.relations": "関連項目",
 

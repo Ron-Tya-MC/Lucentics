@@ -75,9 +75,9 @@
   "advancement.lucentics.prism_break": "Hate me hard♠",
   "advancement.lucentics.prism_break.desc": "Obtain a Destruction Prism",
   "advancement.lucentics.prism_fluid_place": "ultramarine dripping down",
-  "advancement.lucentics.prism_fluid_place.desc": "Obtain a Fluid Place Prism",
+  "advancement.lucentics.prism_fluid_place.desc": "Obtain a Fluid Placing Prism",
   "advancement.lucentics.prism_fluid_drain": "R and I and…",
-  "advancement.lucentics.prism_fluid_drain.desc": "Obtain a Fluid Drain Prism",
+  "advancement.lucentics.prism_fluid_drain.desc": "Obtain a Fluid Draining Prism",
   "advancement.lucentics.prism_place": "it always started with rain",
   "advancement.lucentics.prism_place.desc": "Obtain a Construction Prism",
 
@@ -130,6 +130,7 @@
 
   "patchouli.lucentics.name": "Luxicon",
   "patchouli.lucentics.landing_text": "Welcome to the lucent world.",
+  "patchouli.lucentics.tooltip": "The guidebook for Lucentics",
 
   "patchouli.lucentics.common.relations": "Related Entry(ies)",
 

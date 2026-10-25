@@ -12,6 +12,12 @@ public class CraftingProvider {
     public CraftingProvider() {}
 
     public static void buildRecipes(LucenticsRecipeProvider provider, RecipeOutput recipeOutput) {
+        provider.enterFolder("tools");
+
+        provider.generic(LucenticsItemRegister.LUXICON).unlockedBy(LucenticsItemRegister.NOTHING)
+                .shapeless(b -> b.requires(Items.BOOK)
+                        .requires(Items.TORCH));
+
         provider.enterFolder("buildings");
 
         provider.generic(LucenticsBlockRegister.DUSK_BRICKS).unlockedBy(LucenticsItemRegister.DUSK_BRICK)

@@ -2,14 +2,15 @@ package io.github.rontyamc.lucentics.datagen.builders.recipe;
 
 import io.github.rontyamc.lucentics.Lucentics;
 import io.github.rontyamc.lucentics.common.SoundSpec;
-import io.github.rontyamc.lucentics.datagen.builders.IdPathResolvable;
 import io.github.rontyamc.lucentics.common.dict.Warns;
 import io.github.rontyamc.lucentics.common.recipe.RecipeArguments.WeightedOutput;
+import io.github.rontyamc.lucentics.datagen.builders.IdPathResolvable;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipe;
 import io.github.rontyamc.lucentics.recipes.crushing.CrushingRecipeArguments;
 import io.github.rontyamc.lucentics.registers.LucenticsRecipeTypesRegister;
 import net.minecraft.advancements.Criterion;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderGetter;
 import net.minecraft.core.HolderSet;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -23,6 +24,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,10 @@ import java.util.Optional;
 public class CrushingBuilder implements RecipeBuilder, IdPathResolvable {
     private HolderSet<Block> block;
     private final List<Holder<Block>> blocks = new ArrayList<>();
+    @Nullable
+    private TagKey<Block> blockTag = null;
+    @Nullable
+    private HolderGetter<Block> blockLookup = null;
     private Ingredient tool;
     private int requiredHits = 1;
     private int damagePerHit = 1;
@@ -69,6 +75,10 @@ public class CrushingBuilder implements RecipeBuilder, IdPathResolvable {
         return create(HolderSet.empty(), tool, new ItemStack(result));
     }
 
+    public void setBlockLookup(HolderGetter<Block> lookup) {
+        this.blockLookup = lookup;
+    }
+
     public CrushingBuilder input(Holder<Block> block) {
         this.blocks.add(block);
         return this;
@@ -77,6 +87,11 @@ public class CrushingBuilder implements RecipeBuilder, IdPathResolvable {
     @SuppressWarnings("deprecation")
     public CrushingBuilder input(Block block) {
         this.blocks.add(block.builtInRegistryHolder());
+        return this;
+    }
+
+    public CrushingBuilder input(TagKey<Block> tag) {
+        this.blockTag = tag;
         return this;
     }
 
@@ -190,10 +205,22 @@ public class CrushingBuilder implements RecipeBuilder, IdPathResolvable {
 
     @Override
     public void save(RecipeOutput output, ResourceLocation id) {
-        List<Holder<Block>> allBlocks = new ArrayList<>();
-        block.forEach(allBlocks::add);
-        allBlocks.addAll(blocks);
-        HolderSet<Block> blockSet = HolderSet.direct(allBlocks);
+        HolderSet<Block> blockSet;
+
+        if (blockTag != null) {
+            if (!blocks.isEmpty() || block.size() > 0) {
+                throw new IllegalStateException("Recipe \"" + id + "\": tag input and individual block inputs cannot be mixed");
+            }
+            if (blockLookup == null) {
+                throw new IllegalStateException("Recipe \"" + id + "\": block lookup is not set");
+            }
+            blockSet = blockLookup.getOrThrow(blockTag);
+        } else {
+            List<Holder<Block>> allBlocks = new ArrayList<>();
+            block.forEach(allBlocks::add);
+            allBlocks.addAll(blocks);
+            blockSet = HolderSet.direct(allBlocks);
+        }
 
         NonNullList<List<WeightedOutput>> outputs = NonNullList.create();
         outputs.addAll(outputGroups);

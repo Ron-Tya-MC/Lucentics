@@ -2,6 +2,7 @@ package io.github.rontyamc.lucentics.common.util;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Holder;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 
+import java.util.Collections;
 import java.util.List;
 
 public final class BlockUtil {
@@ -34,8 +36,29 @@ public final class BlockUtil {
                 .orElse(List.of());
     }
 
+    public static List<Block> blocksInBlockTag(TagKey<Block> tagKey, HolderLookup.Provider registries) {
+        return registries.lookup(Registries.BLOCK)
+                .flatMap(registry -> registry.get(tagKey))
+                .map(holderSet -> holderSet.stream()
+                        .map(Holder::value)
+                        .toList()
+                )
+                .orElse(Collections.emptyList());
+    }
+
     public static List<Block> blocksInItemTag(TagKey<Item> tagKey, Level level) {
         return level.registryAccess().lookup(Registries.ITEM)
+                .flatMap(registry -> registry.get(tagKey))
+                .map(holderSet -> holderSet.stream()
+                        .filter(item -> ItemUtil.isItemBlock(item.value()))
+                        .map(item -> Block.byItem(item.value()))
+                        .toList()
+                )
+                .orElse(List.of());
+    }
+
+    public static List<Block> blocksInItemTag(TagKey<Item> tagKey, HolderLookup.Provider registries) {
+        return registries.lookup(Registries.ITEM)
                 .flatMap(registry -> registry.get(tagKey))
                 .map(holderSet -> holderSet.stream()
                         .filter(item -> ItemUtil.isItemBlock(item.value()))

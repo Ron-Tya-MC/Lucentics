@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 public final class FluidUtil {
     public static boolean isSameFluid(FluidStack stackA, FluidStack stackB, boolean allowEmpty) {
-        return allowEmpty ? stackA.is(stackB.getFluid()) : !stackB.isEmpty() && stackA.is(stackB.getFluid());
+        return (allowEmpty && (stackA.isEmpty() || stackB.isEmpty())) || stackA.is(stackB.getFluid());
     }
 
     public static List<FluidSlot> stackOrAppend(List<FluidSlot> container, FluidStack addStack, int capacity) {
@@ -70,8 +70,9 @@ public final class FluidUtil {
     }
 
     public static FluidMergeResult merge(FluidStack base, FluidStack add) {
+        if (base.isEmpty()) return FluidMergeResult.of(add.copy(), FluidStack.EMPTY);
         if (add.isEmpty()) return FluidMergeResult.of(base.copy(), FluidStack.EMPTY);
-        if (!isSameFluid(base, add, false)) return FluidMergeResult.of(base.copy(), add.copy());
+        if (!isSameFluid(base, add, true)) return FluidMergeResult.of(base.copy(), add.copy());
 
         return FluidMergeResult.of(base.copyWithAmount(base.getAmount() + add.getAmount()), FluidStack.EMPTY);
     }

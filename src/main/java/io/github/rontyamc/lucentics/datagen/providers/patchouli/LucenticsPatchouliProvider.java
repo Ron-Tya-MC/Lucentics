@@ -102,10 +102,11 @@ public class LucenticsPatchouliProvider implements DataProvider {
         JsonObject json = new JsonObject();
         json.addProperty("name", KEY_ROOT_LUCENTICS + ".name");
         json.addProperty("landing_text", KEY_ROOT_LUCENTICS + ".landing_text");
+        json.addProperty("dont_generate_book", true);
+        json.addProperty("custom_book_item", Lucentics.MOD_ID + ":luxicon");
         json.addProperty("use_resource_pack", true);
         json.addProperty("book_texture", "patchouli:textures/gui/book_red.png");
         json.addProperty("filler_texture", Lucentics.MOD_ID + ":textures/gui/patchouli/blank_page.png");
-        json.addProperty("model", Lucentics.MOD_ID + ":luxicon");
         json.addProperty("version", VERSION);
         json.addProperty("creative_tab", LucenticsTabRegister.CREATIVE_MODE_TAB_TOOLS.getId().toString());
         json.addProperty("i18n", true);

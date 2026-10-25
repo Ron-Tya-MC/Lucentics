@@ -1,0 +1,37 @@
+{
+  "type": "lucentics:crushing",
+  "break_sound": {
+    "sound": "minecraft:block.gravel.break",
+    "source": "block"
+  },
+  "click_sound": {
+    "sound": "minecraft:block.gravel.hit",
+    "source": "block"
+  },
+  "input": "minecraft:gravel",
+  "outputs": [
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "minecraft:gravel"
+        }
+      }
+    },
+    {
+      "content": {
+        "count": 1,
+        "item": {
+          "count": 1,
+          "id": "minecraft:flint"
+        }
+      },
+      "probability": 0.25
+    }
+  ],
+  "required_hit": 2,
+  "tool": {
+    "tag": "minecraft:shovels"
+  }
+}

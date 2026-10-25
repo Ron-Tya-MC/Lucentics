@@ -7,6 +7,7 @@ import io.github.rontyamc.lucentics.common.dict.ItemTagSets;
 import io.github.rontyamc.lucentics.common.util.ModelUtil;
 import io.github.rontyamc.lucentics.common.util.tag_utils.ItemTagSet;
 import io.github.rontyamc.lucentics.items.LensItem;
+import io.github.rontyamc.lucentics.items.LuxiconItem;
 import io.github.rontyamc.lucentics.registers.LucenticsTabRegister.CategoryType;
 import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsITags;
 import net.minecraft.core.component.DataComponents;
@@ -29,7 +30,7 @@ public class LucenticsItemRegister {
     }
     public static final ItemEntry<Item> NOTHING = REGISTRATE.lucenticsItemBuilder(CategoryType.NONE, "nothing", Item::new)
             .register();
-    public static final ItemEntry<Item> LUXICON = REGISTRATE.lucenticsItemBuilder(CategoryType.NONE, "luxicon", Item::new)
+    public static final ItemEntry<LuxiconItem> LUXICON = REGISTRATE.lucenticsItemBuilder(CategoryType.TOOLS, "luxicon", LuxiconItem::new)
             .register();
 
     public static final ItemEntry<Item> DUSK_BRICK = REGISTRATE.lucenticsItemBuilder(CategoryType.INGREDIENTS, "dusk_brick", Item::new)

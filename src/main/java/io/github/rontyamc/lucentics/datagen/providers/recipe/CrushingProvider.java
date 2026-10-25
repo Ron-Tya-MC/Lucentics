@@ -8,6 +8,7 @@ import io.github.rontyamc.lucentics.registers.LucenticsTagRegister.LucenticsITag
 import net.minecraft.data.recipes.RecipeOutput;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.item.Items;
@@ -282,5 +283,23 @@ public class CrushingProvider {
                         .breakSound(SoundSpec.of(SoundEvents.GLASS_BREAK, SoundSource.BLOCKS))
                         .damagePerHit(4)
                         .requiredHits(1));
+
+        provider.generic()
+                .crushing(b -> b.input(BlockTags.WOOL)
+                        .tool(Items.SHEARS)
+                        .output(Items.STRING, 4)
+                        .clickSound(SoundSpec.of(SoundEvents.WOOL_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.WOOL_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(1)
+                        .requiredHits(2));
+        provider.generic()
+                .crushing(b -> b.input(Blocks.GRAVEL)
+                        .tool(ItemTags.SHOVELS)
+                        .output(Items.GRAVEL)
+                        .output(OutputSpec.of(Items.FLINT).probability(0.25f))
+                        .clickSound(SoundSpec.of(SoundEvents.GRAVEL_HIT, SoundSource.BLOCKS))
+                        .breakSound(SoundSpec.of(SoundEvents.GRAVEL_BREAK, SoundSource.BLOCKS))
+                        .damagePerHit(1)
+                        .requiredHits(2));
     }
 }
